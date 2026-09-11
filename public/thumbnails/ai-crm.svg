@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="AI CRM 收入智能视图预览">
+  <title>AI CRM — 收入智能视图</title>
+  <defs>
+    <style>
+      .m { font-family: "SF Mono", ui-monospace, "JetBrains Mono", monospace; }
+      .s { font-family: ui-sans-serif, -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+      .micro { font-size: 19px; letter-spacing: 3.2px; fill: #a9a296; }
+      .lab { font-size: 21px; fill: #a9a296; }
+      .faint { font-size: 19px; fill: #6d675d; }
+    </style>
+  </defs>
+
+  <!-- canvas -->
+  <rect width="1600" height="1000" fill="#17140f"/>
+
+  <!-- ambient vertical hairlines -->
+  <g stroke="#221e18" stroke-width="1">
+    <line x1="400" y1="0" x2="400" y2="1000"/>
+    <line x1="800" y1="0" x2="800" y2="1000"/>
+    <line x1="1200" y1="0" x2="1200" y2="1000"/>
+  </g>
+
+  <!-- · header row -->
+  <circle cx="78" cy="79" r="5" fill="#d4452a"/>
+  <text class="m micro" x="98" y="86">REVENUE INTELLIGENCE</text>
+  <text class="s faint" x="1528" y="86" text-anchor="end">AI CRM</text>
+  <line x1="72" y1="118" x2="1528" y2="118" stroke="#2f2a23" stroke-width="1"/>
+
+  <!-- · readout -->
+  <text class="s lab" x="72" y="180">本月经常性收入</text>
+  <text class="s" x="72" y="278" font-size="94" font-weight="600" fill="#f4f2ee" letter-spacing="-3">¥ 8,642,300</text>
+  <text class="m" x="72" y="342" font-size="22" fill="#d4452a">+18.4%</text>
+  <text class="s faint" x="176" y="342">环比上月</text>
+
+  <!-- · chart grid -->
+  <g stroke="#2f2a23" stroke-width="1">
+    <line x1="72" y1="400" x2="1528" y2="400"/>
+    <line x1="72" y1="475" x2="1528" y2="475"/>
+    <line x1="72" y1="550" x2="1528" y2="550"/>
+    <line x1="72" y1="625" x2="1528" y2="625"/>
+    <line x1="72" y1="700" x2="1528" y2="700"/>
+  </g>
+
+  <!-- · area -->
+  <path
+    d="M72,700 L72,610 L204.4,622 L336.7,598 L469.1,580 L601.5,592 L733.8,559 L866.2,544 L998.5,553 L1130.9,526 L1263.3,502 L1395.6,484 L1528,460 L1528,700 Z"
+    fill="#f4f2ee" fill-opacity="0.07"/>
+
+  <!-- · line -->
+  <path
+    d="M72,610 L204.4,622 L336.7,598 L469.1,580 L601.5,592 L733.8,559 L866.2,544 L998.5,553 L1130.9,526 L1263.3,502 L1395.6,484 L1528,460"
+    fill="none" stroke="#f4f2ee" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- · current-month marker -->
+  <line x1="1528" y1="460" x2="1528" y2="700" stroke="#d4452a" stroke-width="1.5" stroke-dasharray="5 6"/>
+  <circle cx="1528" cy="460" r="8" fill="#d4452a"/>
+  <circle cx="1528" cy="460" r="16" fill="none" stroke="#d4452a" stroke-width="1.5" stroke-opacity="0.45"/>
+
+  <!-- · axis labels -->
+  <text class="s faint" x="72" y="736">1月</text>
+  <text class="s" x="1528" y="736" text-anchor="end" font-size="19" fill="#a9a296">12月</text>
+
+  <!-- · pipeline composition -->
+  <text class="s lab" x="72" y="790">管道构成</text>
+  <g>
+    <rect x="72"   y="812" width="316" height="10" rx="5" fill="#2f2a23"/>
+    <rect x="392"  y="812" width="404" height="10" rx="5" fill="#45403a"/>
+    <rect x="800"  y="812" width="274" height="10" rx="5" fill="#857e74"/>
+    <rect x="1078" y="812" width="450" height="10" rx="5" fill="#d4452a"/>
+  </g>
+
+  <!-- · legend -->
+  <g>
+    <rect x="72" y="864" width="9" height="9" fill="#2f2a23"/><text class="s faint" x="94" y="874">初步接洽</text><text class="m faint" x="286" y="874" text-anchor="end">22%</text>
+    <rect x="460" y="864" width="9" height="9" fill="#45403a"/><text class="s faint" x="482" y="874">需求确认</text><text class="m faint" x="674" y="874" text-anchor="end">28%</text>
+    <rect x="848" y="864" width="9" height="9" fill="#857e74"/><text class="s faint" x="870" y="874">方案报价</text><text class="m faint" x="1062" y="874" text-anchor="end">19%</text>
+    <rect x="1236" y="864" width="9" height="9" fill="#d4452a"/><text class="s faint" x="1258" y="874">赢单</text><text class="m faint" x="1450" y="874" text-anchor="end">31%</text>
+  </g>
+
+  <!-- · footer hairline -->
+  <line x1="72" y1="924" x2="1528" y2="924" stroke="#2f2a23" stroke-width="1"/>
+  <text class="m micro" x="72" y="962">SALES COMMAND CENTER</text>
+  <text class="m micro" x="1528" y="962" text-anchor="end">PROTOTYPE 01</text>
+</svg>
