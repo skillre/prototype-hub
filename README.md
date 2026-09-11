@@ -63,10 +63,13 @@ export interface Prototype {
 | --- | --- |
 | **AI CRM** | 智能销售工作台 · Sales · Stable |
 | URL | <https://prototype-starter-skillres-projects.vercel.app/crm> |
+| **AI Finance** | AI 财务工作台 · Finance · Stable |
+| URL | <https://prototype-ai-finance.vercel.app/> |
 
 > **关于 Deployment Protection**
 > AI CRM 部署在 Vercel 上并开启了 Deployment Protection（访问者需要先登录
-> Vercel 账号）。门户只负责链接，**不做任何绕过**，也不修改 Vercel 设置。
+> Vercel 账号）；AI Finance 没有开启。门户只负责链接，**不做任何绕过**，
+> 也不修改 Vercel 设置。
 
 ### 布局如何随原型变多而扩展
 
@@ -74,11 +77,17 @@ export interface Prototype {
 
 1. **精选展板** —— `featured: true` 的条目渲染成通栏编辑式大卡：
    元信息行（序号 / 分类 / 状态）→ 名称与说明 + CTA → 大幅视觉预览。
-   目前只有 AI CRM，占据这一位。
+   目前 AI CRM 与 AI Finance 都在这一层，自上而下堆叠成画廊。
 2. **索引行** —— `featured: false` 的条目渲染成紧凑的编号列表行。
    当前列表为空，条目一加进来就会自动出现。
 
+> 索引行**没有图像位**：条目一旦 `featured: false`，它的签名视觉就整块消失。
+> 因此「要不要上精选」实际上等于「这个原型要不要露出画面」。AI Finance 的
+> 现金跑道静帧是它唯一的身份表达，所以同样进精选位——这是数据侧的取舍，
+> 不是组件改动。
+
 也就是说：**新增原型不需要改任何组件**，只需要在注册表里加一条。
+（第二条 entry 加进来时已实测成立。）
 
 ---
 
@@ -178,17 +187,39 @@ pnpm test                              # 全部
 pnpm exec playwright test tests/hub.spec.ts --project=chromium
 ```
 
-`tests/hub.spec.ts` 覆盖：
+`tests/hub.spec.ts` 覆盖（条目相关用例从 registry 派生，每个原型各跑一遍）：
 
 1. 首页正常打开，唯一 `h1` 就是字标 `Prototype Lab`
-2. Prototype Registry 展示 AI CRM 条目（分类 / 状态 / 说明 / CTA / 缩略图 alt）
-3. 卡片链接指向生产地址，且 `target="_blank" rel="noopener noreferrer"`
-4. **点击卡片会在新标签页打开 AI CRM**（外站请求用本地应答替代，不依赖外网）
-5. 键盘可以走到 AI CRM 卡片（含 skip link）
-6. 语义结构：`header` / `footer` / `main#main` / `nav[aria-label]` / 区块 `aria-labelledby`
-7. **缩略图进入视口后真正可见**，不停留在 `opacity: 0`（回归测试）
-8. 移动端 390 × 844 首页正常且无横向溢出
-9. 移动端卡片宽度与 CTA 尺寸（不被拉伸成通栏横幅）
+2. registry 同时收录 AI CRM 与 AI Finance（计数文案 / 序号 01·02 / 非精选层为空）
+3. 每个条目：分类 / 状态 / 说明 / CTA / 缩略图 `alt` 与 `src`
+4. 每个条目的缩略图**真实加载**（HTTP 200 + `naturalWidth > 0`）
+5. **缩略图进入视口后真正可见**，不停留在 `opacity: 0`（回归测试）
+6. 每个条目的链接指向生产地址，且 `target="_blank" rel="noopener noreferrer"`
+7. **点击展板会在新标签页打开对应原型**（外站请求用本地应答替代，不依赖外网）
+8. 键盘可以依次走到两张展板，且焦点环可见（含 skip link）
+9. 语义结构：`header` / `footer` / `main#main` / `nav[aria-label]` / 区块 `aria-labelledby`
+10. registry 数据卫生：slug 唯一且 kebab-case、URL 为 https 且与测试登记值一致、
+    缩略图路径约定、说明与替代文本为中文
+11. 桌面 1440 × 900：两块展板纵向堆叠、同宽、16:10、无横向溢出、视觉权重一致
+12. 移动端 390 × 844：首页正常、两块展板完整可见、无横向溢出、CTA 尺寸正常
+13. 本地化：首页不出现词典之外的硬编码英文（白名单 = 品牌字标 / 技术栈 / 枚举值）
+
+### Browser QA（截图留档）
+
+测试通过不等于画面成立。`/.qa/hub-shots.mjs` 会在 1440 × 900 与 390 × 844 两个
+视口把首页真实渲染出来，产出整页 / Registry 区块 / 每块展板的截图，并同时断言：
+
+- 每块展板的宽度、间距、16:10 图像位、鼠标悬停前的揭示状态
+- 横向溢出（`scrollWidth - innerWidth`，并列出越界元素）
+- 控制台报错 / 页面异常 / 请求失败 / 缩略图是否解码
+
+```bash
+pnpm dev --port 3100        # 另开一个终端
+node .qa/hub-shots.mjs      # 截图落在 .qa/out/，末尾打印 QA OK 或问题清单
+```
+
+改注册表或换缩略图之后，**跑一遍这个再提交**——它是唯一能发现
+「数据对了但画面塌了」的一步。
 
 ---
 
@@ -231,8 +262,9 @@ lib/
   i18n/                           # 词典与取词入口
   motion-presets.ts               # 缓动曲线与入场时长
   utils.ts                        # cn()
-public/thumbnails/                # 每个原型一张预览图
+public/thumbnails/                # 每个原型一张预览图（1600 × 1000 = 16:10）
 tests/hub.spec.ts                 # Playwright e2e
+.qa/hub-shots.mjs                 # Browser QA：双视口截图 + 溢出 / 报错检查
 ```
 
 ---

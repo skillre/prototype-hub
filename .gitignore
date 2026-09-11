@@ -17,6 +17,9 @@
 /test-results/
 /playwright-report/
 
+# browser QA 产物（截图 / report.json；脚本 .qa/*.mjs 本身要提交）
+/.qa/out/
+
 # next.js
 /.next/
 /out/

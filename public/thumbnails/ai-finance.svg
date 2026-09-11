@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="AI Finance 现金跑道视图预览">
+  <title>AI Finance — 现金跑道视图</title>
+  <defs>
+    <style>
+      .m { font-family: "SF Mono", ui-monospace, "JetBrains Mono", monospace; }
+      .s { font-family: ui-sans-serif, -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+      .micro { font-size: 19px; letter-spacing: 3.2px; fill: #a9a296; }
+      .lab { font-size: 21px; fill: #a9a296; }
+      .faint { font-size: 19px; fill: #6d675d; }
+      .soft { font-size: 19px; fill: #a9a296; }
+    </style>
+  </defs>
+
+  <!-- canvas -->
+  <rect width="1600" height="1000" fill="#17140f"/>
+
+  <!-- ambient vertical hairlines -->
+  <g stroke="#221e18" stroke-width="1">
+    <line x1="400" y1="0" x2="400" y2="1000"/>
+    <line x1="800" y1="0" x2="800" y2="1000"/>
+    <line x1="1200" y1="0" x2="1200" y2="1000"/>
+  </g>
+
+  <!-- · header row -->
+  <circle cx="78" cy="79" r="5" fill="#d4452a"/>
+  <text class="m micro" x="98" y="86">CASH RUNWAY INTELLIGENCE</text>
+  <text class="s faint" x="1528" y="86" text-anchor="end">AI FINANCE</text>
+  <line x1="72" y1="118" x2="1528" y2="118" stroke="#2f2a23" stroke-width="1"/>
+
+  <!-- · readout: two metrics on one plane -->
+  <line x1="800" y1="152" x2="800" y2="356" stroke="#2f2a23" stroke-width="1"/>
+
+  <text class="s lab" x="72" y="186">现金头寸</text>
+  <text class="s" x="72" y="292" font-size="94" font-weight="600" fill="#f4f2ee" letter-spacing="-3">¥ 8,420,000</text>
+  <text class="s soft" x="72" y="336">约 842 万 · 每月净支出 ¥ 570,000</text>
+
+  <text class="s lab" x="864" y="186">预计现金跑道</text>
+  <text class="s" x="864" y="292" font-size="94" font-weight="600" fill="#f4f2ee" letter-spacing="-3">14.8</text>
+  <text class="s" x="1082" y="292" font-size="40" fill="#a9a296">个月</text>
+  <text class="s soft" x="864" y="336">现金警戒线 ¥ 1,000,000</text>
+
+  <!-- · forecast section -->
+  <line x1="72" y1="376" x2="1528" y2="376" stroke="#2f2a23" stroke-width="1"/>
+  <text class="s lab" x="72" y="418">90 天现金预测</text>
+  <text class="m" x="266" y="424" font-size="19" fill="#6d675d">90 天净流出 ¥ 1,549,000</text>
+
+  <!-- · legend（同行右对齐） -->
+  <rect x="915" y="417" width="20" height="13" fill="#3f9a9b" fill-opacity="0.22" stroke="#3f9a9b" stroke-width="1" stroke-opacity="0.6"/>
+  <text class="s soft" x="945" y="424">情景带：压力 → 优化</text>
+  <line x1="1157" y1="423" x2="1177" y2="423" stroke="#3f9a9b" stroke-width="3" stroke-linecap="round"/>
+  <text class="s soft" x="1187" y="424">基准预测</text>
+  <line x1="1293" y1="423" x2="1313" y2="423" stroke="#d4452a" stroke-width="1.5" stroke-dasharray="6 7"/>
+  <text class="s soft" x="1323" y="424">现金警戒线 ¥ 1,000,000</text>
+
+  <!-- · chart grid -->
+  <g stroke="#2f2a23" stroke-width="1">
+    <line x1="72" y1="528" x2="1240" y2="528"/>
+    <line x1="72" y1="616" x2="1240" y2="616"/>
+    <line x1="72" y1="704" x2="1240" y2="704"/>
+    <line x1="72" y1="792" x2="1240" y2="792"/>
+  </g>
+
+  <!-- · 跑道走廊：基准预测到现金警戒线之间的距离 -->
+  <path
+    d="M72,483.3 L161.8,485.3 L251.7,488 L341.5,491.2 L431.4,492.5 L521.2,496.3 L611.1,499.5 L700.9,502.3 L790.8,507.2 L880.6,512.6 L970.5,517.3 L1060.3,523.8 L1150.2,532.2 L1240,540.1 L1240,755.3 L72,755.3 Z"
+    fill="#3f9a9b" fill-opacity="0.08"/>
+
+  <!-- · 情景带：压力 → 优化（基准被夹在中间） -->
+  <path
+    d="M72,483.3 L161.8,484.4 L251.7,485.8 L341.5,487.7 L431.4,488.8 L521.2,491.3 L611.1,493.5 L700.9,495.7 L790.8,499 L880.6,502.7 L970.5,506 L1060.3,509.3 L1150.2,511.9 L1240,515.5 L1240,629.2 L1150.2,614.2 L1060.3,597.7 L970.5,580.1 L880.6,564.7 L790.8,547.4 L700.9,531.7 L611.1,522.1 L521.2,513 L431.4,503.8 L341.5,500.9 L251.7,493.5 L161.8,487.7 L72,483.3 Z"
+    fill="#3f9a9b" fill-opacity="0.16"/>
+
+  <!-- · 情景带上下沿 -->
+  <path
+    d="M72,483.3 L161.8,484.4 L251.7,485.8 L341.5,487.7 L431.4,488.8 L521.2,491.3 L611.1,493.5 L700.9,495.7 L790.8,499 L880.6,502.7 L970.5,506 L1060.3,509.3 L1150.2,511.9 L1240,515.5"
+    fill="none" stroke="#3f9a9b" stroke-width="1.5" stroke-opacity="0.5" stroke-linejoin="round"/>
+  <path
+    d="M72,483.3 L161.8,487.7 L251.7,493.5 L341.5,500.9 L431.4,503.8 L521.2,513 L611.1,522.1 L700.9,531.7 L790.8,547.4 L880.6,564.7 L970.5,580.1 L1060.3,597.7 L1150.2,614.2 L1240,629.2"
+    fill="none" stroke="#3f9a9b" stroke-width="1.5" stroke-opacity="0.32" stroke-linejoin="round"/>
+
+  <!-- · 现金警戒线 -->
+  <line x1="72" y1="755.3" x2="1240" y2="755.3" stroke="#d4452a" stroke-width="1.5" stroke-dasharray="6 7"/>
+
+  <!-- · 基准预测 -->
+  <path
+    d="M72,483.3 L161.8,485.3 L251.7,488 L341.5,491.2 L431.4,492.5 L521.2,496.3 L611.1,499.5 L700.9,502.3 L790.8,507.2 L880.6,512.6 L970.5,517.3 L1060.3,523.8 L1150.2,532.2 L1240,540.1"
+    fill="none" stroke="#3f9a9b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- · 今天 marker -->
+  <circle cx="72" cy="483.3" r="7" fill="#f4f2ee"/>
+  <circle cx="72" cy="483.3" r="15" fill="none" stroke="#f4f2ee" stroke-width="1.5" stroke-opacity="0.4"/>
+
+  <!-- · 90 天末读数 -->
+  <circle cx="1240" cy="540.1" r="5" fill="#f4f2ee"/>
+  <text class="m" x="1232" y="570" text-anchor="end" font-size="20" fill="#f4f2ee">¥ 6,871,000</text>
+
+  <!-- · 距警戒线（右缘量尺） -->
+  <g stroke="#a9a296" stroke-width="1.5">
+    <line x1="1300" y1="540.1" x2="1300" y2="755.3"/>
+    <line x1="1290" y1="540.1" x2="1310" y2="540.1"/>
+    <line x1="1290" y1="755.3" x2="1310" y2="755.3"/>
+  </g>
+  <text class="s soft" x="1320" y="628">距警戒线</text>
+  <text class="m" x="1320" y="660" font-size="24" fill="#f4f2ee">¥ 7,420,000</text>
+  <text class="s" x="1320" y="692" font-size="19" fill="#d4452a">预计 2027-10 触及</text>
+
+  <!-- · axis labels -->
+  <text class="s faint" x="72" y="826">第 0 天</text>
+  <text class="s faint" x="1240" y="826" text-anchor="end">第 90 天</text>
+
+  <!-- · footer hairline -->
+  <line x1="72" y1="906" x2="1528" y2="906" stroke="#2f2a23" stroke-width="1"/>
+  <text class="m micro" x="72" y="950">FINANCIAL COMMAND CENTER</text>
+  <text class="m micro" x="1528" y="950" text-anchor="end">PROTOTYPE 02</text>
+</svg>

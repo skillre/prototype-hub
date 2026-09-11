@@ -64,6 +64,28 @@ export const prototypes: Prototype[] = [
     thumbnailAlt: "AI CRM 收入智能视图预览：月度收入读数、趋势曲线与关键客户排名",
     featured: true,
   },
+  {
+    name: "AI Finance",
+    slug: "ai-finance",
+    description: "AI 财务工作台",
+    category: "Finance",
+    status: "Stable",
+    /**
+     * 独立的 Vercel 项目，生产别名指向 main 上的 v1.0.0。
+     * 与 AI CRM 不同，该部署没有开启 Deployment Protection。
+     */
+    url: "https://prototype-ai-finance.vercel.app/",
+    thumbnail: "/thumbnails/ai-finance.svg",
+    thumbnailAlt:
+      "AI Finance 现金跑道视图预览：现金头寸、现金跑道月数、90 天现金预测情景带与警戒线",
+    /**
+     * 同样进精选位。这不是默认值，是当前结构的必然结果：索引行
+     * （`PrototypeIndexRow`）没有图像位，条目一旦 `featured: false`
+     * 就会连签名视觉一起消失。两个原型都是 Stable 的 Reference
+     * Prototype，各自值得一块展板。
+     */
+    featured: true,
+  },
 ]
 
 /** 首页主展示位（编辑式大卡）。 */
