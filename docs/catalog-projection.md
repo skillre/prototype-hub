@@ -203,11 +203,12 @@ Vercel 项目**占用 —— `POST /v9/projects/<id>/domains` 返回 **409
 > `compatibility.json` 的 `finding` / `alternativeConsidered` 与 `s1.json#notes[11]`
 > 都改成了「已证实的 + 已排除的 + 未确定的」，本仓的投影逐字收录它们。
 >
-> **一处上游遗留（截至本次同步）**：`ai-finance.json#notes[11]` 仍是**第一版措辞**
-> （「理由与 s1 完全相同」＋被推翻的 gitSource 解释，且没有提 409），所以生成物里 finance
-> 的 `evidence` 会同时出现这条旧解释与 s1 的更正 —— **以 `compatibility.json` 的
-> `finding` / `alternativeConsidered` 与 `s1.json#notes[11]` 为准**。根控制面是只读输入，
-> 本仓不代改生成物。
+> **那条上游遗留已经修掉（根仓 `ba7d6de`）**：`ai-finance.json#notes[11]` 现在与 s1 一样，
+> 写的是「原因尚未完全确定」＋「第一版解释已被本仓真正的 Git push（`cd47017`）推翻」＋
+> 已证实的主域名冲突（409）＋已排除的时间顺序假设，并明确保留「我曾写错」这件事。
+> 于是生成物里两条 `evidence` 都不再以本仓的口气主张那条被推翻的原因 —— 旧解释只剩**引号里
+> 被撤回的那一句**。这也是这套投影该有的行为：**改的是输入，重新 sync 之后生成物自己变**，
+> 本仓从头到尾没有手改过生成物。
 
 「有没有对外可点的地址」是人的断言：`tests/catalog-projection.spec.ts` 里那份公开/不可点
 条目清单被显式改成了 4 / 2，而不是让它随 catalog 悄悄变化。
@@ -217,12 +218,17 @@ Vercel 项目**占用 —— `POST /v9/projects/<id>/domains` 返回 **409
 > （`drift` 从「任何 production branch 断言都 UNKNOWN」改成「断言必须有出处」）。
 > 本仓的 `catalog:check` 也拒绝「有分支、没出处」的生成物。
 
-### 同一个地址的两次观察（都留着，因为可以对照）
+### 同一个地址的三次观察（都留着，因为可以对照）
 
 | 观察时间 | 该地址当时提供的内容 | 证据 |
 |---|---|---|
 | 2026-09-16 上午 | **旧版**：手写索引 + `Stable` ×4 + 已 404 的 finance 链接，不含身份标记 | `pnpm qa:online --base-url=…` → identity 0 次、投影条目 0/6、两个未授权外链，**exit 1 / 52 项** |
 | 2026-09-16 晚些时候（合并 `main` 触发的 Production 部署之后） | **本版**：身份标记在位、`Stable` 归零、旧死链归零 | 本仓独立匿名探测：**200 / 43755 字节** · `data-app-identity` ×1 · `Stable` ×0 · `prototype-ai-finance.vercel.app` ×0 · 外部链接恰好 1 条（hub 自己） |
+| 2026-09-16 更晚（合并 `5d27f25` 触发的 Production 部署之后） | **本版 + 四条公开地址**：站外链接从 1 条变成 4 条，且与投影的 `publicUrl` 集合**逐条一致** | 本仓独立匿名探测：**200 / 45837 字节** · `data-app-identity` ×2 · `Stable` ×0 · 去重后的外链恰好 4 条（starter / kits / ai-research / hub）· `未部署 / 受保护` ×4 |
+
+> 第三次观察里那次部署的 SHA 是**控制面告知**的（合并 `5d27f25` 触发）；本仓没有 Vercel
+> 凭证，**没有回读它的 `target` / `gitRef` / `sha` / `readyState`** —— 我验的是页面本身：
+> 匿名 200、身份标记在位、外链数与地址集合与投影一致。
 
 **「链接可点」与「内容是新版」是两件事**，它们在当天分别成立过：上午前者不成立
 （catalog 里根本没有地址），下午两者同时成立。这段对照留在文档里的价值就在于它两侧都写了——

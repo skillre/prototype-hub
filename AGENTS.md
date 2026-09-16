@@ -251,8 +251,9 @@ pnpm qa                # Browser QA：自管 server + 身份校验 + 双视口 �
 > 地址返回 404，控制面已把它们恢复为受保护）。索引会渲染四条可点击条目，这是 **catalog
 > 事实变化**的结果，不是本仓改了展示层。**两条例外的根因尚未确定**：控制面第一版解释
 > （「部署由 API 创建、不是 Git webhook 触发的」）已被它自己的实验推翻，已证实的只有
-> 「主域名被另一个项目占用（409）」—— 详见 `docs/catalog-projection.md` 第 9 节
-> （注意 `ai-finance.json#notes[11]` 仍是旧措辞，是上游遗留）。
+> 「主域名被另一个项目占用（409）」—— 详见 `docs/catalog-projection.md` 第 9 节。finance 与 s1
+> 的 `notes[11]` 现在**都**是撤回版本（根仓 `ba7d6de` 补齐了 finance），生成物里旧解释只剩
+> 引号里被撤回的那一句。
 
 > **根控制面侧的第四分支已经补上（2026-09-16 核实）**：`contracts/factory-lock.schema.json`
 > 用 `oneOf` 描述**四种**角色形状，`catalog-hub` 这一支从根仓 `fdbfbae` 起就在；

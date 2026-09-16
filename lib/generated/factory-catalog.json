@@ -10,9 +10,9 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "014cabb96492326301b26ebb67d99a61edbde367",
+    "gitSha": "ba7d6de33e3b91405b8f2668f239492df2d3927f",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:7350177619904b12dfdd4ce7d515dd2dea6e5efe5d560d38ba63bf6b2aa7036c",
+    "inputsDigest": "sha256:79934c131ec1f9abc5f25f075721b8122c0b6dbaca43723e63b08101f39a3a34",
     "inputsDirty": false,
     "inputs": [
       {
@@ -29,7 +29,7 @@
       },
       {
         "path": "catalog/projects/ai-finance.json",
-        "digest": "sha256:3a6ec680881cb07b7cfaa0b912fa1b46ec6ad32bdc531a14b8a2dc6f560b8605"
+        "digest": "sha256:fbd734b0dd4e2b8493bc08111439ec0591352fa6952c3b3733646a1391d1a527"
       },
       {
         "path": "catalog/projects/ai-research.json",
@@ -71,8 +71,8 @@
     "catalogIsTheOnlyFactSource": "身份、kind、端口、门禁、工厂/套件状态与部署状态全部来自 catalog；lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。"
   },
-  "syncedAt": "2026-09-16T07:33:02.570Z",
-  "payloadDigest": "sha256:b0ff57932331030a219aee4e26563cf2ca7ca0f7547c4234d8b73c4c949eb1be",
+  "syncedAt": "2026-09-16T07:43:25.088Z",
+  "payloadDigest": "sha256:bb10cfe6b336484cea4dc567d9b38f5aa00c97505b2e6b78fad46a64a15e1095",
   "counts": {
     "projects": 6,
     "withPublicUrl": 4,
@@ -157,7 +157,7 @@
           },
           {
             "source": "catalog/projects/ai-finance.json#notes[11]",
-            "text": "**生产地址仍然只对已登录者可见（2026-09-16）**：`deployment.productionUrl` 保持 null，理由与 s1 完全相同（见 s1.json 的同名 note）：它的部署也是用 Vercel API 以 `gitSource` 创建的，Git 集成没有接管，关掉 Deployment Protection 会让地址变成 404 而不是 200。已恢复为受保护（302），没有留下 404。"
+            "text": "**生产地址仍然只对已登录者可见（2026-09-16）**：`deployment.productionUrl` 保持 null，已恢复为受保护（302）—— 登录后可以正常看到页面，没有留下 404。**原因尚未完全确定，而这里必须写下我第一次的解释是错的**：第一版写的是「它的部署由 Vercel API 以 `gitSource` 创建、不是 Git webhook 触发的，所以平台不把它当作当前生产部署」；随后我给本仓做了**真正的 Git push**（`cd47017`，`target=production` / `gitRef=main` / `READY`），把保护设成 Only-Preview 之后**依旧 404** —— 假设被自己的实验推翻。目前**已证实**的只有一条：这个项目的主域名被**另一个项目**占用（`POST /v9/projects/<id>/domains` → **409 `already assigned to another project`**）；**已排除**的还有「时间顺序」（在 `vercel git connect` 之后重建 gitSource 部署，仍 404）。保留这段错误比删掉它更有用：只留结论的话，下一个人会照着它去修一个不存在的原因。"
           }
         ]
       },
