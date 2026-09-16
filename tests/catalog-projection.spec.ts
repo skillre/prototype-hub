@@ -67,7 +67,9 @@ const presentation = presentationFile as unknown as {
  * 新增第 7 个仓时，这条测试必须被显式改一次——那是有意的。让目录静默增长，
  * 就回到了「没人知道索引里有几条是真的」的状态。
  */
-const EXPECTED_PROJECT_COUNT = 5
+// 这个数不是派生出来的，是**人写下的当前事实** —— 工作区里有几个仓。
+// 加一个原型就该让它变红，逼人显式更新一次，而不是让新条目悄悄混进投影里。
+const EXPECTED_PROJECT_COUNT = 6
 
 const LEGACY_CLAIMS = [
   "https://prototype-ai-finance.vercel.app/",
@@ -237,7 +239,7 @@ test.describe("catalog 投影", () => {
     const notPublicIds = artifact.projects
       .filter((project) => project.deployment.publicUrl === null)
       .map((project) => project.id)
-    expect(notPublicIds).toEqual(["ai-finance"])
+    expect(notPublicIds).toEqual(["ai-finance", "s1"])
     for (const project of artifact.projects.filter((entry) => notPublicIds.includes(entry.id))) {
       expect(project.deployment.clickable).toBe(false)
       expect(project.deployment.label).toBe("未部署 / 受保护")
@@ -262,7 +264,7 @@ test.describe("catalog 投影", () => {
     // active 必须被明说，而不是靠「没有 retired 字段」去推断。
     expect(
       artifact.projects.filter((entry) => entry.status === "active").map((entry) => entry.id),
-    ).toEqual(["ai-finance", "ai-research", "hub", "kits", "starter"])
+    ).toEqual(["ai-finance", "ai-research", "hub", "kits", "s1", "starter"])
 
     // 运行时 API 同样带着这个字段，页面才有东西可渲染。
     expect(prototypes.every((prototype) => prototype.status === "active")).toBe(true)
