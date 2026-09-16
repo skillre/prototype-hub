@@ -32,6 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang={DEFAULT_LOCALE}
+      data-app-identity="prototype-hub"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="bg-paper text-ink">

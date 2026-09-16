@@ -49,18 +49,22 @@ export const zhCN = {
   registry: {
     index: "01 / Prototype Registry",
     title: "原型索引",
-    description: "每一个条目都是一个可以真正点开、点击、操作的产品体验。",
+    description:
+      "索引由根 catalog 生成：哪些仓存在、各自处于什么状态、有没有可公开的地址，都以事实为准。",
     countPrefix: "收录",
     countUnit: "个原型",
-    /** 非精选原型的分组标题（当前为空，为后续扩展预留） */
+    /** 非精选条目的分组标题（没有签名视觉的仓落在这里） */
     indexListTitle: "更多原型",
   },
 
   /** Prototype 卡片 */
   card: {
     categoryLabel: "分类",
-    statusLabel: "状态",
+    /** 屏幕阅读器读出的字段名：显示的是部署可得性，不是成熟度评分 */
+    availabilityLabel: "部署",
     cta: "打开原型",
+    /** 没有已核实公开地址时的 CTA 文案（不可点击） */
+    unavailableCta: "暂无公开地址",
     externalHint: "在新标签页打开",
     previewAltFallback: "原型预览",
   },
@@ -94,6 +98,9 @@ export const zhCN = {
     tagline: "AI Agent 驱动的交互式产品原型",
     backToTop: "回到顶部",
     rights: "保留所有权利",
+    /** 索引的来源说明：页面上不出现手写的事实 */
+    catalogNote: "索引由根 catalog 生成",
+    catalogSnapshot: "快照",
   },
 
   /** 404 */

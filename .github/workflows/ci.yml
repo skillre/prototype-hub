@@ -1,0 +1,143 @@
+# Prototype Hub · CI
+#
+# WHAT THIS IS
+# ------------
+# A **quality gate only**. CI answers "is this tree still internally consistent
+# and green?", and nothing else. It does not build a preview environment, it does
+# not promote anything, and it holds no deployment credentials:
+#
+#   - 部署仍由 **Vercel Git Integration** 负责 —— push/tag 触发平台自己的构建，
+#     平台是部署的一方，CI 不是。
+#   - 本 workflow **不调用任何部署 CLI、不读取任何部署 token / bypass secret**，
+#     也不创建 Preview 或 Production。`pnpm qa:online`（REMOTE observer）需要用户
+#     显式提供 secret，因此永远不在 CI 里自动运行。
+#   - 部署授权是**独立的一次人工决定**（见 AGENTS.md 管理块与 docs/deployment.md
+#     第 0 节）。让 CI 顺手部署会把「人的决定」变成构建的副作用。
+#
+# WHY IT IS SELF-CONTAINED (and how to switch later)
+# -------------------------------------------------
+# The intended end state is to call the shared workflow from the root control
+# repository:
+#
+#     # uses: skillre/prototype-factory-control/.github/workflows/reusable-prototype-ci.yml@v1
+#
+# That call is **not** enabled here. Verified on 2026-09-16: `git ls-remote`
+# against the configured root remote exits 0 with **zero refs**, so the reusable
+# workflow exists only in a local working tree and no `@ref` can resolve it. (An
+# unauthenticated GitHub API request 404s for that repository — which proves
+# nothing, since private repositories also 404.)
+#
+# A `uses:` pointing at a ref that does not exist makes the workflow file itself
+# invalid: *every* run fails before a single job starts. CI would be dead, not
+# merely degraded. The state is recorded as `upstream/control-repo` (value: null)
+# in `factory.lock.json`, and `pnpm factory:agents` enforces the pairing — the
+# moment a real `uses:` line is added, the lock must stop calling it unknown.
+#
+# CATALOG CHECK IN CI — AND WHAT CI CANNOT CHECK
+# ---------------------------------------------
+# `pnpm catalog:check` runs here **without** a control root: a fresh clone has no
+# sibling catalog. In that mode it verifies what is actually verifiable — the
+# artifact's internal integrity (payload digest, projection rules, overlay
+# coverage, runtime read-only constraint) — and prints
+# `[upstream-unavailable]` with the verdict
+# `INTEGRITY-OK (UPSTREAM UNVERIFIED)`.
+#
+# It does **not** print PASS, because the one thing it cannot check is whether the
+# committed projection still reflects the catalog. That comparison happens on a
+# machine that has the control root (`pnpm catalog:check` there prints
+# `PASS（已与根 catalog 比对）` and verifies the source SHA against the inputs).
+# A green CI run therefore means "internally consistent", never "matches root".
+#
+# SERIALIZATION (non-negotiable)
+# ------------------------------
+# `pnpm test` and `pnpm qa` must never run concurrently: Next 16's dev server
+# locks per *project* (`.next/dev/lock`), not per port, so two of them in one
+# checkout fight over the same tree. `browser-qa` therefore `needs:` the gate job
+# — serial by construction, not by ordering luck. `pnpm factory:agents` checks
+# that this stays true.
+
+name: CI
+
+on:
+  push:
+    branches: ["main", "feature/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gate:
+    name: Quality gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # Reads the pinned version from `packageManager` in package.json — the same
+      # field the local toolchain uses. No second place to update.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      # First gate, on purpose: the agent policy must hold before anything else
+      # is allowed to be called green.
+      - name: Agent policy gate
+        run: pnpm factory:agents
+
+      # Honest either way: with no control root it reports [upstream-unavailable]
+      # and says it did not compare against the catalog, rather than claiming a pass.
+      - name: Catalog projection check
+        run: pnpm catalog:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build
+
+      - name: Playwright E2E
+        run: pnpm test
+
+  browser-qa:
+    name: Browser QA (serial)
+    needs: quality-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Never runs at the same time as the E2E job above (`needs:`), never reuses
+      # an existing server, and only sweeps the server it starts itself on 3100.
+      - name: Browser QA sweep
+        run: pnpm qa

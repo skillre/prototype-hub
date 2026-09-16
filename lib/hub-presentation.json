@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "note": "展示层（人工编辑）。它只能覆盖 catalog 里已存在的条目，只能提供展示用字段：name / description / thumbnail / thumbnailAlt。身份、kind、端口、门禁、工厂与套件状态、部署状态与任何地址一律来自 lib/generated/factory-catalog.json —— 这个文件既不能新增条目，也不能改变事实。`pnpm catalog:check` 双向核对：多余键与漏掉的条目都会失败。",
+  "kindLabels": {
+    "product": "产品",
+    "hub": "门户",
+    "kits": "资产",
+    "starter": "基线"
+  },
+  "presentation": {
+    "ai-finance": {
+      "name": "AI Finance",
+      "description": "AI 财务工作台",
+      "thumbnail": "/thumbnails/ai-finance.svg",
+      "thumbnailAlt": "AI Finance 现金跑道视图预览：现金头寸、现金跑道月数、90 天现金预测情景带与警戒线"
+    },
+    "ai-research": {
+      "name": "AI Research",
+      "description": "AI 研究工作台",
+      "thumbnail": null,
+      "thumbnailAlt": null
+    },
+    "hub": {
+      "name": "Prototype Hub",
+      "description": "原型索引门户（本站）",
+      "thumbnail": null,
+      "thumbnailAlt": null
+    },
+    "kits": {
+      "name": "Prototype Kits",
+      "description": "视觉与能力资产注册表",
+      "thumbnail": null,
+      "thumbnailAlt": null
+    },
+    "s1": {
+      "name": "S1 Incident Command",
+      "description": "事故指挥工作台",
+      "thumbnail": null,
+      "thumbnailAlt": null
+    },
+    "starter": {
+      "name": "Prototype Starter",
+      "description": "工厂基线仓 · 内含 AI CRM 参考样例",
+      "thumbnail": "/thumbnails/ai-crm.svg",
+      "thumbnailAlt": "AI CRM 收入智能视图预览：月度收入读数、趋势曲线与关键客户排名"
+    }
+  }
+}

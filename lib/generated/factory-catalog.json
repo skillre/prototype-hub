@@ -1,0 +1,434 @@
+{
+  "schemaVersion": 1,
+  "generator": {
+    "script": "scripts/sync-factory-catalog.mjs",
+    "syncCommand": "pnpm catalog:sync",
+    "checkCommand": "pnpm catalog:check",
+    "note": "本文件由脚本生成，不要手工编辑。Hub 运行时只读本文件，不跨仓读取。"
+  },
+  "source": {
+    "controlRoot": "..",
+    "controlRootSource": "default",
+    "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
+    "gitSha": "83916bf8c8acb7ed7e4d616dae6cf2a8e934c50d",
+    "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
+    "inputsDigest": "sha256:6c26a17c93275a564ad61775027052371b4250855658138fa34778af76fbe711",
+    "inputsDirty": false,
+    "inputs": [
+      {
+        "path": "catalog/compatibility.json",
+        "digest": "sha256:1d51083277f7f163f1a6f5d878518eee6a21707c2bfe71f6e2b92ba7384f97f9"
+      },
+      {
+        "path": "catalog/ports.json",
+        "digest": "sha256:4c9ca5e3f347b828e757a67e44f1cb142366f16496e0c0bcfafe039c67200990"
+      },
+      {
+        "path": "workspace-policy.json",
+        "digest": "sha256:3ccb3d53473c6e93e19f59bf85fdc430ab3dce0ae0a7bc0d0b4dbd768a300632"
+      },
+      {
+        "path": "catalog/projects/ai-finance.json",
+        "digest": "sha256:add68a217279f29b4a7c64e5fd8a11c0cb8de494a72e5f94c7f435795adb7de9"
+      },
+      {
+        "path": "catalog/projects/ai-research.json",
+        "digest": "sha256:1048497c5764f732ab567626e87e91bcd15f51e97a80bd6ff3e740b4ddd99e47"
+      },
+      {
+        "path": "catalog/projects/hub.json",
+        "digest": "sha256:0cc582c38146b026b3c6fc39a613c0a226c5c05c59ff45a7b61ef5d68a316e52"
+      },
+      {
+        "path": "catalog/projects/kits.json",
+        "digest": "sha256:970e2c77449bfca12197573cb9d2c116115cc9f0bb71c6d86878c53f8c8620ab"
+      },
+      {
+        "path": "catalog/projects/s1.json",
+        "digest": "sha256:489da8e82e1fe53e7fdfccad78f0068029275ec52ada096ea2194555e8598207"
+      },
+      {
+        "path": "catalog/projects/starter.json",
+        "digest": "sha256:47d65ee353b4332725b6f46ff97689cdca9562cd0c1a09d7a36486972fdb1c6f"
+      }
+    ],
+    "catalogGeneratedAt": "2026-09-15",
+    "workspacePolicyVersion": "1.0.0",
+    "factory": {
+      "current": "1.2.0",
+      "supportedVersionRange": ">=1.1.0 <2.0.0"
+    },
+    "vercel": {
+      "cliAuth": "expired",
+      "deploymentsProtected": "all-existing-team-deployments-are-sso-protected",
+      "accessibilityRule": "受 SSO 保护的 URL 不得被称为 public。只有匿名请求返回 2xx 才支持这个说法。"
+    },
+    "catalogPortsGeneratedAt": "2026-09-15"
+  },
+  "rules": {
+    "publicRequiresRecordedUrl": "只有当 catalog 记录了 deployment.productionUrl 时，条目才是 public 且可点击。",
+    "unknownIsNotPublic": "没有已核实地址的条目显示「未部署 / 受保护」，既不给死链接，也不猜地址；受 SSO 保护的地址不得称为 public。",
+    "catalogIsTheOnlyFactSource": "身份、kind、端口、门禁、工厂/套件状态与部署状态全部来自 catalog；lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
+    "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。"
+  },
+  "syncedAt": "2026-09-15T23:38:23.500Z",
+  "payloadDigest": "sha256:e45d42c9373198d2c1cf3925ea2700700aa2ff1e7e8155fe6ee76d3ef9484c3a",
+  "counts": {
+    "projects": 6,
+    "withPublicUrl": 0,
+    "withoutPublicUrl": 6,
+    "byKind": {
+      "hub": 1,
+      "kits": 1,
+      "product": 3,
+      "starter": 1
+    }
+  },
+  "portCollisions": [
+    {
+      "port": 3200,
+      "projectIds": [
+        "kits",
+        "s1",
+        "starter"
+      ],
+      "severity": "high"
+    }
+  ],
+  "projects": [
+    {
+      "id": "ai-finance",
+      "kind": "product",
+      "title": "AI Finance · 原型产品",
+      "path": "prototype-ai-finance",
+      "repo": "https://github.com/skillre/prototype-ai-finance.git",
+      "defaultBranch": "main",
+      "qaPort": 3210,
+      "qaPortSource": "prototype-ai-finance/playwright.config.ts:PORT (`Number(process.env.FINANCE_PORT ?? 3210)`)",
+      "gates": {
+        "lint": true,
+        "typecheck": true,
+        "test": true,
+        "build": true,
+        "qa": false
+      },
+      "gatesMissing": [
+        "qa"
+      ],
+      "factory": {
+        "lockPath": "factory/factory.lock.json",
+        "lockPresent": false,
+        "lockFormat": null,
+        "factoryVersion": null,
+        "policyVersion": null,
+        "initStage": null
+      },
+      "kits": {
+        "role": "consumer",
+        "lockPresent": true,
+        "registryVersion": "0.1.1"
+      },
+      "observed": {
+        "observedAt": "2026-09-15",
+        "branch": "feature/style-cinematic-source-install",
+        "head": "8a20e0d",
+        "dirty": false
+      },
+      "deployment": {
+        "provider": "vercel",
+        "linked": true,
+        "projectName": "prototype-ai-finance",
+        "productionBranch": null,
+        "productionUrl": null,
+        "publicUrl": null,
+        "availability": "not-public",
+        "label": "未部署 / 受保护",
+        "clickable": false,
+        "reason": "catalog 记录了 Vercel 项目链接，但没有已核实的公开 URL（deployment.productionUrl = null）；团队内已存在的部署受 SSO 保护，受保护不得称为 public。",
+        "evidence": [
+          {
+            "source": "catalog/projects/ai-finance.json#notes[6]",
+            "text": "**当前不存在可公开访问的部署（2026-09-15 核实）**：公开别名返回 **404**，旧的 production 部署返回 **410 Gone**。团队内已存在的部署全部受 **SSO 保护**。因此 `deployment.productionUrl` 保持 null —— 410 表示旧的 production 已被移除，不是「还在服务只是看不见」。推论：**这个仓没有 public URL 可用**，不能拿一个受保护的 URL 称为 public。"
+          }
+        ]
+      },
+      "sourceFile": "catalog/projects/ai-finance.json"
+    },
+    {
+      "id": "ai-research",
+      "kind": "product",
+      "title": "AI Research · 原型产品",
+      "path": "prototype-ai-research",
+      "repo": "https://github.com/skillre/prototype-ai-research.git",
+      "defaultBranch": "main",
+      "qaPort": 3230,
+      "qaPortSource": "prototype-ai-research/.qa/qa.config.mjs:QA_PORT",
+      "gates": {
+        "lint": true,
+        "typecheck": true,
+        "test": true,
+        "build": true,
+        "qa": true
+      },
+      "gatesMissing": [],
+      "factory": {
+        "lockPath": "factory.lock.json",
+        "lockPresent": true,
+        "lockFormat": "governance-baseline",
+        "factoryVersion": "1.2.0",
+        "policyVersion": "1.3.0",
+        "initStage": "product"
+      },
+      "kits": {
+        "role": "consumer",
+        "lockPresent": true,
+        "registryVersion": "0.1.1"
+      },
+      "observed": {
+        "observedAt": "2026-09-15",
+        "branch": "feature/factory-governance-v1.3",
+        "head": "3858f3c",
+        "dirty": true
+      },
+      "deployment": {
+        "provider": "vercel",
+        "linked": true,
+        "projectName": "prototype-ai-research",
+        "productionBranch": null,
+        "productionUrl": null,
+        "publicUrl": null,
+        "availability": "not-public",
+        "label": "未部署 / 受保护",
+        "clickable": false,
+        "reason": "catalog 记录了 Vercel 项目链接，但没有已核实的公开 URL（deployment.productionUrl = null）；团队内已存在的部署受 SSO 保护，受保护不得称为 public。",
+        "evidence": []
+      },
+      "sourceFile": "catalog/projects/ai-research.json"
+    },
+    {
+      "id": "hub",
+      "kind": "hub",
+      "title": "Prototype Hub · 原型索引门户",
+      "path": "prototype-hub",
+      "repo": "https://github.com/skillre/prototype-hub.git",
+      "defaultBranch": "main",
+      "qaPort": 3100,
+      "qaPortSource": "prototype-hub/playwright.config.ts:PORT",
+      "gates": {
+        "lint": true,
+        "typecheck": true,
+        "test": true,
+        "build": true,
+        "qa": false
+      },
+      "gatesMissing": [
+        "qa"
+      ],
+      "factory": {
+        "lockPath": "factory/factory.lock.json",
+        "lockPresent": false,
+        "lockFormat": null,
+        "factoryVersion": null,
+        "policyVersion": null,
+        "initStage": null
+      },
+      "kits": {
+        "role": "none",
+        "lockPresent": false,
+        "registryVersion": null
+      },
+      "observed": {
+        "observedAt": "2026-09-15",
+        "branch": "main",
+        "head": "9d63830",
+        "dirty": false
+      },
+      "deployment": {
+        "provider": "vercel",
+        "linked": false,
+        "projectName": null,
+        "productionBranch": null,
+        "productionUrl": null,
+        "publicUrl": null,
+        "availability": "not-public",
+        "label": "未部署 / 受保护",
+        "clickable": false,
+        "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
+        "evidence": [
+          {
+            "source": "catalog/projects/hub.json#notes[3]",
+            "text": "仓库无 .vercel 目录：未 link 任何 Vercel 项目。"
+          },
+          {
+            "source": "catalog/projects/hub.json#notes[4]",
+            "text": "**未核实的远端观察**：Vercel 侧似乎存在一个名为 `prototype` 的项目与 hub 相关。hub 本地没有 .vercel 目录，无法从本地核对，因此 `deployment.projectName` **保持 null** —— 一个「似乎」不构成可以写进 catalog 的事实。原始观察记在 catalog/compatibility.json:infrastructure.vercel.observations。"
+          }
+        ]
+      },
+      "sourceFile": "catalog/projects/hub.json"
+    },
+    {
+      "id": "kits",
+      "kind": "kits",
+      "title": "Prototype Kits · 视觉与能力资产 Registry",
+      "path": "prototype-kits",
+      "repo": "https://github.com/skillre/prototype-kits.git",
+      "defaultBranch": "main",
+      "qaPort": 3200,
+      "qaPortSource": "prototype-kits/playground/package.json:dev `next dev -p 3200`；prototype-kits/.qa/kits-shots.mjs:KITS_BASE 默认 http://localhost:3200",
+      "gates": {
+        "lint": true,
+        "typecheck": true,
+        "test": true,
+        "build": true,
+        "qa": true
+      },
+      "gatesMissing": [],
+      "factory": {
+        "lockPath": "factory/factory.lock.json",
+        "lockPresent": false,
+        "lockFormat": null,
+        "factoryVersion": null,
+        "policyVersion": null,
+        "initStage": null
+      },
+      "kits": {
+        "role": "registry-source",
+        "lockPresent": false,
+        "registryVersion": "0.2.0"
+      },
+      "observed": {
+        "observedAt": "2026-09-15",
+        "branch": "main",
+        "head": "a282c51",
+        "dirty": false
+      },
+      "deployment": {
+        "provider": "vercel",
+        "linked": true,
+        "projectName": "prototype-kits",
+        "productionBranch": null,
+        "productionUrl": null,
+        "publicUrl": null,
+        "availability": "not-public",
+        "label": "未部署 / 受保护",
+        "clickable": false,
+        "reason": "catalog 记录了 Vercel 项目链接，但没有已核实的公开 URL（deployment.productionUrl = null）；团队内已存在的部署受 SSO 保护，受保护不得称为 public。",
+        "evidence": [
+          {
+            "source": "catalog/projects/kits.json#notes[5]",
+            "text": "**部署身份有歧义（2026-09-15 核实）**：同一个 repo 在 Vercel 侧关联了 **3 个项目**。本地 .vercel/project.json 只能指明其中一个，catalog 记录的就是本地已核对的那一个（`prototype-kits`）。另外两个的名称未经本地核对，因此不写入 catalog —— 但这条歧义本身必须留档：**「这个 repo 部署到哪里」在当前有多个可能答案**。"
+          }
+        ]
+      },
+      "sourceFile": "catalog/projects/kits.json"
+    },
+    {
+      "id": "s1",
+      "kind": "product",
+      "title": "S1 Incident Command · 原型产品",
+      "path": "prototype-s1-incident-command",
+      "repo": null,
+      "defaultBranch": null,
+      "qaPort": 3200,
+      "qaPortSource": "prototype-s1-incident-command/.qa/qa.config.mjs:QA_PORT",
+      "gates": {
+        "lint": true,
+        "typecheck": true,
+        "test": true,
+        "build": true,
+        "qa": true
+      },
+      "gatesMissing": [],
+      "factory": {
+        "lockPath": "factory/factory.lock.json",
+        "lockPresent": false,
+        "lockFormat": null,
+        "factoryVersion": null,
+        "policyVersion": null,
+        "initStage": "product"
+      },
+      "kits": {
+        "role": "consumer",
+        "lockPresent": true,
+        "registryVersion": "0.2.0"
+      },
+      "observed": {
+        "observedAt": "2026-09-15",
+        "branch": "feature/incident-command-workspace",
+        "head": "e0fe812",
+        "dirty": false
+      },
+      "deployment": {
+        "provider": "vercel",
+        "linked": false,
+        "projectName": null,
+        "productionBranch": null,
+        "productionUrl": null,
+        "publicUrl": null,
+        "availability": "not-public",
+        "label": "未部署 / 受保护",
+        "clickable": false,
+        "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
+        "evidence": [
+          {
+            "source": "catalog/projects/s1.json#notes[1]",
+            "text": "**原因已核实（2026-09-15）**：`skillre/prototype-s1-incident-command` 这个 GitHub repo **不存在**。所以这不是一处漏配的 remote —— 远端仓根本还没有。创建远端仓是人的决定，控制面不猜仓名，也不填一个看起来合理的 URL。推论：s1 目前无法通过 Vercel Git 集成部署。"
+          }
+        ]
+      },
+      "sourceFile": "catalog/projects/s1.json"
+    },
+    {
+      "id": "starter",
+      "kind": "starter",
+      "title": "Prototype Starter · Factory 基线",
+      "path": "prototype-starter",
+      "repo": "https://github.com/skillre/prototype-starter.git",
+      "defaultBranch": "main",
+      "qaPort": 3200,
+      "qaPortSource": "prototype-starter/.qa/qa.config.mjs:QA_PORT",
+      "gates": {
+        "lint": true,
+        "typecheck": true,
+        "test": true,
+        "build": true,
+        "qa": true
+      },
+      "gatesMissing": [],
+      "factory": {
+        "lockPath": "factory.lock.json",
+        "lockPresent": true,
+        "lockFormat": "governance-baseline",
+        "factoryVersion": "1.2.0",
+        "policyVersion": "1.3.0",
+        "initStage": "baseline"
+      },
+      "kits": {
+        "role": "consumer",
+        "lockPresent": false,
+        "registryVersion": null
+      },
+      "observed": {
+        "observedAt": "2026-09-15",
+        "branch": "feature/factory-governance-v1.3",
+        "head": "64d743d",
+        "dirty": true
+      },
+      "deployment": {
+        "provider": "vercel",
+        "linked": false,
+        "projectName": null,
+        "productionBranch": null,
+        "productionUrl": null,
+        "publicUrl": null,
+        "availability": "not-public",
+        "label": "未部署 / 受保护",
+        "clickable": false,
+        "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
+        "evidence": []
+      },
+      "sourceFile": "catalog/projects/starter.json"
+    }
+  ]
+}

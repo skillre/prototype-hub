@@ -1,4 +1,5 @@
 import { DEFAULT_LOCALE, getDictionary } from "@/lib/i18n"
+import { catalogSource } from "@/lib/prototypes"
 
 export function SiteFooter() {
   const t = getDictionary(DEFAULT_LOCALE)
@@ -20,6 +21,12 @@ export function SiteFooter() {
             </span>
           </p>
           <p className="mt-3 text-sm text-ink-soft">{t.footer.tagline}</p>
+          <p className="mt-2 text-xs text-ink-faint">
+            {t.footer.catalogNote}
+            {catalogSource.catalogGeneratedAt
+              ? ` · ${t.footer.catalogSnapshot} ${catalogSource.catalogGeneratedAt}`
+              : null}
+          </p>
         </div>
 
         <div className="flex flex-col gap-3 lg:items-end">

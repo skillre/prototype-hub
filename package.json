@@ -8,8 +8,14 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "playwright test",
-    "check": "pnpm lint && pnpm typecheck && pnpm test"
+    "test": "node scripts/check-qa-port.mjs && playwright test",
+    "qa": "node scripts/check-qa-port.mjs && node .qa/browser-qa.mjs",
+    "qa:online": "node .qa/online-qa.mjs",
+    "catalog:sync": "node scripts/sync-factory-catalog.mjs",
+    "catalog:check": "node scripts/sync-factory-catalog.mjs --check",
+    "factory:agents": "node scripts/guard-agent-policy.mjs",
+    "factory:deploy": "node scripts/verify-deployment.mjs",
+    "check": "pnpm factory:agents && pnpm catalog:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm qa"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
