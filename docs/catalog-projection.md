@@ -166,8 +166,10 @@ verdict: INTEGRITY-OK (UPSTREAM UNVERIFIED) —— 只验证了生成物内部�
 不是从 URL 或分支名推断出来的。只有匿名 2xx 才支持「public」这个说法，这里成立。
 
 于是投影里 **hub 自己**从「未部署 / 受保护」变成 `public` + 「公开」+ 可点击；
-其余五仓（starter / kits / research 的生产地址受 SSO 保护；finance 与 s1 目前没有
-可匿名访问的地址）仍是 `not-public`，页面上**不渲染任何 `<a href>`**。
+其余五仓的生产部署**全部受 SSO 保护**（匿名请求 302 → `sso-api`，2026-09-16 观察到），
+所以仍是 `not-public`、页面上**不渲染任何 `<a href>`**。其中 finance 与 s1 的生产部署是
+当天稍后用 Vercel API 以 `gitSource`（`ref=main`）补上的（`8d3eea5`），同样受保护 ——
+**受保护既不是失败，也不是 public**，因此 `deployment.productionUrl` 对它们仍是 null。
 
 > **分支断言必须有出处。** `productionBranch` 与 `productionBranchSource` 是**一起**投影的：
 > 只写一个 "main" 而没有出处，正是控制面这次收紧规则要消除的东西

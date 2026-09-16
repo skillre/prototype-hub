@@ -10,14 +10,14 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "b30a55546a769e4f47ff0145d5a83ee1db9b41ac",
+    "gitSha": "2e85683a130de8c9ee07ef64355fcbe64c317fa0",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:8d3817f36a9675cf06fbe2d7d029a5ff629f27ea942f9c3984590f864d87cbe5",
+    "inputsDigest": "sha256:d6b5f022f4a40e6a328933fdc892e023de6a48a46018b1412898d1717a79c625",
     "inputsDirty": false,
     "inputs": [
       {
         "path": "catalog/compatibility.json",
-        "digest": "sha256:8f661e03d231195c51f3349f1c572cef904291302d800038691b99c611148dad"
+        "digest": "sha256:18e9ef51c4e2f6109e3de1f4093bd66d0215711132e8bf34dfe341811dcd096e"
       },
       {
         "path": "catalog/ports.json",
@@ -29,7 +29,7 @@
       },
       {
         "path": "catalog/projects/ai-finance.json",
-        "digest": "sha256:dea0951275f0a1774b9cd258653086daaaa54e28f8a0a4a382f6fa47fca2fccf"
+        "digest": "sha256:8b360a6ccaabc8bc82cd5b4f64788fdb7ca832cb6525197c0f77a630ef102b9b"
       },
       {
         "path": "catalog/projects/ai-research.json",
@@ -45,7 +45,7 @@
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:34fa64c5bb3db5d08a1bdb455c256eb79f3b03d2e8902eb72a0d8df9ff04305f"
+        "digest": "sha256:3a9117588e23a629e259a4d64f157f68a7c9d89ef6252954238e33f450d51050"
       },
       {
         "path": "catalog/projects/starter.json",
@@ -71,8 +71,8 @@
     "catalogIsTheOnlyFactSource": "身份、kind、端口、门禁、工厂/套件状态与部署状态全部来自 catalog；lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。"
   },
-  "syncedAt": "2026-09-16T02:11:16.761Z",
-  "payloadDigest": "sha256:15866525b6463cb32e9e19d872d08e882e34cabf02d839a3865a11366dec10d3",
+  "syncedAt": "2026-09-16T04:57:55.651Z",
+  "payloadDigest": "sha256:4fb34ec687b504218540c319a11b9d5520725165ad72294c8466dc9a8d99d2cc",
   "counts": {
     "projects": 6,
     "withPublicUrl": 1,
@@ -150,6 +150,10 @@
           {
             "source": "catalog/projects/ai-finance.json#notes[9]",
             "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
+          },
+          {
+            "source": "catalog/projects/ai-finance.json#notes[10]",
+            "text": "**Production 部署已补上（2026-09-16，用户授权）**：本仓的 `main` 是在 `vercel git connect` **之前**就 push 的，而 Git 集成只在 push 时构建、不追溯 —— 所以它此前是**零部署**。用 Vercel API 以 `gitSource`（`type=github` / `repoId` / `ref=main` / `sha=dd13e78…`，即已推送的 main 那个 commit）创建了一条 `target=production` 的部署，`readyState=READY`，身份里的 `gitRef` 就是 `main`（不是靠 URL 推断的）。该地址对匿名请求返回 **302 → sso-api**，因此它是 **protected**，`deployment.productionUrl` 保持 null。"
           }
         ]
       },
@@ -422,6 +426,10 @@
           {
             "source": "catalog/projects/s1.json#notes[9]",
             "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
+          },
+          {
+            "source": "catalog/projects/s1.json#notes[10]",
+            "text": "**Production 分支错位已纠正（2026-09-16，用户授权）**：原先那条 `target=production` 的部署来自 `feature/incident-command-workspace`（`bfa14b6`）—— 原因是新建 GitHub 仓的默认分支就是第一个被 push 的分支。默认分支已改回 `main`，并用 Vercel API 以 `gitSource`（`ref=main` / `sha=b985588…`）创建了一条新的 `target=production` 部署，`readyState=READY`。旧那条不作删改，只作历史。该地址对匿名请求 **302 → sso-api**，所以 `deployment.productionUrl` 仍是 null：受保护不等于 public。"
           }
         ]
       },
