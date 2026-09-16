@@ -165,11 +165,36 @@ verdict: INTEGRITY-OK (UPSTREAM UNVERIFIED) —— 只验证了生成物内部�
 `vercel api /v9/projects/<name>` 的 `link.productionBranch` **只读回读**——
 不是从 URL 或分支名推断出来的。只有匿名 2xx 才支持「public」这个说法，这里成立。
 
-于是投影里 **hub 自己**从「未部署 / 受保护」变成 `public` + 「公开」+ 可点击；
-其余五仓的生产部署**全部受 SSO 保护**（匿名请求 302 → `sso-api`，2026-09-16 观察到），
-所以仍是 `not-public`、页面上**不渲染任何 `<a href>`**。其中 finance 与 s1 的生产部署是
+于是投影里 **hub 自己**从「未部署 / 受保护」变成 `public` + 「公开」+ 可点击；当时另外五仓
+仍是 `not-public`（starter / kits / research 的生产地址受 SSO 保护；finance 与 s1 的生产部署是
 当天稍后用 Vercel API 以 `gitSource`（`ref=main`）补上的（`8d3eea5`），同样受保护 ——
-**受保护既不是失败，也不是 public**，因此 `deployment.productionUrl` 对它们仍是 null。
+**受保护既不是失败，也不是 public**，因此 `deployment.productionUrl` 对它们仍是 null）。
+
+### 当天第三次变化：六个仓转 Public 之后，公开地址从 1 条变成 4 条
+
+同一天更晚些时候（根 `8eaea8f`）：六个原型仓由 private 改为 public，六个 Vercel 项目的
+Deployment Protection 从「Standard Protection」改为「Only Preview Deployments」——
+Production 不再要求登录，Preview 仍受 SSO 保护。投影里的事实随之变成 **4 条 public /
+2 条 not-public**：
+
+| 条目 | `deployment.productionUrl`（均经**匿名** `curl` 实测） | 投影 |
+|---|---|---|
+| starter | `https://prototype-starter-git-main-skillres-projects.vercel.app`（200） | `public` + 「公开」+ 可点击 |
+| kits | `https://prototype-kits-git-main-skillres-projects.vercel.app`（200） | 同上 |
+| ai-research | `https://prototype-ai-research-git-main-skillres-projects.vercel.app`（200） | 同上 |
+| hub | `https://prototype-hub-dusky.vercel.app/`（不变，200） | 同上 |
+| ai-finance | 仍为 `null` | `not-public` + 「未部署 / 受保护」+ 不渲染 `<a href>` |
+| s1 | 仍为 `null` | 同上 |
+
+**finance 与 s1 为什么没有跟着变公开**：同一个设置下，它们的地址返回 **404**（既不是 200
+也不是 302）—— 它们的部署是用 Vercel API 以 `gitSource` 创建的、不是 Git webhook 触发的，
+平台没有把它们当作「当前生产部署」来路由；关掉保护层之后请求无处可去。控制面**已把它们
+恢复为受保护（302），没有留下 404**，并把这条机制差异写进各自的 `notes[11]`（这两条原文
+会出现在生成物的 `evidence` 里）。要让它们也公开，需要一次**真正的 main push** 让 Git 集成
+接管 —— 那是另一次人工授权，不在本轮范围内。
+
+「有没有对外可点的地址」是人的断言：`tests/catalog-projection.spec.ts` 里那份公开/不可点
+条目清单被显式改成了 4 / 2，而不是让它随 catalog 悄悄变化。
 
 > **分支断言必须有出处。** `productionBranch` 与 `productionBranchSource` 是**一起**投影的：
 > 只写一个 "main" 而没有出处，正是控制面这次收紧规则要消除的东西

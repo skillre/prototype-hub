@@ -10,14 +10,14 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "3b313307db129b459c883af7984a8bae3936e3ab",
+    "gitSha": "8eaea8fb39130641cc78f91a0ed9ab50366bd151",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:a15a1e732bec2c26a113b6de8c179bc9758b59d3a8033e0e91b29aaee1c3b695",
+    "inputsDigest": "sha256:693df5597d8173adf25cfb5d6598c1451d4a0adc5f2bcfb5e2a7d80a984f12ba",
     "inputsDirty": false,
     "inputs": [
       {
         "path": "catalog/compatibility.json",
-        "digest": "sha256:18e9ef51c4e2f6109e3de1f4093bd66d0215711132e8bf34dfe341811dcd096e"
+        "digest": "sha256:49a90c46f809a0d90ecb45185679cb396e8cde4d2ec70b6ba0ee111ee9d2ba40"
       },
       {
         "path": "catalog/ports.json",
@@ -25,15 +25,15 @@
       },
       {
         "path": "workspace-policy.json",
-        "digest": "sha256:4d6a34600f61419e0c7f910cc5d3e4c5feb3fd26faf0252e2fcb9e464f7e9e42"
+        "digest": "sha256:db3fc6829f219c34dd0fef9c9c8f14b38f4dc395fe02aabf770794613095f0f4"
       },
       {
         "path": "catalog/projects/ai-finance.json",
-        "digest": "sha256:8b360a6ccaabc8bc82cd5b4f64788fdb7ca832cb6525197c0f77a630ef102b9b"
+        "digest": "sha256:3a6ec680881cb07b7cfaa0b912fa1b46ec6ad32bdc531a14b8a2dc6f560b8605"
       },
       {
         "path": "catalog/projects/ai-research.json",
-        "digest": "sha256:b0b23fd0027569a3e3fbbef960bbb1861c3f0155b44e938a599877bbcab2ee85"
+        "digest": "sha256:a04bf22d7de0939180138173e6c7adb079257d46b06427989c265e1a14378fe9"
       },
       {
         "path": "catalog/projects/hub.json",
@@ -41,15 +41,15 @@
       },
       {
         "path": "catalog/projects/kits.json",
-        "digest": "sha256:9ec7ff6e4e5b0eabae741f420ef137b6ff6e5cd85924763d71458147a9f783c4"
+        "digest": "sha256:9ea8ba88bfeb742d5bbf50a809558ed1597ed550d020ea1a099bf3ac5d4787c1"
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:3a9117588e23a629e259a4d64f157f68a7c9d89ef6252954238e33f450d51050"
+        "digest": "sha256:3e28d454890d503038f01134b72965e8ec06f91e09128102757a9371a5919499"
       },
       {
         "path": "catalog/projects/starter.json",
-        "digest": "sha256:4b8a3794bbcfc2d315980ad2138100c7ed0f4289c76381885562c4868fe28c4c"
+        "digest": "sha256:568901ac461f6b1a1e4245532543081d81210332b402fbad11fbb380912401c1"
       }
     ],
     "catalogGeneratedAt": "2026-09-16",
@@ -71,12 +71,12 @@
     "catalogIsTheOnlyFactSource": "身份、kind、端口、门禁、工厂/套件状态与部署状态全部来自 catalog；lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。"
   },
-  "syncedAt": "2026-09-16T05:09:53.356Z",
-  "payloadDigest": "sha256:c8cfae6e29f1cb919a9c759889537ed3e074d51fede8a37fc4cc86a323a1174a",
+  "syncedAt": "2026-09-16T07:22:44.360Z",
+  "payloadDigest": "sha256:163fa4af70a9ab793d7b21a376f679ad4e6a90211f5392a27cd2c6661578e788",
   "counts": {
     "projects": 6,
-    "withPublicUrl": 1,
-    "withoutPublicUrl": 5,
+    "withPublicUrl": 4,
+    "withoutPublicUrl": 2,
     "byKind": {
       "hub": 1,
       "kits": 1,
@@ -154,6 +154,10 @@
           {
             "source": "catalog/projects/ai-finance.json#notes[10]",
             "text": "**Production 部署已补上（2026-09-16，用户授权）**：本仓的 `main` 是在 `vercel git connect` **之前**就 push 的，而 Git 集成只在 push 时构建、不追溯 —— 所以它此前是**零部署**。用 Vercel API 以 `gitSource`（`type=github` / `repoId` / `ref=main` / `sha=dd13e78…`，即已推送的 main 那个 commit）创建了一条 `target=production` 的部署，`readyState=READY`，身份里的 `gitRef` 就是 `main`（不是靠 URL 推断的）。该地址对匿名请求返回 **302 → sso-api**，因此它是 **protected**，`deployment.productionUrl` 保持 null。"
+          },
+          {
+            "source": "catalog/projects/ai-finance.json#notes[11]",
+            "text": "**生产地址仍然只对已登录者可见（2026-09-16）**：`deployment.productionUrl` 保持 null，理由与 s1 完全相同（见 s1.json 的同名 note）：它的部署也是用 Vercel API 以 `gitSource` 创建的，Git 集成没有接管，关掉 Deployment Protection 会让地址变成 404 而不是 200。已恢复为受保护（302），没有留下 404。"
           }
         ]
       },
@@ -201,12 +205,12 @@
         "projectName": "prototype-ai-research",
         "productionBranch": "main",
         "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch；2026-09-16 只读回读，六个项目全部为 main，且 link.type=github / link.org=skillre 与该仓的 origin 一致",
-        "productionUrl": null,
-        "publicUrl": null,
-        "availability": "not-public",
-        "label": "未部署 / 受保护",
-        "clickable": false,
-        "reason": "catalog 记录了 Vercel 项目链接，但没有已核实的公开 URL（deployment.productionUrl = null）；团队内已存在的部署受 SSO 保护，受保护不得称为 public。",
+        "productionUrl": "https://prototype-ai-research-git-main-skillres-projects.vercel.app",
+        "publicUrl": "https://prototype-ai-research-git-main-skillres-projects.vercel.app",
+        "availability": "public",
+        "label": "公开",
+        "clickable": true,
+        "reason": "catalog 的 deployment.productionUrl 记录了一个已核实的地址。",
         "evidence": [
           {
             "source": "catalog/projects/ai-research.json#notes[6]",
@@ -215,6 +219,10 @@
           {
             "source": "catalog/projects/ai-research.json#notes[8]",
             "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
+          },
+          {
+            "source": "catalog/projects/ai-research.json#notes[9]",
+            "text": "**生产地址现在是公开可达的（2026-09-16，用户授权）**：六个原型仓改为 Public，并把对应 Vercel 项目的 Deployment Protection 从「Standard Protection」调成「Only Preview Deployments」—— Production 不再要求登录，Preview 仍受 SSO 保护。实名核对：该地址对**匿名**请求返回 **HTTP/2 200**（而 Preview 地址仍是 302 → sso-api），两条都实测过，不是从设置推断。按本 catalog 的规则，只有匿名 2xx 才允许写进 `productionUrl`。"
           }
         ]
       },
@@ -343,12 +351,12 @@
         "projectName": "prototype-kits",
         "productionBranch": "main",
         "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch；2026-09-16 只读回读，六个项目全部为 main，且 link.type=github / link.org=skillre 与该仓的 origin 一致",
-        "productionUrl": null,
-        "publicUrl": null,
-        "availability": "not-public",
-        "label": "未部署 / 受保护",
-        "clickable": false,
-        "reason": "catalog 记录了 Vercel 项目链接，但没有已核实的公开 URL（deployment.productionUrl = null）；团队内已存在的部署受 SSO 保护，受保护不得称为 public。",
+        "productionUrl": "https://prototype-kits-git-main-skillres-projects.vercel.app",
+        "publicUrl": "https://prototype-kits-git-main-skillres-projects.vercel.app",
+        "availability": "public",
+        "label": "公开",
+        "clickable": true,
+        "reason": "catalog 的 deployment.productionUrl 记录了一个已核实的地址。",
         "evidence": [
           {
             "source": "catalog/projects/kits.json#notes[7]",
@@ -361,6 +369,10 @@
           {
             "source": "catalog/projects/kits.json#notes[10]",
             "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
+          },
+          {
+            "source": "catalog/projects/kits.json#notes[11]",
+            "text": "**生产地址现在是公开可达的（2026-09-16，用户授权）**：六个原型仓改为 Public，并把对应 Vercel 项目的 Deployment Protection 从「Standard Protection」调成「Only Preview Deployments」—— Production 不再要求登录，Preview 仍受 SSO 保护。实名核对：该地址对**匿名**请求返回 **HTTP/2 200**（而 Preview 地址仍是 302 → sso-api），两条都实测过，不是从设置推断。按本 catalog 的规则，只有匿名 2xx 才允许写进 `productionUrl`。"
           }
         ]
       },
@@ -430,6 +442,10 @@
           {
             "source": "catalog/projects/s1.json#notes[10]",
             "text": "**Production 分支错位已纠正（2026-09-16，用户授权）**：原先那条 `target=production` 的部署来自 `feature/incident-command-workspace`（`bfa14b6`）—— 原因是新建 GitHub 仓的默认分支就是第一个被 push 的分支。默认分支已改回 `main`，并用 Vercel API 以 `gitSource`（`ref=main` / `sha=b985588…`）创建了一条新的 `target=production` 部署，`readyState=READY`。旧那条不作删改，只作历史。该地址对匿名请求 **302 → sso-api**，所以 `deployment.productionUrl` 仍是 null：受保护不等于 public。"
+          },
+          {
+            "source": "catalog/projects/s1.json#notes[11]",
+            "text": "**生产地址仍然只对已登录者可见（2026-09-16）**：`deployment.productionUrl` 保持 null。原因不是配置漏了，而是一条实测出来的机制差异：把 Deployment Protection 调成「Only Preview Deployments」之后，**starter / kits / hub / research 四条生产地址变成匿名 200，而 finance 与 s1 变成 404** —— 后两者的部署是用 Vercel API 以 `gitSource` 创建的，不是由 Git webhook 触发的，因此没有被平台当作「当前生产部署」来路由；关掉保护后请求无处可去。已把它们恢复为受保护（302，登录后可看），没有留下 404。要让它们也公开，需要一次**真正的 main push** 让 Git 集成接管。"
           }
         ]
       },
@@ -477,16 +493,20 @@
         "projectName": null,
         "productionBranch": "main",
         "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch；2026-09-16 只读回读，六个项目全部为 main，且 link.type=github / link.org=skillre 与该仓的 origin 一致",
-        "productionUrl": null,
-        "publicUrl": null,
-        "availability": "not-public",
-        "label": "未部署 / 受保护",
-        "clickable": false,
-        "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
+        "productionUrl": "https://prototype-starter-git-main-skillres-projects.vercel.app",
+        "publicUrl": "https://prototype-starter-git-main-skillres-projects.vercel.app",
+        "availability": "public",
+        "label": "公开",
+        "clickable": true,
+        "reason": "catalog 的 deployment.productionUrl 记录了一个已核实的地址。",
         "evidence": [
           {
             "source": "catalog/projects/starter.json#notes[9]",
             "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
+          },
+          {
+            "source": "catalog/projects/starter.json#notes[10]",
+            "text": "**生产地址现在是公开可达的（2026-09-16，用户授权）**：六个原型仓改为 Public，并把对应 Vercel 项目的 Deployment Protection 从「Standard Protection」调成「Only Preview Deployments」—— Production 不再要求登录，Preview 仍受 SSO 保护。实名核对：该地址对**匿名**请求返回 **HTTP/2 200**（而 Preview 地址仍是 302 → sso-api），两条都实测过，不是从设置推断。按本 catalog 的规则，只有匿名 2xx 才允许写进 `productionUrl`。"
           }
         ]
       },

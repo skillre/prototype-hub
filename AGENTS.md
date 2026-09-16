@@ -245,12 +245,20 @@ pnpm qa                # Browser QA：自管 server + 身份校验 + 双视口 �
 > 页面不暴露 commit，「页面 == `2d5cc8a`」没有被对上（见
 > `unresolved[deployment/hub-live-revision-sha]`）。那次部署是用户授权合并触发的平台行为，
 > 本仓没有创建、没有提升、没有改保护设置。
+> 同一天更晚些时候六个原型仓转为 public、六个 Vercel 项目的 Deployment Protection 改为
+> 「Only Preview Deployments」，starter / kits / ai-research 因此也拿到匿名 200 的公开地址：
+> 投影现在是 **4 条 `public` / 2 条 `not-public`**（finance 与 s1 例外 —— 同一设置下它们的
+> 地址返回 404，控制面已把它们恢复为受保护）。索引会渲染四条可点击条目，这是 **catalog
+> 事实变化**的结果，不是本仓改了展示层；两条例外的原因写在它们的 `notes[11]` 里。
 
 > **根控制面侧的第四分支已经补上（2026-09-16 核实）**：`contracts/factory-lock.schema.json`
 > 用 `oneOf` 描述**四种**角色形状，`catalog-hub` 这一支从根仓 `fdbfbae` 起就在；
 > `5f9a6b1` 又给它加了本锁的四个 provenance 字段（`productionBranch` /
 > `productionBranchSource` / `latestProductionSha` / `latestProductionShaSource`）——
 > 理由是：断言一个 Production Branch 而说不出它从哪来，正是这套东西要防的。
-> 控制面的 `pnpm drift` 现在对六个锁都通过：2026-09-16 实测 67 pass · 0 fail · 8 warn ·
-> 4 skip · 2 unknown（两个 unknown 是历史根文件的人工决定，退出码 2 来自它们，不来自 hub）。
+> 控制面的 `pnpm drift` 现在对六个锁都通过：2026-09-16 实测 **66 pass · 0 fail · 10 warn ·
+> 4 skip · 0 unknown**（verdict: PASS WITH WARNINGS，**exit 0**）。两个历史 unknown 都已关闭：
+> phase-0 根文件由人决定删除，六个 Public 仓的 `main` 也真的配上了最小保护
+> （禁 force-push / 禁删除）——注意「main 已受保护」这句话必须带主语：控制仓仍是 private/free，
+> 平台对它不提供该能力，保护也只挡 force-push 与删除，挡不住一次错误的 push。
 > **不要为了「看着合规」把锁改回产品形状**：`kind: catalog-hub` 仍然是更准确的描述。

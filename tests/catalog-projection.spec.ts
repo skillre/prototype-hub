@@ -197,27 +197,37 @@ test.describe("catalog 投影", () => {
   })
 
   /**
-   * 这一条是**人的断言**：截至 2026-09-16，根 catalog 只核实过一个公开地址——
-   * hub 自己的 production URL。别处新增 productionUrl 时它必须被显式改一次，
+   * 这一条是**人的断言**：截至 2026-09-16，根 catalog 核实了**四个**公开地址 ——
+   * starter / kits / ai-research / hub。别处新增或撤销 productionUrl 时它必须被显式改一次，
    * 因为「有没有对外可点的地址」不该悄悄变化。
    *
-   * 注意它断言的是**链接可用**，不是**页面已更新**：那个地址当天下午已被合并 `main`
+   * 注意它断言的是**链接可用**，不是**页面已更新**：hub 那个地址当天已被合并 `main`
    * 触发的 Production 部署（2d5cc8a）刷新，而「页面 == 该 SHA」没有被本仓独立复核
    * （页面不暴露 commit）。两次观察见 docs/catalog-projection.md 第 9 节。
+   *
+   * 另外两条（ai-finance / s1）**故意留在 not-public**：把 Deployment Protection 关成
+   * 「Only Preview Deployments」之后，它们的地址变成 **404**（既不是 200 也不是 302）——
+   * 部署由 Vercel API 以 `gitSource` 创建、Git 集成没有接管，平台没有把它们当作「当前生产
+   * 部署」来路由。控制面已把它们恢复为受保护：**受保护不是失败，也不是 public**。
    */
   test("公开地址的条目集合与当前 catalog 事实一致", () => {
     const publicIds = artifact.projects
       .filter((project) => project.deployment.publicUrl !== null)
       .map((project) => project.id)
-    expect(publicIds).toEqual(["hub"])
+    expect(publicIds).toEqual(["ai-research", "hub", "kits", "starter"])
 
-    const hub = artifact.projects.find((project) => project.id === "hub")!
-    expect(hub.deployment.publicUrl).toMatch(/^https:\/\//)
-    expect(hub.deployment.clickable).toBe(true)
-    expect(hub.deployment.label).toBe("公开")
+    for (const id of publicIds) {
+      const project = artifact.projects.find((entry) => entry.id === id)!
+      expect(project.deployment.publicUrl).toMatch(/^https:\/\//)
+      expect(project.deployment.clickable).toBe(true)
+      expect(project.deployment.label).toBe("公开")
+    }
 
-    for (const project of artifact.projects.filter((entry) => entry.id !== "hub")) {
-      expect(project.deployment.publicUrl, `${project.id} 不应有公开地址`).toBeNull()
+    const notPublicIds = artifact.projects
+      .filter((project) => project.deployment.publicUrl === null)
+      .map((project) => project.id)
+    expect(notPublicIds).toEqual(["ai-finance", "s1"])
+    for (const project of artifact.projects.filter((entry) => notPublicIds.includes(entry.id))) {
       expect(project.deployment.clickable).toBe(false)
       expect(project.deployment.label).toBe("未部署 / 受保护")
     }

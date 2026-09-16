@@ -105,8 +105,9 @@ pnpm factory:agents --print-block   # 同步管理块（只打印，不写文件
 
 `automation/lib/scan.mjs` 的 `format` / `lockedVersion` 识别同样认识这个形状
 （`catalog-hub` 读 `adoption.factoryVersion`），所以控制面的 `pnpm drift` 不再对 hub 报
-`factory-lock-off-contract`：2026-09-16 实测 **67 pass · 0 fail · 8 warn · 4 skip · 2 unknown**，
-退出码 2 来自两个历史根文件的人工决定，不来自本仓。
+`factory-lock-off-contract`：2026-09-16 实测 **66 pass · 0 fail · 10 warn · 4 skip · 0 unknown**
+（verdict: PASS WITH WARNINGS，**exit 0** —— 两个历史 unknown 都已关闭：phase-0 根文件由人决定
+删除，六个 Public 仓的 `main` 也真的配上了最小保护）。
 
 **历史（留着，因为它是这条规则的来由）**：在这一支补上之前，hub 的 `catalog-hub` 形状
 确实报过 `factory-lock-off-contract` / UNKNOWN（退出码 2），版本比对一节还会报「锁没有声明
