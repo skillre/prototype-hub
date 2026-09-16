@@ -10,9 +10,9 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "5ed48ac0949be34e05b3db6ae71ca90d0ffb8ca6",
+    "gitSha": "51fa6bd05f6edc3a66c8cb889764ea829948b70b",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:f9b1e553d190b4191b3f391cc5a658e27a7347215ef28640401032d01f870534",
+    "inputsDigest": "sha256:7a56804f872bb74c2a6ffbe2edf3387eb134ab5f04a145a99d6108cf3e3469cb",
     "inputsDirty": false,
     "inputs": [
       {
@@ -29,27 +29,27 @@
       },
       {
         "path": "catalog/projects/ai-finance.json",
-        "digest": "sha256:78933b989b8ada5338c47ddf58e5c7829d1d2700bf519ec6007ea8aa67fe9a8b"
+        "digest": "sha256:45af64427e06db4e60faf12671c68f0c589840003945d70886281bd291dfc5ed"
       },
       {
         "path": "catalog/projects/ai-research.json",
-        "digest": "sha256:a04bf22d7de0939180138173e6c7adb079257d46b06427989c265e1a14378fe9"
+        "digest": "sha256:7fa632ee9c299b9cb178dbca88a1cb6bacf96a6e3a88dc9844dcf76421b95058"
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:52251e223d590b570426a6f05f73bb821f3243c45104dc7759ed3f2dbc7e5126"
+        "digest": "sha256:c94a17eb83814542cb3d8b7b76d7bb3aa98416455712046794df73507216e0a1"
       },
       {
         "path": "catalog/projects/kits.json",
-        "digest": "sha256:dac841ab0f2b777a7298211e84d1d23f24005c009e7c1ba9a2f6b72333a22ff5"
+        "digest": "sha256:ce7f447de4c1095c48a90e1c41eca63a776fbf224e9d06eb68ffa96281367033"
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:ef910dae3c336bb38fc166626806a0b3598e6761d83ed37f0b88ebc88db69a08"
+        "digest": "sha256:bf065c64021e163cdb9f48576f20048265280635e92cfb9e38dd50c99936ac00"
       },
       {
         "path": "catalog/projects/starter.json",
-        "digest": "sha256:568901ac461f6b1a1e4245532543081d81210332b402fbad11fbb380912401c1"
+        "digest": "sha256:90b2f4c079fc3fa043a2bd2d465e6e782d75d0a0ebec3b61bdf45e55819aa3d2"
       }
     ],
     "catalogGeneratedAt": "2026-09-16",
@@ -72,8 +72,8 @@
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
     "retiredIsAStateNotAHole": "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。"
   },
-  "syncedAt": "2026-09-16T23:29:42.196Z",
-  "payloadDigest": "sha256:cded5de21df01df2e51a34d27bfb4747581755c7c73cf91d48a0d678fcf90fab",
+  "syncedAt": "2026-09-16T23:42:46.222Z",
+  "payloadDigest": "sha256:1d1bfa5d8f565c99c8fe7f909dbbc57149d2f6779d84a039a081163604a93574",
   "counts": {
     "projects": 6,
     "withPublicUrl": 4,
@@ -122,7 +122,7 @@
         "registryVersion": "0.1.1"
       },
       "observed": {
-        "observedAt": "2026-09-16",
+        "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
         "head": "cd47017",
         "dirty": false
@@ -202,7 +202,7 @@
         "registryVersion": "0.1.1"
       },
       "observed": {
-        "observedAt": "2026-09-16",
+        "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
         "head": "49e35cc",
         "dirty": false
@@ -270,9 +270,9 @@
         "registryVersion": null
       },
       "observed": {
-        "observedAt": "2026-09-16",
+        "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "486c9eb",
+        "head": "43d2047",
         "dirty": false
       },
       "deployment": {
@@ -354,10 +354,10 @@
         "registryVersion": "0.2.0"
       },
       "observed": {
-        "observedAt": "2026-09-16",
+        "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "26353fa",
-        "dirty": true
+        "head": "3bd09a3",
+        "dirty": false
       },
       "deployment": {
         "provider": "vercel",
@@ -426,9 +426,9 @@
         "registryVersion": "0.3.0"
       },
       "observed": {
-        "observedAt": "2026-09-16",
+        "observedAt": "2026-09-17",
         "branch": "feature/s1-console",
-        "head": "83be6c6",
+        "head": "49f302c",
         "dirty": false
       },
       "deployment": {
@@ -494,7 +494,7 @@
         "registryVersion": null
       },
       "observed": {
-        "observedAt": "2026-09-16",
+        "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
         "head": "825bd5e",
         "dirty": false
