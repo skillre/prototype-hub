@@ -29,7 +29,7 @@
     "anonymousAccess": "public",
     "observedOn": "2026-09-16",
     "source": "控制面于 2026-09-16 用 Vercel CLI 回读 skillres-projects/prototype-hub 确认（project id prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB、Latest Production URL）；本仓同时独立做了匿名只读探测：`curl -s -D- https://prototype-hub-dusky.vercel.app/` → HTTP/2 200（server: Vercel，无 SSO 跳转），响应里仍是旧版页面（手写索引 + 旧地址），且不含新的 data-app-identity 标记。",
-    "note": "«已核实» 与 «未核实» 在这里被刻意分开：项目身份与匿名可达性是已核实的事实；Production Branch、当前生产部署对应的 git SHA、以及那份部署是否等于某个已验收的 RC，**都没有被回读**，因此不写在这里（见 unresolved）。部署模型仍是 Vercel Git 集成：本仓没有创建、没有提升、没有修改任何部署，也没有 push。catalog 侧尚未记录该地址，所以投影里的 hub 仍然是 productionUrl=null / 未部署·受保护——控制面把地址写进 catalog/projects/hub.json 之后，下一次 catalog:sync 会自动把它变成 public + 可点击。"
+    "note": "«已核实» 与 «未核实» 在这里被刻意分开：项目身份与匿名可达性是已核实的事实；Production Branch、当前生产部署对应的 git SHA、以及那份部署是否等于某个已验收的 RC，**都没有被回读**，因此不写在这里（见 unresolved）。部署模型仍是 Vercel Git 集成：本仓没有创建、没有提升、没有修改任何部署，也没有 push。catalog 侧尚未记录该地址，所以投影里的 hub 仍然是 productionUrl=null / 未部署·受保护——控制面把地址写进 catalog/projects/hub.json 之后，下一次 catalog:sync 会自动把它变成 public + 可点击。 2026-09-16 根 catalog 已把该地址记进 catalog/projects/hub.json 的 deployment.productionUrl（匿名 curl HTTP/2 200 / server: Vercel / 无 SSO；vercel project ls 确认项目存在），因此投影把 hub 显示为 public + 可点击，其余五仓仍为「未部署 / 受保护」。**但「链接可点」不等于「内容已更新」**：该地址当前提供的仍是旧版页面（手写索引 + Stable + 已 404 的 finance 链接，qa:online 对其 exit 1 / 52 项），刷新它需要一次部署，而部署是独立的人工授权。"
   },
   "projection": {
     "artifact": "lib/generated/factory-catalog.json",
@@ -37,10 +37,10 @@
     "syncCommand": "catalog:sync",
     "checkCommand": "catalog:check",
     "sourceRoot": "FACTORY_CONTROL_ROOT（默认：本仓父目录，即 /Users/skillre/ai-prototypes）",
-    "sourceSha": "83916bf8c8acb7ed7e4d616dae6cf2a8e934c50d",
-    "inputsDigest": "sha256:6c26a17c93275a564ad61775027052371b4250855658138fa34778af76fbe711",
+    "sourceSha": "fdbfbae9f4a25066afe3ee0c775144d09539b986",
+    "inputsDigest": "sha256:26d71a99c6a47fa8ce789f07d115130220f1f98af6dfd732af1d4a8b7af09d16",
     "readOnlyAtRuntime": true,
-    "standaloneHonesty": "根控制面不可用时（独立 CI、裸 clone），`pnpm catalog:check` 只验证生成物内部完整性：payloadDigest 自洽、展示层契约、运行时只读约束；它打印 [upstream-unavailable] 并输出 `INTEGRITY-OK (UPSTREAM UNVERIFIED)`。**未执行上游比对时不会说自己通过**，`--require-upstream` 可以把这一条变成非零退出。"
+    "standaloneHonesty": "根控制面不可用时（独立 CI、裸 clone），`pnpm catalog:check` 只验证生成物内部完整性：payloadDigest 自洽、展示层契约、运行时只读约束；它打印 [upstream-unavailable] 并输出 `INTEGRITY-OK (UPSTREAM UNVERIFIED)`。**未执行上游比对时不会说自己通过**，`--require-upstream` 可以把这一条变成非零退出。 2026-09-16 补充：根 catalog 输入可能带未提交改动（生成物会记 source.inputsDirty），此时上游比对降级为 [upstream-provenance-dirty] 说明——不判 PASS、也不判 FAIL，提交/回退后必须重新 sync 以重新锚定。"
   },
   "managedSurfaces": [
     "AGENTS.md",
@@ -100,5 +100,5 @@
       "value": null
     }
   ],
-  "note": "平台/目录仓的治理锁，记录采纳 policy 1.3.0 那一刻的事实。三件事必须说清楚：(1) **形状是 catalog-hub，不是 product** —— hub 没有基线派生来源、没有 init-contract.json、也不被当作产品部署；把产品形状套上去会让「基线身份」与「部署归属」同时变成谎话。(2) **投影是本仓的核心面** —— 索引不再是手写列表，而是 scripts/sync-factory-catalog.mjs 从根 catalog 生成的 lib/generated/factory-catalog.json；运行时只读生成物，不跨仓读取，`pnpm catalog:check` 在根可用时逐文件复核来源 SHA，在根不可用时诚实地说「未执行上游比对」。(3) **旧的手写断言已经下线** —— AI Finance 曾以 `Stable` + 公开地址出现在首页，而那个地址现在是 404（旧 production 部署 410 Gone）；现在任何没有 catalog 记录 productionUrl 的条目都是 not-public，显示「未部署 / 受保护」，不可点击。部署身份现在被拆成两半记录：deployment 段只有已核实的事实（项目、最新 Production URL、匿名 200），Production Branch 与部署 SHA 留在 unresolved（value: null）。另一侧：根控制面 contracts/factory-lock.schema.json 目前只描述三种角色形状（baseline / product / kits-registry），需要**第四分支 `catalog-hub`**才能把本锁判为符合契约；在那一支补上之前，控制面的 drift 会对 hub 报 factory-lock-off-contract / UNKNOWN——这是控制面待补，不是本仓应该回退形状。"
+  "note": "平台/目录仓的治理锁，记录采纳 policy 1.3.0 那一刻的事实。三件事必须说清楚：(1) **形状是 catalog-hub，不是 product** —— hub 没有基线派生来源、没有 init-contract.json、也不被当作产品部署；把产品形状套上去会让「基线身份」与「部署归属」同时变成谎话。(2) **投影是本仓的核心面** —— 索引不再是手写列表，而是 scripts/sync-factory-catalog.mjs 从根 catalog 生成的 lib/generated/factory-catalog.json；运行时只读生成物，不跨仓读取，`pnpm catalog:check` 在根可用时逐文件复核来源 SHA，在根不可用时诚实地说「未执行上游比对」。(3) **旧的手写断言已经下线** —— AI Finance 曾以 `Stable` + 公开地址出现在首页，而那个地址现在是 404（旧 production 部署 410 Gone）；现在任何没有 catalog 记录 productionUrl 的条目都是 not-public，显示「未部署 / 受保护」，不可点击。部署身份现在被拆成两半记录：deployment 段只有已核实的事实（项目、最新 Production URL、匿名 200），Production Branch 与部署 SHA 留在 unresolved（value: null）。另一侧：根控制面 contracts/factory-lock.schema.json 目前只描述三种角色形状（baseline / product / kits-registry），需要**第四分支 `catalog-hub`**才能把本锁判为符合契约；在那一支补上之前，控制面的 drift 会对 hub 报 factory-lock-off-contract / UNKNOWN——这是控制面待补，不是本仓应该回退形状。 2026-09-16 二次同步：根 catalog 刷新到新 main（生成物 source.gitSha 已更新），hub 由 not-public 变为 public（链接可点、内容仍旧）；输入摘要与来源复核见 catalog:check 输出。"
 }

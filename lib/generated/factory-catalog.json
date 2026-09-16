@@ -10,60 +10,60 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "83916bf8c8acb7ed7e4d616dae6cf2a8e934c50d",
+    "gitSha": "fdbfbae9f4a25066afe3ee0c775144d09539b986",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:6c26a17c93275a564ad61775027052371b4250855658138fa34778af76fbe711",
-    "inputsDirty": false,
+    "inputsDigest": "sha256:26d71a99c6a47fa8ce789f07d115130220f1f98af6dfd732af1d4a8b7af09d16",
+    "inputsDirty": true,
     "inputs": [
       {
         "path": "catalog/compatibility.json",
-        "digest": "sha256:1d51083277f7f163f1a6f5d878518eee6a21707c2bfe71f6e2b92ba7384f97f9"
+        "digest": "sha256:71674445df57f2bd5e9f95b10a8d2eee2ee34bafc7fa1702e6d9d28c554a9792"
       },
       {
         "path": "catalog/ports.json",
-        "digest": "sha256:4c9ca5e3f347b828e757a67e44f1cb142366f16496e0c0bcfafe039c67200990"
+        "digest": "sha256:2223e2397aac96b68ebfd83836791e33718ec89417acb812cc43818813782098"
       },
       {
         "path": "workspace-policy.json",
-        "digest": "sha256:3ccb3d53473c6e93e19f59bf85fdc430ab3dce0ae0a7bc0d0b4dbd768a300632"
+        "digest": "sha256:0041c4d3445a8ab4262ba4d370e9a9147c8766f5a8f85821349351363f413d5c"
       },
       {
         "path": "catalog/projects/ai-finance.json",
-        "digest": "sha256:add68a217279f29b4a7c64e5fd8a11c0cb8de494a72e5f94c7f435795adb7de9"
+        "digest": "sha256:e97511bd54e74d19da38f76aa16443a940a1c134719359217d4da5d727392b17"
       },
       {
         "path": "catalog/projects/ai-research.json",
-        "digest": "sha256:1048497c5764f732ab567626e87e91bcd15f51e97a80bd6ff3e740b4ddd99e47"
+        "digest": "sha256:07c86412222112532dbea2636ff70d005872d040661aa0d133f6efdc8c793cba"
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:0cc582c38146b026b3c6fc39a613c0a226c5c05c59ff45a7b61ef5d68a316e52"
+        "digest": "sha256:d3e74b9dabb9b518e1e0043467308b7117b0bdbc52849239b18ecf12e8c37045"
       },
       {
         "path": "catalog/projects/kits.json",
-        "digest": "sha256:970e2c77449bfca12197573cb9d2c116115cc9f0bb71c6d86878c53f8c8620ab"
+        "digest": "sha256:b45a7041fd22e1e39a34d6ecb842638f37d3f275fc1e2e8288da283612c42aa6"
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:489da8e82e1fe53e7fdfccad78f0068029275ec52ada096ea2194555e8598207"
+        "digest": "sha256:2b34dec3b1a09bc7b76cd35557f73ff5483849bf805261cd9c3694385ae333e3"
       },
       {
         "path": "catalog/projects/starter.json",
-        "digest": "sha256:47d65ee353b4332725b6f46ff97689cdca9562cd0c1a09d7a36486972fdb1c6f"
+        "digest": "sha256:d44c846e3c79ca768139ff7dde8abaa5d60d53b0f8aa04f8b9a2f34bdc1330e0"
       }
     ],
-    "catalogGeneratedAt": "2026-09-15",
-    "workspacePolicyVersion": "1.0.0",
+    "catalogGeneratedAt": "2026-09-16",
+    "workspacePolicyVersion": "1.1.0",
     "factory": {
       "current": "1.2.0",
       "supportedVersionRange": ">=1.1.0 <2.0.0"
     },
     "vercel": {
-      "cliAuth": "expired",
+      "cliAuth": "valid",
       "deploymentsProtected": "all-existing-team-deployments-are-sso-protected",
-      "accessibilityRule": "受 SSO 保护的 URL 不得被称为 public。只有匿名请求返回 2xx 才支持这个说法。"
+      "accessibilityRule": "受 SSO 保护的 URL 不得被称为 public。只有匿名请求返回 2xx 才支持这个说法 —— 302 到 SSO 两者都不是：它既不是部署失败，也不是公开可访问。"
     },
-    "catalogPortsGeneratedAt": "2026-09-15"
+    "catalogPortsGeneratedAt": "2026-09-16"
   },
   "rules": {
     "publicRequiresRecordedUrl": "只有当 catalog 记录了 deployment.productionUrl 时，条目才是 public 且可点击。",
@@ -71,12 +71,12 @@
     "catalogIsTheOnlyFactSource": "身份、kind、端口、门禁、工厂/套件状态与部署状态全部来自 catalog；lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。"
   },
-  "syncedAt": "2026-09-15T23:38:23.500Z",
-  "payloadDigest": "sha256:e45d42c9373198d2c1cf3925ea2700700aa2ff1e7e8155fe6ee76d3ef9484c3a",
+  "syncedAt": "2026-09-16T01:32:26.932Z",
+  "payloadDigest": "sha256:1762d19219b4ddca36b41fe7deeac5e5314cf18dd1153a3247d790bbe12be020",
   "counts": {
     "projects": 6,
-    "withPublicUrl": 0,
-    "withoutPublicUrl": 6,
+    "withPublicUrl": 1,
+    "withoutPublicUrl": 5,
     "byKind": {
       "hub": 1,
       "kits": 1,
@@ -84,17 +84,7 @@
       "starter": 1
     }
   },
-  "portCollisions": [
-    {
-      "port": 3200,
-      "projectIds": [
-        "kits",
-        "s1",
-        "starter"
-      ],
-      "severity": "high"
-    }
-  ],
+  "portCollisions": [],
   "projects": [
     {
       "id": "ai-finance",
@@ -104,24 +94,22 @@
       "repo": "https://github.com/skillre/prototype-ai-finance.git",
       "defaultBranch": "main",
       "qaPort": 3210,
-      "qaPortSource": "prototype-ai-finance/playwright.config.ts:PORT (`Number(process.env.FINANCE_PORT ?? 3210)`)",
+      "qaPortSource": "prototype-ai-finance/.qa/qa.config.mjs:QA_PORT",
       "gates": {
         "lint": true,
         "typecheck": true,
         "test": true,
         "build": true,
-        "qa": false
+        "qa": true
       },
-      "gatesMissing": [
-        "qa"
-      ],
+      "gatesMissing": [],
       "factory": {
-        "lockPath": "factory/factory.lock.json",
-        "lockPresent": false,
-        "lockFormat": null,
-        "factoryVersion": null,
-        "policyVersion": null,
-        "initStage": null
+        "lockPath": "factory.lock.json",
+        "lockPresent": true,
+        "lockFormat": "product",
+        "factoryVersion": "1.2.0",
+        "policyVersion": "1.3.0",
+        "initStage": "product"
       },
       "kits": {
         "role": "consumer",
@@ -129,9 +117,9 @@
         "registryVersion": "0.1.1"
       },
       "observed": {
-        "observedAt": "2026-09-15",
-        "branch": "feature/style-cinematic-source-install",
-        "head": "8a20e0d",
+        "observedAt": "2026-09-16",
+        "branch": "feature/factory-governance-v1.3",
+        "head": "dd13e78",
         "dirty": false
       },
       "deployment": {
@@ -147,8 +135,16 @@
         "reason": "catalog 记录了 Vercel 项目链接，但没有已核实的公开 URL（deployment.productionUrl = null）；团队内已存在的部署受 SSO 保护，受保护不得称为 public。",
         "evidence": [
           {
-            "source": "catalog/projects/ai-finance.json#notes[6]",
-            "text": "**当前不存在可公开访问的部署（2026-09-15 核实）**：公开别名返回 **404**，旧的 production 部署返回 **410 Gone**。团队内已存在的部署全部受 **SSO 保护**。因此 `deployment.productionUrl` 保持 null —— 410 表示旧的 production 已被移除，不是「还在服务只是看不见」。推论：**这个仓没有 public URL 可用**，不能拿一个受保护的 URL 称为 public。"
+            "source": "catalog/projects/ai-finance.json#notes[4]",
+            "text": "**Vercel 侧有一处真实矛盾（2026-09-16 已认证核实）**：本地 `.vercel/project.json` 声称链接到项目名 `prototype-ai-finance`，但当前 scope（skillres-projects）的 `vercel project ls` 里**没有**这个项目，`vercel project inspect prototype-ai-finance` 也直接报 `There is no project`。所以 `deployment.linked: true` 只说明**本地有 link 文件**，不说明项目在平台上存在 —— 这个 link 要么指向另一个 scope/团队，要么已经失效。在核清楚之前，不得据此断言「它部署在哪」。"
+          },
+          {
+            "source": "catalog/projects/ai-finance.json#notes[5]",
+            "text": "**没有可公开访问的部署（2026-09-16 复核）**：两个候选公开别名对匿名请求都返回 **404**；旧的 production 部署返回 **410 Gone**。团队内已存在的部署全部受 **SSO 保护**（匿名 curl starter / kits 的新 Preview 得到 302 → sso-api，是实测）。因此 `deployment.productionUrl` 保持 null：拿一个受保护的 URL 称为 public 是错的，而「匿名 404」只说明匿名访问不到，**不**证明没有部署。"
+          },
+          {
+            "source": "catalog/projects/ai-finance.json#notes[7]",
+            "text": "**没有验证的部分（缺这条就不算合格交接）**：`pnpm qa:online` 从未对任何真实部署运行过；本次 push 之后的 CI 结果尚未回读；`factory:manifest` 的 L3 与 `qa:doctor` 的上游比对都是对着**同机 prototype-kits 工作副本**（registry 0.2.0），不是对着一个钉住的 commit，也不直接对已安装的 0.1.1 —— 它证明「id 存在且 approved / 托管文件与 kits.lock.json 的 checksum 一致」，**不证明**已装内容与上游逐字节一致；HVA（人工视觉验收）未做，因此本仓不处于任何 READY-TO-RELEASE 状态。"
           }
         ]
       },
@@ -174,7 +170,7 @@
       "factory": {
         "lockPath": "factory.lock.json",
         "lockPresent": true,
-        "lockFormat": "governance-baseline",
+        "lockFormat": "product",
         "factoryVersion": "1.2.0",
         "policyVersion": "1.3.0",
         "initStage": "product"
@@ -185,10 +181,10 @@
         "registryVersion": "0.1.1"
       },
       "observed": {
-        "observedAt": "2026-09-15",
+        "observedAt": "2026-09-16",
         "branch": "feature/factory-governance-v1.3",
-        "head": "3858f3c",
-        "dirty": true
+        "head": "49e35cc",
+        "dirty": false
       },
       "deployment": {
         "provider": "vercel",
@@ -201,7 +197,12 @@
         "label": "未部署 / 受保护",
         "clickable": false,
         "reason": "catalog 记录了 Vercel 项目链接，但没有已核实的公开 URL（deployment.productionUrl = null）；团队内已存在的部署受 SSO 保护，受保护不得称为 public。",
-        "evidence": []
+        "evidence": [
+          {
+            "source": "catalog/projects/ai-research.json#notes[6]",
+            "text": "本仓当前在 `feature/factory-governance-v1.3` 上，已 push 到 origin。Caveat：GITHUB git filter 与 Vercel 部署仍取决于人 —— 本仓的 Preview 受 SSO 保护（匿名 302 → sso-api，实测），不得称为 public。"
+          }
+        ]
       },
       "sourceFile": "catalog/projects/ai-research.json"
     },
@@ -213,23 +214,21 @@
       "repo": "https://github.com/skillre/prototype-hub.git",
       "defaultBranch": "main",
       "qaPort": 3100,
-      "qaPortSource": "prototype-hub/playwright.config.ts:PORT",
+      "qaPortSource": "prototype-hub/.qa/qa.config.mjs:QA_PORT",
       "gates": {
         "lint": true,
         "typecheck": true,
         "test": true,
         "build": true,
-        "qa": false
+        "qa": true
       },
-      "gatesMissing": [
-        "qa"
-      ],
+      "gatesMissing": [],
       "factory": {
-        "lockPath": "factory/factory.lock.json",
-        "lockPresent": false,
-        "lockFormat": null,
-        "factoryVersion": null,
-        "policyVersion": null,
+        "lockPath": "factory.lock.json",
+        "lockPresent": true,
+        "lockFormat": "catalog-hub",
+        "factoryVersion": "1.2.0",
+        "policyVersion": "1.3.0",
         "initStage": null
       },
       "kits": {
@@ -238,9 +237,9 @@
         "registryVersion": null
       },
       "observed": {
-        "observedAt": "2026-09-15",
-        "branch": "main",
-        "head": "9d63830",
+        "observedAt": "2026-09-16",
+        "branch": "feature/factory-governance-v1.3",
+        "head": "841a789",
         "dirty": false
       },
       "deployment": {
@@ -248,20 +247,28 @@
         "linked": false,
         "projectName": null,
         "productionBranch": null,
-        "productionUrl": null,
-        "publicUrl": null,
-        "availability": "not-public",
-        "label": "未部署 / 受保护",
-        "clickable": false,
-        "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
+        "productionUrl": "https://prototype-hub-dusky.vercel.app/",
+        "publicUrl": "https://prototype-hub-dusky.vercel.app/",
+        "availability": "public",
+        "label": "公开",
+        "clickable": true,
+        "reason": "catalog 的 deployment.productionUrl 记录了一个已核实的地址。",
         "evidence": [
           {
+            "source": "catalog/projects/hub.json#notes[2]",
+            "text": "**AI Finance 的旧公开地址已经下线**：它曾以 `Stable` + 公开链接出现在首页，而那个地址现在是 404（旧 production 410 Gone）。现在只有 catalog 记录了 `productionUrl` 的条目才会被渲染成可点击链接，其余显示「未部署 / 受保护」且不渲染 `<a>`。"
+          },
+          {
             "source": "catalog/projects/hub.json#notes[3]",
-            "text": "仓库无 .vercel 目录：未 link 任何 Vercel 项目。"
+            "text": "**部署身份：已核实与未核实被刻意分开。** 已核实（2026-09-16）：Vercel 项目 `prototype-hub`（`prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`），Latest Production URL `https://prototype-hub-dusky.vercel.app/`，匿名 curl 返回 **HTTP/2 200**（server: Vercel，无 SSO 跳转）—— 这个地址是**公开可达**的。未核实：项目级 **Production Branch** 设置与那一次部署对应的 **git SHA** 都没有回读，因此 `productionBranch` 仍记 null。"
           },
           {
             "source": "catalog/projects/hub.json#notes[4]",
-            "text": "**未核实的远端观察**：Vercel 侧似乎存在一个名为 `prototype` 的项目与 hub 相关。hub 本地没有 .vercel 目录，无法从本地核对，因此 `deployment.projectName` **保持 null** —— 一个「似乎」不构成可以写进 catalog 的事实。原始观察记在 catalog/compatibility.json:infrastructure.vercel.observations。"
+            "text": "**那份公开部署提供的是旧版页面**（2026-09-16 观察：仍是手写索引 + `Stable` 标记 + 已 404 的 finance 链接，且不含新的 `data-app-identity` 标记）。刷新它需要一次部署，而部署是独立的人工授权 —— 本控制面没有创建、没有提升、没有修改任何部署。把 URL 记进 catalog 只说明「它部署在这里」，不代表它的内容是当前版本。"
+          },
+          {
+            "source": "catalog/projects/hub.json#notes[5]",
+            "text": "仓库本地无 `.vercel` 目录（未经 CLI link），但 Vercel 侧项目确实存在 —— Git 集成连接是平台侧的事。`deployment.linked` 记的是**本地有没有 link 文件**，与「平台上有没有项目」是两件事，不能互相推断。"
           }
         ]
       },
@@ -274,8 +281,8 @@
       "path": "prototype-kits",
       "repo": "https://github.com/skillre/prototype-kits.git",
       "defaultBranch": "main",
-      "qaPort": 3200,
-      "qaPortSource": "prototype-kits/playground/package.json:dev `next dev -p 3200`；prototype-kits/.qa/kits-shots.mjs:KITS_BASE 默认 http://localhost:3200",
+      "qaPort": 3300,
+      "qaPortSource": "prototype-kits/.qa/qa.config.mjs:QA_PORT",
       "gates": {
         "lint": true,
         "typecheck": true,
@@ -285,11 +292,11 @@
       },
       "gatesMissing": [],
       "factory": {
-        "lockPath": "factory/factory.lock.json",
-        "lockPresent": false,
-        "lockFormat": null,
+        "lockPath": "factory.lock.json",
+        "lockPresent": true,
+        "lockFormat": "kits-registry",
         "factoryVersion": null,
-        "policyVersion": null,
+        "policyVersion": "1.3.0",
         "initStage": null
       },
       "kits": {
@@ -298,9 +305,9 @@
         "registryVersion": "0.2.0"
       },
       "observed": {
-        "observedAt": "2026-09-15",
-        "branch": "main",
-        "head": "a282c51",
+        "observedAt": "2026-09-16",
+        "branch": "feature/factory-governance-v1.3",
+        "head": "1a7ea3a",
         "dirty": false
       },
       "deployment": {
@@ -316,8 +323,12 @@
         "reason": "catalog 记录了 Vercel 项目链接，但没有已核实的公开 URL（deployment.productionUrl = null）；团队内已存在的部署受 SSO 保护，受保护不得称为 public。",
         "evidence": [
           {
-            "source": "catalog/projects/kits.json#notes[5]",
-            "text": "**部署身份有歧义（2026-09-15 核实）**：同一个 repo 在 Vercel 侧关联了 **3 个项目**。本地 .vercel/project.json 只能指明其中一个，catalog 记录的就是本地已核对的那一个（`prototype-kits`）。另外两个的名称未经本地核对，因此不写入 catalog —— 但这条歧义本身必须留档：**「这个 repo 部署到哪里」在当前有多个可能答案**。"
+            "source": "catalog/projects/kits.json#notes[7]",
+            "text": "**本仓的 CI 与质量门**：`.github/workflows/ci.yml` 自包含（`factory:agents → registry → verify:standalone → lint/typecheck/test/build`，browser QA 独立 job 且 `needs:` 质量门），不调用部署 CLI、不持有 token。真实运行结果：2026-09-16 的 `1a7ea3a` → **success**（`gh run list` 回读）。"
+          },
+          {
+            "source": "catalog/projects/kits.json#notes[8]",
+            "text": "**部署身份有歧义（原始观察 2026-09-15，未在 2026-09-16 重新推导）**：当时记录「同一个 repo 在 Vercel 侧关联了 3 个项目」。2026-09-16 用已认证的 `vercel project ls` 回读当前 scope，列表里**只有一个**名为 `prototype-kits` 的项目。这两条不矛盾也不互证 —— 后者的范围是当前 scope 的项目名单，前者的证据来源没有重新核。因此 `deployment.productionBranch` / `productionUrl` 仍记 null：**「这个 repo 部署到哪里」在当前仍不只有一个确定答案**。"
           }
         ]
       },
@@ -330,7 +341,7 @@
       "path": "prototype-s1-incident-command",
       "repo": null,
       "defaultBranch": null,
-      "qaPort": 3200,
+      "qaPort": 3220,
       "qaPortSource": "prototype-s1-incident-command/.qa/qa.config.mjs:QA_PORT",
       "gates": {
         "lint": true,
@@ -341,11 +352,11 @@
       },
       "gatesMissing": [],
       "factory": {
-        "lockPath": "factory/factory.lock.json",
-        "lockPresent": false,
-        "lockFormat": null,
-        "factoryVersion": null,
-        "policyVersion": null,
+        "lockPath": "factory.lock.json",
+        "lockPresent": true,
+        "lockFormat": "product",
+        "factoryVersion": "1.2.0",
+        "policyVersion": "1.3.0",
         "initStage": "product"
       },
       "kits": {
@@ -354,10 +365,10 @@
         "registryVersion": "0.2.0"
       },
       "observed": {
-        "observedAt": "2026-09-15",
+        "observedAt": "2026-09-16",
         "branch": "feature/incident-command-workspace",
         "head": "e0fe812",
-        "dirty": false
+        "dirty": true
       },
       "deployment": {
         "provider": "vercel",
@@ -410,10 +421,10 @@
         "registryVersion": null
       },
       "observed": {
-        "observedAt": "2026-09-15",
+        "observedAt": "2026-09-16",
         "branch": "feature/factory-governance-v1.3",
-        "head": "64d743d",
-        "dirty": true
+        "head": "825bd5e",
+        "dirty": false
       },
       "deployment": {
         "provider": "vercel",

@@ -470,16 +470,25 @@ function readExistingArtifact(repoRoot) {
 function stabilise({ artifact, inputsDigest, existing, reanchor, now, root }) {
   const previous = existing && !existing.__unreadable ? existing : null
   const inputsUnchanged = previous?.source?.inputsDigest === inputsDigest
-  const keepPrevious = inputsUnchanged && !reanchor
-
   const head = git(root, ["rev-parse", "HEAD"])
+
+  // Cleanliness is part of provenance, not a cosmetic flag. `source.gitSha` is a
+  // claim of the form "these exact bytes were read at this commit", and that
+  // claim is false while the control root carries uncommitted changes to the
+  // inputs. So a change in dirtiness re-anchors even when the content did not
+  // change: the moment those edits are committed, the next sync moves the anchor
+  // to the commit that actually contains them, and the per-file re-check at that
+  // SHA starts passing again instead of failing forever against a stale anchor.
+  const previousDirty = previous?.source?.inputsDirty === true
+  const provenanceStable = inputsUnchanged && previousDirty === artifact.source.inputsDirty
+  const keepPrevious = provenanceStable && !reanchor
 
   artifact.source.gitSha =
     keepPrevious && previous.source.gitSha ? previous.source.gitSha : head
   artifact.syncedAt =
     keepPrevious && typeof previous.syncedAt === "string" ? previous.syncedAt : now
   artifact.payloadDigest = payloadDigestOf(artifact)
-  return { previous, inputsUnchanged, head }
+  return { previous, inputsUnchanged, head, provenanceStable }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -845,7 +854,7 @@ function main() {
     }
 
     const { artifact, inputsDigest } = buildProjection({ root, rootSource })
-    const { previous, inputsUnchanged, head } = stabilise({
+    const { previous, inputsUnchanged, provenanceStable, head } = stabilise({
       artifact,
       inputsDigest,
       existing,
@@ -874,10 +883,17 @@ function main() {
     )
     push(
       `  source.gitSha ${artifact.source.gitSha} · HEAD ${head ?? "unknown"} · ` +
-        `输入${inputsUnchanged ? "未变（保留旧 SHA/syncedAt）" : "已变（已推进 SHA/syncedAt）"}${reanchor ? " · --reanchor" : ""}`,
+        `输入${inputsUnchanged ? "未变" : "已变"}` +
+        `${provenanceStable ? "（保留旧 SHA/syncedAt）" : "（已推进 SHA/syncedAt）"}` +
+        `${reanchor ? " · --reanchor" : ""}`,
     )
     push(`  payloadDigest ${artifact.payloadDigest}`)
-    push(`  inputsDirty = ${artifact.source.inputsDirty}`)
+    push(
+      `  inputsDirty = ${artifact.source.inputsDirty}` +
+        (artifact.source.inputsDirty
+          ? " ← 根仓的 catalog 输入有未提交改动：记录内容属实，但 SHA 无法完整描述它；该处提交/回退后需重新 sync 以重新锚定"
+          : ""),
+    )
     push("")
 
     const integrity = checkIntegrity(artifact)

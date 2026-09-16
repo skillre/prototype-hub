@@ -141,3 +141,47 @@ verdict: INTEGRITY-OK (UPSTREAM UNVERIFIED) —— 只验证了生成物内部�
   catalog 的核实工作属于控制面的 `drift` / `verify-policy`。
 - `observed` 快照有半衰期（分支/SHA/脏标记随时会动），所以它只作为事实展示，
   不进入任何判据。
+
+## 9 · 2026-09-16 的行为变化：hub 变成「公开且可点击」
+
+根控制面刷新后（`prototype-factory-control` main = 见生成物的 `source.gitSha`），
+`catalog/projects/hub.json` 记录了：
+
+```jsonc
+"deployment": {
+  "linked": false,
+  "projectName": "prototype-hub",
+  "productionUrl": "https://prototype-hub-dusky.vercel.app/"   // ← 新增
+}
+```
+
+核实方式（控制面一侧，2026-09-16）：匿名 `curl` 实测 **HTTP/2 200、`server: Vercel`、
+无 SSO 跳转**；`vercel project ls` 确认项目 `prototype-hub` 存在
+（`prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`）。**只有匿名 2xx 才支持「public」这个说法**，这里成立。
+
+于是投影里：
+
+- **hub 自己**从「未部署 / 受保护」变成 **`public` + `label: "公开"` + 可点击**，
+  索引行重新出现外链箭头与「打开原型」级别的可点承诺；
+- **其余五个仓**仍是 `not-public`、「未部署 / 受保护」，页面上**不渲染任何 `<a href>`**。
+
+> **⚠️ 「链接可点」不等于「内容已更新」。** 那个地址当前提供的仍是**旧版**页面：
+> 手写索引（`AI CRM` / `AI Finance` / `Stable`）与已经 404 的
+> `https://prototype-ai-finance.vercel.app/`。把线上刷新成本仓这一版需要**一次部署**，
+> 而部署是独立的人工授权（见 `docs/deployment.md`）——索引只负责把「地址是已核实的」
+> 如实画出来，不负责让那个地址上的内容变新。
+> 证据：`pnpm qa:online --base-url=https://prototype-hub-dusky.vercel.app/` 以观察者身份
+> 跑过该地址，结论是 identity 标记 0 次、投影条目 0/6、两个未授权外链（52 项问题，exit 1）。
+
+## 10 · 输入脏了怎么办（provenance 的边界）
+
+`source.gitSha` 是一句「这些字节是在这个 commit 上读到的」。根控制面有**未提交的
+catalog 改动**时，这句话就不成立，所以生成物会记 `source.inputsDirty: true`，并且
+`catalog:check` 对这一步只给 `[upstream-provenance-dirty]` 的说明——**不判 PASS，也不判 FAIL**：
+
+- 内容摘要（`inputsDigest`）仍然能与工作副本逐文件比对，所以「生成物是否反映当前 catalog」
+  是可验证的；
+- 但「它等于哪个 commit 的内容」不可验证——那要等控制面把改动提交（或回退）。
+- 提交之后**必须重新 sync**：脏状态本身是 provenance 的一部分，`catalog:sync` 会在
+  脏 → 干净的转换处重新锚定 `gitSha`/`syncedAt`（即使内容没变），否则按旧 SHA
+  逐文件复核会永远失败。内容没变、脏状态没变时，重复 sync 仍然是 byte-identical。

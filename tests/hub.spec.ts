@@ -174,7 +174,15 @@ test.describe("首页", () => {
         await expect(link).toHaveAttribute("target", "_blank")
         await expect(link).toHaveAttribute("rel", /noopener/)
         await expect(link).toHaveAttribute("rel", /noreferrer/)
-        await expect(card).toContainText("打开原型")
+
+        if (prototype.featured) {
+          // 展板的 CTA 是可点的「打开原型」
+          await expect(card).toContainText("打开原型")
+        } else {
+          // 索引行没有 CTA 按钮，它用外链箭头 + 屏幕阅读器提示表达「可点」
+          await expect(card.locator("svg.lucide-arrow-up-right")).toHaveCount(1)
+          await expect(card).toContainText("在新标签页打开")
+        }
       }
     })
   }

@@ -151,14 +151,58 @@ test.describe("catalog 投影", () => {
     }
   })
 
-  test("生成物里没有任何 vercel.app 地址，也没有旧的手写断言", () => {
+  test("生成物里的部署地址只能来自 catalog 记录，且没有旧的手写断言", () => {
     const raw = readFileSync(
       path.join(REPO_ROOT, "lib/generated/factory-catalog.json"),
       "utf8",
     )
-    expect(raw).not.toMatch(/https?:\/\/[^\s"]*vercel\.app/i)
+
+    // 旧的手写地址永远不许出现（它们正是这次改造要消除的东西）。
     for (const legacy of LEGACY_CLAIMS) {
       expect(raw).not.toContain(legacy)
+    }
+
+    // 生成物里**可以**出现部署地址，但只能来自 catalog 记录：逐个比对 publicUrl。
+    const recordedUrls = new Set(
+      artifact.projects
+        .map((project) => project.deployment.publicUrl)
+        .filter((url): url is string => typeof url === "string"),
+    )
+    const normalise = (url: string) => url.replace(/\/+$/, "")
+    const recorded = new Set([...recordedUrls].map(normalise))
+    const foundUrls = raw.match(/https?:\/\/[^\s"]*\.vercel\.app/gi) ?? []
+    expect(foundUrls.length).toBeGreaterThanOrEqual(recorded.size)
+    for (const url of foundUrls) {
+      expect(
+        recorded.has(normalise(url)),
+        `${url} 不在 catalog 记录的 publicUrl 里`,
+      ).toBe(true)
+    }
+  })
+
+  /**
+   * 这一条是**人的断言**：截至 2026-09-16，根 catalog 只核实过一个公开地址——
+   * hub 自己的 production URL。别处新增 productionUrl 时它必须被显式改一次，
+   * 因为「有没有对外可点的地址」不该悄悄变化。
+   *
+   * 注意它断言的是**链接可用**，不是**页面已更新**：那个地址当前提供的仍是旧版页面，
+   * 详见 docs/catalog-projection.md 第 9 节。
+   */
+  test("公开地址的条目集合与当前 catalog 事实一致", () => {
+    const publicIds = artifact.projects
+      .filter((project) => project.deployment.publicUrl !== null)
+      .map((project) => project.id)
+    expect(publicIds).toEqual(["hub"])
+
+    const hub = artifact.projects.find((project) => project.id === "hub")!
+    expect(hub.deployment.publicUrl).toMatch(/^https:\/\//)
+    expect(hub.deployment.clickable).toBe(true)
+    expect(hub.deployment.label).toBe("公开")
+
+    for (const project of artifact.projects.filter((entry) => entry.id !== "hub")) {
+      expect(project.deployment.publicUrl, `${project.id} 不应有公开地址`).toBeNull()
+      expect(project.deployment.clickable).toBe(false)
+      expect(project.deployment.label).toBe("未部署 / 受保护")
     }
   })
 
@@ -250,6 +294,14 @@ test.describe("catalog:check", () => {
     const output = runCheck(root)
     expect(output).toContain("PASS（已与根 catalog 比对）")
     expect(output).toContain("输入摘要一致")
-    expect(output).toContain("来源可复核")
+
+    // 来源复核只有两种合法结局：通过，或者**明确声明降级**（根仓有未提交输入时）。
+    // 两种都不出现 = 静默的 provenance，不能算验证过。
+    const cleanProvenance = output.includes("来源可复核")
+    const degradedProvenance = output.includes("[upstream-provenance-dirty]")
+    expect(
+      cleanProvenance || degradedProvenance,
+      "来源复核既没有通过也没有声明降级 —— 静默的 provenance 不能算验证过",
+    ).toBe(true)
   })
 })
