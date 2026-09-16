@@ -92,26 +92,28 @@ pnpm factory:agents --print-block   # 同步管理块（只打印，不写文件
 
 退出码：`0` 通过（允许 warning）· `1` 不合法 · `2` 缺文件。
 
-## 5 · 控制面侧待补：第四角色分支
+## 5 · 控制面侧的第四个角色分支（已补上，2026-09-16 核实）
 
-根控制面的 `contracts/factory-lock.schema.json` 目前用 `oneOf` 描述**三种**角色形状：
+根控制面的 `contracts/factory-lock.schema.json` 现在用 `oneOf` 描述**四种**角色形状：
 
 1. `factory-baseline` governance lock（starter）
 2. product lock（派生产品）
 3. `kits-registry` lock（kits）
+4. `catalog-hub` lock（本仓）—— 从根仓 `fdbfbae` 起就在；`5f9a6b1` 又给它加上本锁新增的
+   四个 provenance 字段（`productionBranch` / `productionBranchSource` /
+   `latestProductionSha` / `latestProductionShaSource`）
 
-本仓的 `catalog-hub` 形状是**第四种**。在那一支被补上之前：
+`automation/lib/scan.mjs` 的 `format` / `lockedVersion` 识别同样认识这个形状
+（`catalog-hub` 读 `adoption.factoryVersion`），所以控制面的 `pnpm drift` 不再对 hub 报
+`factory-lock-off-contract`：2026-09-16 实测 **67 pass · 0 fail · 8 warn · 4 skip · 2 unknown**，
+退出码 2 来自两个历史根文件的人工决定，不来自本仓。
 
-- 控制面的 `pnpm drift` 会对 hub 报 `factory-lock-off-contract` / **UNKNOWN**（退出码 2），
-  并且在版本比对一节报「锁没有声明控制面认识的那种版本字段」——因为 `factoryVersion`
-  在平台形状里位于 `adoption` 段，而扫描器只在顶层找它；
-- 这是**控制面要补的分支**，不是本仓应该把锁改回产品形状的理由：
-  `kind: catalog-hub` 是**更准确**的描述，把准确描述换成能通过校验的旧形状，
-  正是这次治理要消除的那种「为了让闸门变绿而说谎」。
-
-控制面补分支时需要同步两处：`contracts/factory-lock.schema.json` 的 `oneOf`
-与 `automation/lib/scan.mjs` 的 `format` / `lockedVersion` 识别（让 `catalog-hub`
-读 `adoption.factoryVersion`）。
+**历史（留着，因为它是这条规则的来由）**：在这一支补上之前，hub 的 `catalog-hub` 形状
+确实报过 `factory-lock-off-contract` / UNKNOWN（退出码 2），版本比对一节还会报「锁没有声明
+控制面认识的那种版本字段」—— 因为 `factoryVersion` 在平台形状里位于 `adoption` 段，
+而扫描器只在顶层找它。当时正确的处置是**补控制面的分支**，不是把锁改回产品形状：
+`kind: catalog-hub` 是更准确的描述，把准确描述换成能通过校验的旧形状，
+正是这次治理要消除的那种「为了让闸门变绿而说谎」。
 
 ## 6 · 一处必须说清楚的半衰期
 

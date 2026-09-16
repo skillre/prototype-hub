@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://prototype-factory.local/schemas/hub-factory-lock.schema.json",
   "title": "Factory Governance Lock · platform / catalog-hub",
-  "description": "平台/目录仓（prototype-hub）自己的治理锁，形态 `kind: catalog-hub`。\n\n**它不是 product 锁。** 产品锁描述「从哪一版基线派生、初始化到哪一步、部署到哪个 Vercel 项目」；hub 没有派生来源，也不是被初始化的产品。把产品形状套上去会让「基线身份」与「部署归属」两件事同时变成谎话，所以这里用一套诚实的平台形状：它记录自己的包名/版本/采纳时刻 SHA、采纳了哪一版工厂与政策、政策来源的确切 commit、catalog 投影的产物与命令、受管面，以及**未决项**（value 恒为 null，probe 写清楚怎么核的、结果是什么）。\n\n锁记的是「采纳那一刻的快照」，不是「当前 HEAD」——HEAD 前进不会让锁失效，但两个值都必须能解释。\n\n本文件是**仓内 schema**（`pnpm factory:agents` 用它校验本仓的锁）；根控制面的 contracts/factory-lock.schema.json 需要为 `kind: catalog-hub` 增开第四个角色分支，才能把这种形状也当作「符合契约」。在那之前，控制面的 drift 会对本仓报 `factory-lock-off-contract` / UNKNOWN —— 这是控制面一侧待补的分支，不是本仓把形状改回产品的理由。",
+  "description": "平台/目录仓（prototype-hub）自己的治理锁，形态 `kind: catalog-hub`。\n\n**它不是 product 锁。** 产品锁描述「从哪一版基线派生、初始化到哪一步、部署到哪个 Vercel 项目」；hub 没有派生来源，也不是被初始化的产品。把产品形状套上去会让「基线身份」与「部署归属」两件事同时变成谎话，所以这里用一套诚实的平台形状：它记录自己的包名/版本/采纳时刻 SHA、采纳了哪一版工厂与政策、政策来源的确切 commit、catalog 投影的产物与命令、受管面，以及**未决项**（value 恒为 null，probe 写清楚怎么核的、结果是什么）。\n\n锁记的是「采纳那一刻的快照」，不是「当前 HEAD」——HEAD 前进不会让锁失效，但两个值都必须能解释。\n\n本文件是**仓内 schema**（`pnpm factory:agents` 用它校验本仓的锁），比根契约更严（要求 deployment 段与 readOnlyAtRuntime const true）；根控制面的 contracts/factory-lock.schema.json 已用第四支 `catalog-hub` 接纳这种形状（该支从根仓 fdbfbae 起就在，2026-09-16 又由 5f9a6b1 补上本锁的四个 provenance 字段），控制面的 drift 因此不再对本仓报 `factory-lock-off-contract`。本仓不改回产品形状的理由不变：`kind: catalog-hub` 是更准确的描述。",
   "type": "object",
   "additionalProperties": false,
   "required": [

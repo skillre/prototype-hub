@@ -228,9 +228,12 @@ pnpm qa                # Browser QA：自管 server + 身份校验 + 双视口 �
   Latest Production URL、匿名 200、项目级 Production Branch = `main` + 出处、那次生产部署的
   SHA + 出处）；本仓没有独立复核到的部分（页面不暴露 commit）留在这里，值仍为 null。
   两半分开放，是为了不把「知道一半」说成「知道」。
-- `ci/runtime` —— 这份 CI 是否真的在 Actions 上跑过。**在 2026-09-16 这次 push 之前**没有任何
-  运行记录；push 之后必须回读第一次运行的结论（run id / headSha / conclusion），
-  不能因为 workflow 文件看着对就假设它是绿的。
+- `ci/runtime` —— **已关闭（2026-09-16，不再是未决项）**：这份 CI 确实在 Actions 上跑过并被回读 ——
+  当天四次 push 运行（`841a789` 35042199927、`2d5cc8a` 35045169397 与 35045341876、
+  `a694b91` 35057401601）结论都是 `success`，两个 job（Quality gate → Browser QA (serial)）
+  串行跑完。但要记住 CI 里跑的是 **standalone** 模式的 `catalog:check`
+  （打印 `[upstream-unavailable]` / `INTEGRITY-OK (UPSTREAM UNVERIFIED)`）：
+  它证明生成物内部自洽，**不等于**与根 catalog 一致。
 
 > **线上地址的两次观察（都留着，因为可以对照）**：2026-09-16 上午该地址提供的还是**旧版**页面
 > （手写索引 + `Stable` + 已经 404 的旧地址，也没有身份标记）；用户授权合并 `main` 之后，
@@ -243,7 +246,11 @@ pnpm qa                # Browser QA：自管 server + 身份校验 + 双视口 �
 > `unresolved[deployment/hub-live-revision-sha]`）。那次部署是用户授权合并触发的平台行为，
 > 本仓没有创建、没有提升、没有改保护设置。
 
-> **根控制面侧待补（不是本仓回退形状的理由）**：`contracts/factory-lock.schema.json`
-> 目前用 `oneOf` 描述三种角色形状（`factory-baseline` / `product` / `kits-registry`），
-> 需要**第四分支 `catalog-hub`** 才能把本锁判为符合契约。在那一支补上之前，控制面的
-> `pnpm drift` 会对 hub 报 `factory-lock-off-contract` / UNKNOWN —— 这是控制面要补的分支。
+> **根控制面侧的第四分支已经补上（2026-09-16 核实）**：`contracts/factory-lock.schema.json`
+> 用 `oneOf` 描述**四种**角色形状，`catalog-hub` 这一支从根仓 `fdbfbae` 起就在；
+> `5f9a6b1` 又给它加了本锁的四个 provenance 字段（`productionBranch` /
+> `productionBranchSource` / `latestProductionSha` / `latestProductionShaSource`）——
+> 理由是：断言一个 Production Branch 而说不出它从哪来，正是这套东西要防的。
+> 控制面的 `pnpm drift` 现在对六个锁都通过：2026-09-16 实测 67 pass · 0 fail · 8 warn ·
+> 4 skip · 2 unknown（两个 unknown 是历史根文件的人工决定，退出码 2 来自它们，不来自 hub）。
+> **不要为了「看着合规」把锁改回产品形状**：`kind: catalog-hub` 仍然是更准确的描述。
