@@ -10,14 +10,14 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "8eaea8fb39130641cc78f91a0ed9ab50366bd151",
+    "gitSha": "014cabb96492326301b26ebb67d99a61edbde367",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:693df5597d8173adf25cfb5d6598c1451d4a0adc5f2bcfb5e2a7d80a984f12ba",
+    "inputsDigest": "sha256:7350177619904b12dfdd4ce7d515dd2dea6e5efe5d560d38ba63bf6b2aa7036c",
     "inputsDirty": false,
     "inputs": [
       {
         "path": "catalog/compatibility.json",
-        "digest": "sha256:49a90c46f809a0d90ecb45185679cb396e8cde4d2ec70b6ba0ee111ee9d2ba40"
+        "digest": "sha256:678b597ac77abd287ad1b7402a50d5593b3fd89cf58ccec2c358c96b98297802"
       },
       {
         "path": "catalog/ports.json",
@@ -45,7 +45,7 @@
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:3e28d454890d503038f01134b72965e8ec06f91e09128102757a9371a5919499"
+        "digest": "sha256:18ae7c3796fbe6b4dba18a5cd614701ece0391a1937e311755644e71ff884ee9"
       },
       {
         "path": "catalog/projects/starter.json",
@@ -71,8 +71,8 @@
     "catalogIsTheOnlyFactSource": "身份、kind、端口、门禁、工厂/套件状态与部署状态全部来自 catalog；lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。"
   },
-  "syncedAt": "2026-09-16T07:22:44.360Z",
-  "payloadDigest": "sha256:163fa4af70a9ab793d7b21a376f679ad4e6a90211f5392a27cd2c6661578e788",
+  "syncedAt": "2026-09-16T07:33:02.570Z",
+  "payloadDigest": "sha256:b0ff57932331030a219aee4e26563cf2ca7ca0f7547c4234d8b73c4c949eb1be",
   "counts": {
     "projects": 6,
     "withPublicUrl": 4,
@@ -445,7 +445,7 @@
           },
           {
             "source": "catalog/projects/s1.json#notes[11]",
-            "text": "**生产地址仍然只对已登录者可见（2026-09-16）**：`deployment.productionUrl` 保持 null。原因不是配置漏了，而是一条实测出来的机制差异：把 Deployment Protection 调成「Only Preview Deployments」之后，**starter / kits / hub / research 四条生产地址变成匿名 200，而 finance 与 s1 变成 404** —— 后两者的部署是用 Vercel API 以 `gitSource` 创建的，不是由 Git webhook 触发的，因此没有被平台当作「当前生产部署」来路由；关掉保护后请求无处可去。已把它们恢复为受保护（302，登录后可看），没有留下 404。要让它们也公开，需要一次**真正的 main push** 让 Git 集成接管。"
+            "text": "**生产地址仍然只对已登录者可见（2026-09-16）**：`deployment.productionUrl` 保持 null。原因**尚未完全确定**，但有一条已证实的事实：这个项目的主域名被**另一个 Vercel 项目**占用 —— `POST /v9/projects/<id>/domains` 返回 **409 `already assigned to another project`**。我最初记在这里的解释（「部署由 API 创建而不是 Git webhook 触发，所以平台不把它当作当前生产部署」）**已被我自己的实验推翻**：给本仓做了真正的 Git push、拿到 `target=production` / `gitRef=main` / `READY` 的 webhook 部署之后，Only-Preview 设置下**依旧 404**。排除过的另外两条假设也都实测过：在 `vercel git connect` 之后重新创建 gitSource 部署 → 仍 404；改设置前后对照 → 只有保护开关决定 302 还是 404。**已恢复为受保护：登录后可以看到页面，不留 404。**"
           }
         ]
       },

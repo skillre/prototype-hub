@@ -206,9 +206,11 @@ test.describe("catalog 投影", () => {
    * （页面不暴露 commit）。两次观察见 docs/catalog-projection.md 第 9 节。
    *
    * 另外两条（ai-finance / s1）**故意留在 not-public**：把 Deployment Protection 关成
-   * 「Only Preview Deployments」之后，它们的地址变成 **404**（既不是 200 也不是 302）——
-   * 部署由 Vercel API 以 `gitSource` 创建、Git 集成没有接管，平台没有把它们当作「当前生产
-   * 部署」来路由。控制面已把它们恢复为受保护：**受保护不是失败，也不是 public**。
+   * 「Only Preview Deployments」之后，它们的地址变成 **404**（既不是 200 也不是 302），
+   * 控制面已把它们恢复为受保护：**受保护不是失败，也不是 public**。
+   * **原因尚未确定**：控制面第一版解释（「部署由 API 创建、不是 Git webhook 触发的」）
+   * 已被真实 Git push 实验推翻；已证实的只有「主域名被另一个项目占用（409）」。
+   * 详见 docs/catalog-projection.md 第 9 节。
    */
   test("公开地址的条目集合与当前 catalog 事实一致", () => {
     const publicIds = artifact.projects

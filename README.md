@@ -214,7 +214,9 @@ Playwright 启动前失败并给出 `lsof` 定位方法。**禁止** `pkill -f "
 - 同一天更晚些时候，六个原型仓转为 public、六个 Vercel 项目的 Deployment Protection 改为
   「Only Preview Deployments」，于是投影里变成 **4 条公开地址**（starter / kits /
   ai-research / hub）、**2 条 not-public**（ai-finance / s1 —— 它们的地址在同一设置下返回
-  404，控制面已恢复为受保护）。四个地址都是**匿名 200** 才写进 catalog 的；原因与地址见
+  404，控制面已恢复为受保护）。四个地址都是**匿名 200** 才写进 catalog 的。两条例外的
+  **根因尚未确定**：控制面第一版解释（「部署由 API 创建、不是 webhook 触发的」）已被真实
+  Git push 实验推翻，已证实的只有「主域名被另一个项目占用（409）」；地址与完整记录见
   [`docs/catalog-projection.md`](docs/catalog-projection.md) 第 9 节。
   本地仍无 `.vercel/` 链接（Vercel CLI 认证已过期），因此部署列表只能由控制面回读。
 

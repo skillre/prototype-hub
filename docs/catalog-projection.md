@@ -186,12 +186,28 @@ Production 不再要求登录，Preview 仍受 SSO 保护。投影里的事实�
 | ai-finance | 仍为 `null` | `not-public` + 「未部署 / 受保护」+ 不渲染 `<a href>` |
 | s1 | 仍为 `null` | 同上 |
 
-**finance 与 s1 为什么没有跟着变公开**：同一个设置下，它们的地址返回 **404**（既不是 200
-也不是 302）—— 它们的部署是用 Vercel API 以 `gitSource` 创建的、不是 Git webhook 触发的，
-平台没有把它们当作「当前生产部署」来路由；关掉保护层之后请求无处可去。控制面**已把它们
-恢复为受保护（302），没有留下 404**，并把这条机制差异写进各自的 `notes[11]`（这两条原文
-会出现在生成物的 `evidence` 里）。要让它们也公开，需要一次**真正的 main push** 让 Git 集成
-接管 —— 那是另一次人工授权，不在本轮范围内。
+**finance 与 s1 为什么没有跟着变公开 —— 以及一条被推翻的解释**：同一个设置下，它们的地址
+返回 **404**（既不是 200 也不是 302）。控制面第一版写下的解释是「它们的部署由 Vercel API 以
+`gitSource` 创建、不是 Git webhook 触发的，所以平台不把它们当作当前生产部署」——
+**这个解释已经被控制面自己的实验推翻**：随后给两个仓做了真正的 Git push（finance `cd47017`、
+s1 `8c12c74`，都拿到 `target=production` / `gitRef=main` / `READY` 的 webhook 部署），
+再把保护设成 Only-Preview，**依旧 404**。「API vs webhook」与「时间顺序」（`git connect`
+之后重建 gitSource 部署）两条假设都实测排除。**已确立**的是：这两个项目的主域名被**另一个
+Vercel 项目**占用 —— `POST /v9/projects/<id>/domains` 返回 **409
+`already assigned to another project`**；同一设置在其余四条地址上则是匿名 200。
+**根因尚未完全确定，因此不下结论。** 两个项目已**恢复为受保护（302）**：登录后能正常看到
+页面，不留 404 —— **「登录后可看」是正常状态；一个被所有人当成部署故障的 404 不是。**
+
+> **为什么把「写错了」也留下**：这是一个**看起来合理、推理自洽、却被一次真实实验推翻**的
+> 解释。只留结论的话，下一个人会照着它去修错误的方向。控制面把
+> `compatibility.json` 的 `finding` / `alternativeConsidered` 与 `s1.json#notes[11]`
+> 都改成了「已证实的 + 已排除的 + 未确定的」，本仓的投影逐字收录它们。
+>
+> **一处上游遗留（截至本次同步）**：`ai-finance.json#notes[11]` 仍是**第一版措辞**
+> （「理由与 s1 完全相同」＋被推翻的 gitSource 解释，且没有提 409），所以生成物里 finance
+> 的 `evidence` 会同时出现这条旧解释与 s1 的更正 —— **以 `compatibility.json` 的
+> `finding` / `alternativeConsidered` 与 `s1.json#notes[11]` 为准**。根控制面是只读输入，
+> 本仓不代改生成物。
 
 「有没有对外可点的地址」是人的断言：`tests/catalog-projection.spec.ts` 里那份公开/不可点
 条目清单被显式改成了 4 / 2，而不是让它随 catalog 悄悄变化。

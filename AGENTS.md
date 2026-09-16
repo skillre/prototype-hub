@@ -249,7 +249,10 @@ pnpm qa                # Browser QA：自管 server + 身份校验 + 双视口 �
 > 「Only Preview Deployments」，starter / kits / ai-research 因此也拿到匿名 200 的公开地址：
 > 投影现在是 **4 条 `public` / 2 条 `not-public`**（finance 与 s1 例外 —— 同一设置下它们的
 > 地址返回 404，控制面已把它们恢复为受保护）。索引会渲染四条可点击条目，这是 **catalog
-> 事实变化**的结果，不是本仓改了展示层；两条例外的原因写在它们的 `notes[11]` 里。
+> 事实变化**的结果，不是本仓改了展示层。**两条例外的根因尚未确定**：控制面第一版解释
+> （「部署由 API 创建、不是 Git webhook 触发的」）已被它自己的实验推翻，已证实的只有
+> 「主域名被另一个项目占用（409）」—— 详见 `docs/catalog-projection.md` 第 9 节
+> （注意 `ai-finance.json#notes[11]` 仍是旧措辞，是上游遗留）。
 
 > **根控制面侧的第四分支已经补上（2026-09-16 核实）**：`contracts/factory-lock.schema.json`
 > 用 `oneOf` 描述**四种**角色形状，`catalog-hub` 这一支从根仓 `fdbfbae` 起就在；
