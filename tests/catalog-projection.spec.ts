@@ -67,7 +67,7 @@ const presentation = presentationFile as unknown as {
  * 新增第 7 个仓时，这条测试必须被显式改一次——那是有意的。让目录静默增长，
  * 就回到了「没人知道索引里有几条是真的」的状态。
  */
-const EXPECTED_PROJECT_COUNT = 6
+const EXPECTED_PROJECT_COUNT = 5
 
 const LEGACY_CLAIMS = [
   "https://prototype-ai-finance.vercel.app/",
@@ -75,7 +75,7 @@ const LEGACY_CLAIMS = [
 ]
 
 test.describe("catalog 投影", () => {
-  test("投影恰好覆盖 6 个仓，且 id 唯一、有序", () => {
+  test("投影恰好覆盖 5 个仓，且 id 唯一、有序", () => {
     expect(artifact.schemaVersion).toBe(1)
     expect(artifact.projects).toHaveLength(EXPECTED_PROJECT_COUNT)
     expect(prototypes).toHaveLength(EXPECTED_PROJECT_COUNT)
@@ -237,42 +237,36 @@ test.describe("catalog 投影", () => {
     const notPublicIds = artifact.projects
       .filter((project) => project.deployment.publicUrl === null)
       .map((project) => project.id)
-    expect(notPublicIds).toEqual(["ai-finance", "s1"])
+    expect(notPublicIds).toEqual(["ai-finance"])
     for (const project of artifact.projects.filter((entry) => notPublicIds.includes(entry.id))) {
       expect(project.deployment.clickable).toBe(false)
       expect(project.deployment.label).toBe("未部署 / 受保护")
     }
   })
 
-  test("退役是一个状态，不是从索引里消失", () => {
+  test("生命周期机制在场，而当前没有任何条目处于退役态", () => {
+    // 「0 个退役」是一个决定，不是沉默：这一条同时钉住两件事 ——
+    // 机制没有被悄悄删掉（每个条目仍然显式带 status），以及现在的集合确实是空的。
+    // 有一天再退役一个原型时，这条会亮，而不是让 page 少一行而没人发现。
     const retiredIds = artifact.projects
       .filter((entry) => entry.status === "retired")
       .map((entry) => entry.id)
+    expect(retiredIds).toEqual([])
 
-    // 退役的条目仍然出现在投影里，而且带着显式标签与退役记录。
-    // 「这个工作区还托管它吗」与「它能被打开吗」是两个问题 —— 删掉条目只会把第一个答案抹掉，
-    // 而剩下的东西（公开的仓、仍然在线的部署、可恢复的克隆地址）正是下一个人需要的。
-    expect(retiredIds).toEqual(["s1"])
-
-    for (const project of artifact.projects.filter((entry) => retiredIds.includes(entry.id))) {
-      expect(project.lifecycleLabel).toBe("已退役")
-      expect(project.retired).not.toBeNull()
-      expect(project.retired?.reason ?? "").not.toBe("")
-      expect((project.retired?.stillExists ?? []).length).toBeGreaterThan(0)
-      // 退役不改变可得性规则：能不能点仍然只看 catalog 记录的 productionUrl。
-      expect(project.deployment.clickable).toBe(project.deployment.publicUrl !== null)
+    for (const project of artifact.projects) {
+      expect(["active", "retired"]).toContain(project.status)
+      expect(project.lifecycleLabel).toBeNull()
+      expect(project.retired).toBeNull()
     }
 
-    // 而且它真的到了运行时 API —— 页面才有东西可渲染。
-    const retired = prototypes.filter((prototype) => prototype.status === "retired")
-    expect(retired.map((prototype) => prototype.slug)).toEqual(["s1"])
-    expect(retired[0]?.lifecycleLabel).toBe("已退役")
-    expect(retired[0]?.retired?.recoverableFrom ?? "").toContain("git clone")
-
-    // active 的条目必须明说是 active，而不是靠「没有 retired 字段」去推断。
+    // active 必须被明说，而不是靠「没有 retired 字段」去推断。
     expect(
       artifact.projects.filter((entry) => entry.status === "active").map((entry) => entry.id),
     ).toEqual(["ai-finance", "ai-research", "hub", "kits", "starter"])
+
+    // 运行时 API 同样带着这个字段，页面才有东西可渲染。
+    expect(prototypes.every((prototype) => prototype.status === "active")).toBe(true)
+    expect(prototypes.every((prototype) => prototype.lifecycleLabel === null)).toBe(true)
   })
 
   test("运行时代码里没有写死的部署地址，也没有手写的成熟度断言", () => {

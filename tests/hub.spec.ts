@@ -112,7 +112,7 @@ test.describe("首页", () => {
     ).toBeVisible()
 
     // 计数文案跟随投影条目数（Hero 底栏的 Index 同源）
-    expect(prototypeCount).toBe(6)
+    expect(prototypeCount).toBe(5)
     await expect(registry).toContainText(`${pad(prototypeCount)} 个原型`)
     await expect(page.locator("#top")).toContainText(`${pad(prototypeCount)} 个原型`)
 

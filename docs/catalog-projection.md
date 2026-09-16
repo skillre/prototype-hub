@@ -263,15 +263,18 @@ catalog 改动**时，这句话就不成立，所以生成物会记 `source.inpu
 
 ## 11 · 生命周期：退役不是消失
 
-**起因是真实发生的事。** 2026-09-16，工作区里 `prototype-s1-incident-command/` 目录被删掉了
-（用户自己删的）。控制面立刻把 s1 报成四条 FAIL：没有工厂锁、没有 Kits 锁、没有 remote、
-containment 失败。**四条都不对** —— 它不是坏掉了，它是**被移除了**，而这两件事需要不同的说法。
+**机制在场，当前没有任何条目处于退役态。**
 
-所以 catalog 的条目多了一个生命周期字段（事实仍在根 catalog，投影只如实搬运）：
+曾经有过一个：2026-09-16，工作区里的 `prototype-s1-incident-command/` 被移除，随后它的
+GitHub 仓与 Vercel 项目也被删除，最后连 catalog 条目本身都按用户要求清掉了。**那一次的顺序
+说明了这条机制为什么值得留着**：目录先消失时，控制面把一个"被移除"的仓报成了四条"坏掉"的
+FAIL（没有锁、没有 kits lock、没有 remote、containment 失败）—— 它描述的是错的事情。
+
+catalog 因此有生命周期字段（事实在根 catalog，投影只如实搬运）：
 
 ```
 status: "active" | "retired"
-retired: { on, by, reason, stillExists[], recoverableFrom } | null
+retired: { on, by, reason, stillExists[], recoverableFrom, irreversibleLoss } | null
 ```
 
 ### 三条规则
@@ -280,14 +283,13 @@ retired: { on, by, reason, stillExists[], recoverableFrom } | null
    仍然存在」一起抹掉 —— 而后者正是下一个人需要知道的。投影照常渲染它，只是多一个显式的
    `已退役` 标记（`lifecycleLabel`，来自生成物）与一整段退役记录。
 2. **生命周期与可得性正交，所以是两个标签。** 「这个工作区还托管它吗」与「它能被打开吗」
-   各有各的答案：一个仓库可以被退役而它的部署仍然在线。合成一个标签必然丢掉其中一个答案，
+   各有各的答案：一个仓库可以被退役而它的部署仍然在线。合成一个标签必然丢掉一个答案，
    所以 `LifecycleChip` 与 `StatusChip` 并排出现，谁也不改写谁。**可点击规则完全不变** ——
    仍然只有 catalog 记录了 `deployment.productionUrl` 的条目才能点，退役不豁免、也不加锁。
-3. **两件事都要能被机器发现。** 曾经的坑是「字段改了、散文没改」，所以这里两半都钉住：
-   生成器负责把 `status` 搬进生成物（`scripts/sync-factory-catalog.mjs`），
-   `tests/catalog-projection.spec.ts` 负责断言「退役集合 == ["s1"]」「`lifecycleLabel` 非空」
-   「`retired.reason` 与 `stillExists` 都写了」「它确实到了运行时 API」。根控制面那一侧则是反过来的：
-   active 必须在盘上、**retired 必须不在盘上** —— 否则一个退役的项目悄悄回来也不会有人发现。
+3. **零个退役条目也要是一条被写下来的事实。** `tests/catalog-projection.spec.ts` 里那条断言
+   同时钉住两件事：机制没有被悄悄删掉（每个条目仍然显式带 `status`），以及现在的集合确实是空的。
+   删掉机制会让它变红，而不是让页面悄悄少一行。
 
-> 展示层（`lib/hub-presentation.json`）不为退役做任何特殊处理：它只管展示名、说明与缩略图，
-> 生命周期是事实，事实不来自展示层。s1 的展示条目与它 active 时完全一样。
+> 展示层（`lib/hub-presentation.json`）不为退役做特殊处理：它只管展示名、说明与缩略图。
+> 但**它不能给一个 catalog 里不存在的仓保留条目** —— s1 从 catalog 消失时，`catalog:check`
+> 正是靠这条把展示层里的残留当场报了出来。

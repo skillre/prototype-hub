@@ -32,12 +32,6 @@
       "thumbnail": null,
       "thumbnailAlt": null
     },
-    "s1": {
-      "name": "S1 Incident Command",
-      "description": "事故指挥工作台",
-      "thumbnail": null,
-      "thumbnailAlt": null
-    },
     "starter": {
       "name": "Prototype Starter",
       "description": "工厂基线仓 · 内含 AI CRM 参考样例",
