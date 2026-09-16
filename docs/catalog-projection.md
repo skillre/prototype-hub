@@ -258,3 +258,36 @@ catalog 改动**时，这句话就不成立，所以生成物会记 `source.inpu
 - 提交之后**必须重新 sync**：脏状态本身是 provenance 的一部分，`catalog:sync` 会在
   脏 → 干净的转换处重新锚定 `gitSha`/`syncedAt`（即使内容没变），否则按旧 SHA
   逐文件复核会永远失败。内容没变、脏状态没变时，重复 sync 仍然是 byte-identical。
+
+---
+
+## 11 · 生命周期：退役不是消失
+
+**起因是真实发生的事。** 2026-09-16，工作区里 `prototype-s1-incident-command/` 目录被删掉了
+（用户自己删的）。控制面立刻把 s1 报成四条 FAIL：没有工厂锁、没有 Kits 锁、没有 remote、
+containment 失败。**四条都不对** —— 它不是坏掉了，它是**被移除了**，而这两件事需要不同的说法。
+
+所以 catalog 的条目多了一个生命周期字段（事实仍在根 catalog，投影只如实搬运）：
+
+```
+status: "active" | "retired"
+retired: { on, by, reason, stillExists[], recoverableFrom } | null
+```
+
+### 三条规则
+
+1. **退役的条目不从索引里消失。** 删掉条目会把「这个工作区曾经有它」以及「它的仓、部署与证据
+   仍然存在」一起抹掉 —— 而后者正是下一个人需要知道的。投影照常渲染它，只是多一个显式的
+   `已退役` 标记（`lifecycleLabel`，来自生成物）与一整段退役记录。
+2. **生命周期与可得性正交，所以是两个标签。** 「这个工作区还托管它吗」与「它能被打开吗」
+   各有各的答案：一个仓库可以被退役而它的部署仍然在线。合成一个标签必然丢掉其中一个答案，
+   所以 `LifecycleChip` 与 `StatusChip` 并排出现，谁也不改写谁。**可点击规则完全不变** ——
+   仍然只有 catalog 记录了 `deployment.productionUrl` 的条目才能点，退役不豁免、也不加锁。
+3. **两件事都要能被机器发现。** 曾经的坑是「字段改了、散文没改」，所以这里两半都钉住：
+   生成器负责把 `status` 搬进生成物（`scripts/sync-factory-catalog.mjs`），
+   `tests/catalog-projection.spec.ts` 负责断言「退役集合 == ["s1"]」「`lifecycleLabel` 非空」
+   「`retired.reason` 与 `stillExists` 都写了」「它确实到了运行时 API」。根控制面那一侧则是反过来的：
+   active 必须在盘上、**retired 必须不在盘上** —— 否则一个退役的项目悄悄回来也不会有人发现。
+
+> 展示层（`lib/hub-presentation.json`）不为退役做任何特殊处理：它只管展示名、说明与缩略图，
+> 生命周期是事实，事实不来自展示层。s1 的展示条目与它 active 时完全一样。

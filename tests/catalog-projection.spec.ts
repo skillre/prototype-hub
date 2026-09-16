@@ -28,10 +28,19 @@ const artifact = catalogArtifact as unknown as {
   schemaVersion: number
   source: { gitSha: string | null; inputsDigest: string; inputsDirty: boolean }
   payloadDigest: string
-  counts: { projects: number; withPublicUrl: number; withoutPublicUrl: number }
+  counts: { projects: number; withPublicUrl: number; withoutPublicUrl: number; retired: number }
   projects: Array<{
     id: string
     kind: string
+    status: string
+    lifecycleLabel: string | null
+    retired: {
+      on: string | null
+      by: string | null
+      reason: string | null
+      stillExists: string[]
+      recoverableFrom: string | null
+    } | null
     sourceFile: string
     deployment: {
       publicUrl: string | null
@@ -233,6 +242,37 @@ test.describe("catalog 投影", () => {
       expect(project.deployment.clickable).toBe(false)
       expect(project.deployment.label).toBe("未部署 / 受保护")
     }
+  })
+
+  test("退役是一个状态，不是从索引里消失", () => {
+    const retiredIds = artifact.projects
+      .filter((entry) => entry.status === "retired")
+      .map((entry) => entry.id)
+
+    // 退役的条目仍然出现在投影里，而且带着显式标签与退役记录。
+    // 「这个工作区还托管它吗」与「它能被打开吗」是两个问题 —— 删掉条目只会把第一个答案抹掉，
+    // 而剩下的东西（公开的仓、仍然在线的部署、可恢复的克隆地址）正是下一个人需要的。
+    expect(retiredIds).toEqual(["s1"])
+
+    for (const project of artifact.projects.filter((entry) => retiredIds.includes(entry.id))) {
+      expect(project.lifecycleLabel).toBe("已退役")
+      expect(project.retired).not.toBeNull()
+      expect(project.retired?.reason ?? "").not.toBe("")
+      expect((project.retired?.stillExists ?? []).length).toBeGreaterThan(0)
+      // 退役不改变可得性规则：能不能点仍然只看 catalog 记录的 productionUrl。
+      expect(project.deployment.clickable).toBe(project.deployment.publicUrl !== null)
+    }
+
+    // 而且它真的到了运行时 API —— 页面才有东西可渲染。
+    const retired = prototypes.filter((prototype) => prototype.status === "retired")
+    expect(retired.map((prototype) => prototype.slug)).toEqual(["s1"])
+    expect(retired[0]?.lifecycleLabel).toBe("已退役")
+    expect(retired[0]?.retired?.recoverableFrom ?? "").toContain("git clone")
+
+    // active 的条目必须明说是 active，而不是靠「没有 retired 字段」去推断。
+    expect(
+      artifact.projects.filter((entry) => entry.status === "active").map((entry) => entry.id),
+    ).toEqual(["ai-finance", "ai-research", "hub", "kits", "starter"])
   })
 
   test("运行时代码里没有写死的部署地址，也没有手写的成熟度断言", () => {

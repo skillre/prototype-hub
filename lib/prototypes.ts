@@ -50,6 +50,26 @@ export type PrototypeKind = "product" | "hub" | "kits" | "starter"
  */
 export type PrototypeAvailability = "public" | "not-public" | "unverified"
 
+/**
+ * 生命周期 —— catalog 的事实，与「可得性」正交。
+ * - `active`   仍然在工作区里
+ * - `retired`  已退役（例如目录被删除，但仓/部署/证据仍然存在）
+ *
+ * **退役不是从索引里消失。** 把条目删掉会把「这个工作区曾经有它、它的仓与部署
+ * 还在」这件事从账本上抹掉 —— 而那正是下一个人需要知道的。退役也不改变可得性
+ * 规则：能不能点仍然只看 `deployment.productionUrl`。
+ */
+export type PrototypeStatus = "active" | "retired"
+
+/** catalog 记录的退役记录（active 时为 null）。 */
+export interface PrototypeRetirement {
+  on: string | null
+  by: string | null
+  reason: string | null
+  stillExists: string[]
+  recoverableFrom: string | null
+}
+
 export interface Prototype {
   /** 展示名称（来自展示层；缺失即视为配置错误，见 assertProjection） */
   name: string
@@ -61,6 +81,12 @@ export interface Prototype {
   category: string
   /** catalog 记录的仓角色 */
   kind: PrototypeKind
+  /** 生命周期状态（catalog 事实）：已退役的条目仍然出现在索引里 */
+  status: PrototypeStatus
+  /** 已退役时的展示标签（来自生成物，例如「已退役」）；active 时为 null */
+  lifecycleLabel: string | null
+  /** 退役记录（来自 catalog）：为什么退役、还剩什么、从哪里恢复；active 时为 null */
+  retired: PrototypeRetirement | null
   /** 部署可得性（catalog 事实） */
   availability: PrototypeAvailability
   /** 与 availability 一致的展示标签，例如「公开」「未部署 / 受保护」 */
@@ -106,6 +132,15 @@ interface CatalogDeployment {
 interface CatalogProject {
   id: string
   kind: string
+  status?: string
+  lifecycleLabel?: string | null
+  retired?: {
+    on?: string | null
+    by?: string | null
+    reason?: string | null
+    stillExists?: string[]
+    recoverableFrom?: string | null
+  } | null
   title: string | null
   repo: string | null
   qaPort: number | null
@@ -266,6 +301,17 @@ function toPrototype(project: CatalogProject): Prototype {
     description: entry.description,
     category: presentation.kindLabels[project.kind] ?? project.kind,
     kind: project.kind as PrototypeKind,
+    status: (project.status === "retired" ? "retired" : "active") as PrototypeStatus,
+    lifecycleLabel: project.lifecycleLabel ?? null,
+    retired: project.retired
+      ? {
+          on: project.retired.on ?? null,
+          by: project.retired.by ?? null,
+          reason: project.retired.reason ?? null,
+          stillExists: [...(project.retired.stillExists ?? [])],
+          recoverableFrom: project.retired.recoverableFrom ?? null,
+        }
+      : null,
     availability: project.deployment.availability,
     statusLabel: project.deployment.label,
     url: project.deployment.publicUrl,

@@ -130,6 +130,17 @@ const AVAILABILITY_LABEL = Object.freeze({
 })
 
 /**
+ * 生命周期标签。`status: retired` 是 catalog 事实，**不是「消失」**：
+ * 条目仍然被投影，只是多一个显式的「已退役」标签与一段退役记录
+ * （原因 / 仍然存在的东西 / 从哪里能恢复）。
+ *
+ * 退役**不改变**可得性规则：可点击与否仍然只看 `deployment.productionUrl`。
+ * 两件事是正交的 —— 「这个工作区还托管它吗」与「它能被打开吗」各有各的答案，
+ * 合成一个标签就会丢掉其中一个。
+ */
+const LIFECYCLE_LABEL = Object.freeze({ retired: "已退役" })
+
+/**
  * Which catalog notes count as deployment evidence.
  *
  * Deliberately specific. An earlier version matched the bare product name
@@ -278,10 +289,26 @@ function deploymentEvidence(project, sourceFile) {
 function projectEntry(project, sourceFile) {
   const gates = project.toolchain?.gates ?? {}
   const gateNames = ["lint", "typecheck", "test", "build", "qa"]
+  const status = project.status === "retired" ? "retired" : "active"
+  const retired =
+    status === "retired"
+      ? {
+          on: project.retired?.on ?? null,
+          by: project.retired?.by ?? null,
+          reason: project.retired?.reason ?? null,
+          stillExists: Array.isArray(project.retired?.stillExists)
+            ? [...project.retired.stillExists]
+            : [],
+          recoverableFrom: project.retired?.recoverableFrom ?? null,
+        }
+      : null
 
   return {
     id: project.id,
     kind: project.kind,
+    status,
+    lifecycleLabel: status === "retired" ? LIFECYCLE_LABEL.retired : null,
+    retired,
     title: project.title ?? null,
     path: project.path ?? null,
     repo: project.repo ?? null,
@@ -382,6 +409,7 @@ function buildProjection({ root, rootSource = "default" }) {
   }
 
   const withPublicUrl = projects.filter((entry) => entry.deployment.publicUrl !== null)
+  const retiredProjects = projects.filter((entry) => entry.status === "retired")
 
   const inputsDirty =
     (git(root, ["status", "--porcelain", "--", "catalog", "workspace-policy.json"]) ??
@@ -434,6 +462,10 @@ function buildProjection({ root, rootSource = "default" }) {
         "lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
       standaloneHonesty:
         "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
+      retiredIsAStateNotAHole:
+        "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），" +
+        "不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；" +
+        "退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。",
     },
     syncedAt: new Date().toISOString(),
     payloadDigest: "sha256:pending",
@@ -441,6 +473,7 @@ function buildProjection({ root, rootSource = "default" }) {
       projects: projects.length,
       withPublicUrl: withPublicUrl.length,
       withoutPublicUrl: projects.length - withPublicUrl.length,
+      retired: retiredProjects.length,
       byKind: Object.fromEntries(Object.entries(byKind).sort()),
     },
     portCollisions: (ports.collisions ?? []).map((collision) => ({
@@ -615,6 +648,47 @@ function checkIntegrity(artifact) {
       problems.push(`${where}: 没有 deployment 段`)
       continue
     }
+
+    // ── 生命周期：退役是一个状态，不是从账本上挖掉的一块 ─────────────────
+    // 只有两种状态，而且必须自洽：retired 必须带得出「为什么退役、还剩什么、
+    // 从哪里恢复」；active 不能带退役记录。宁可这里报错，也不要渲染出一个
+    // 「看起来只是普通条目」的退役仓。
+    const status = project.status
+    if (status !== "active" && status !== "retired") {
+      problems.push(`${where}: status「${JSON.stringify(status)}」不认识（期望 active | retired）`)
+    }
+    if (status === "retired") {
+      if (!project.retired || typeof project.retired !== "object") {
+        problems.push(`${where}: status=retired 却没有 retired 记录 —— 退役必须说明原因`)
+      } else {
+        const retired = project.retired
+        if (typeof retired.reason !== "string" || retired.reason.trim() === "") {
+          problems.push(`${where}: retired.reason 为空 —— 退役必须写出原因`)
+        }
+        if (!Array.isArray(retired.stillExists)) {
+          problems.push(`${where}: retired.stillExists 必须是数组（可以是空数组，但必须显式）`)
+        }
+        if (!("recoverableFrom" in retired)) {
+          problems.push(`${where}: retired 缺少 recoverableFrom —— 无法恢复就显式写 null`)
+        } else if (
+          retired.recoverableFrom !== null &&
+          (typeof retired.recoverableFrom !== "string" || retired.recoverableFrom.trim() === "")
+        ) {
+          problems.push(`${where}: retired.recoverableFrom 既不是 null 也不是非空字符串`)
+        }
+      }
+      if (typeof project.lifecycleLabel !== "string" || project.lifecycleLabel.trim() === "") {
+        problems.push(`${where}: status=retired 却没有 lifecycleLabel —— 页面上就说不清它已退役`)
+      }
+    } else if (status === "active") {
+      if (project.retired !== null) {
+        problems.push(`${where}: status=active 却带 retired 记录 —— 状态自相矛盾`)
+      }
+      if (project.lifecycleLabel !== null) {
+        problems.push(`${where}: status=active 却带 lifecycleLabel —— 状态自相矛盾`)
+      }
+    }
+
     const { publicUrl, clickable, availability, label } = project.deployment
 
     if (publicUrl !== null && !/^https:\/\//.test(publicUrl)) {
@@ -667,6 +741,10 @@ function checkIntegrity(artifact) {
   }
   if (counts.withoutPublicUrl !== projects.length - publicCount) {
     problems.push("counts.withoutPublicUrl 与实际不一致")
+  }
+  const retiredCount = projects.filter((entry) => entry.status === "retired").length
+  if (counts.retired !== retiredCount) {
+    problems.push(`counts.retired=${counts.retired} 与实际 retired 条目数 ${retiredCount} 不一致`)
   }
 
   const expectedDigest = payloadDigestOf(artifact)

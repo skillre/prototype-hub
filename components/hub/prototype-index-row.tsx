@@ -6,7 +6,7 @@ import { useMessages } from "@/components/i18n/locale-provider"
 import { Badge } from "@/components/ui/badge"
 import { linkTargetProps, prototypeHref, type Prototype } from "@/lib/prototypes"
 
-import { StatusChip } from "./status-chip"
+import { LifecycleChip, StatusChip } from "./status-chip"
 
 /**
  * 非精选条目的紧凑索引行 —— 没有签名视觉的仓（还没有缩略图）落在这里。
@@ -50,6 +50,12 @@ export function PrototypeIndexRow({
         availability={prototype.availability}
         label={prototype.statusLabel}
         fieldLabel={t.card.availabilityLabel}
+        className="shrink-0"
+      />
+      <LifecycleChip
+        status={prototype.status}
+        label={prototype.lifecycleLabel}
+        fieldLabel={t.card.lifecycleLabel}
         className="shrink-0"
       />
       {href ? (

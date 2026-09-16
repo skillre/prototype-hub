@@ -62,6 +62,8 @@ export const zhCN = {
     categoryLabel: "分类",
     /** 屏幕阅读器读出的字段名：显示的是部署可得性，不是成熟度评分 */
     availabilityLabel: "部署",
+    /** 屏幕阅读器读出的字段名：生命周期与部署可得性是两件事，所以是两个标签 */
+    lifecycleLabel: "生命周期",
     cta: "打开原型",
     /** 没有已核实公开地址时的 CTA 文案（不可点击） */
     unavailableCta: "暂无公开地址",

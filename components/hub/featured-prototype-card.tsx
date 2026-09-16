@@ -17,7 +17,7 @@ import {
 } from "@/lib/prototypes"
 import { cn } from "@/lib/utils"
 
-import { StatusChip } from "./status-chip"
+import { LifecycleChip, StatusChip } from "./status-chip"
 
 /**
  * 精选原型展示位 —— 一块编辑式的「展板」，不是卡片网格里的一格：
@@ -67,6 +67,11 @@ export function FeaturedPrototypeCard({
           availability={prototype.availability}
           label={prototype.statusLabel}
           fieldLabel={t.card.availabilityLabel}
+        />
+        <LifecycleChip
+          status={prototype.status}
+          label={prototype.lifecycleLabel}
+          fieldLabel={t.card.lifecycleLabel}
         />
       </div>
 

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import type { PrototypeAvailability } from "@/lib/prototypes"
+import type { PrototypeAvailability, PrototypeStatus } from "@/lib/prototypes"
 
 /**
  * 部署可得性 → 信号点颜色。
@@ -51,6 +51,38 @@ export function StatusChip({
         aria-hidden
         className={cn("size-1.5 shrink-0 rounded-full", DOT[availability])}
       />
+      <span className="sr-only">{fieldLabel}:&nbsp;</span>
+      {label}
+    </span>
+  )
+}
+
+/**
+ * 生命周期 → 显式标记。
+ *
+ * 「这个工作区还托管它吗」与「它能被打开吗」是两件正交的事，所以退役**不**改写
+ * 可得性标记，而是在旁边多一个独立的标记。合成一个标签就会丢掉其中一个答案 ——
+ * 而这里恰恰有过先例：一张手写列表把一个地址已经 404 的条目标成 `Stable`。
+ *
+ * 没有这条标记时返回 \`null\`，不占位、不渲染空元素。
+ */
+export function LifecycleChip({
+  status,
+  label,
+  fieldLabel,
+  className,
+}: {
+  status: PrototypeStatus
+  /** 展示标签，来自生成物（例如「已退役」） */
+  label: string | null
+  /** 词典里的字段名，供屏幕阅读器读出「生命周期: 已退役」 */
+  fieldLabel: string
+  className?: string
+}) {
+  if (status !== "retired" || label === null) return null
+  return (
+    <span className={cn("label-micro inline-flex items-center gap-2 text-ink-mute", className)}>
+      <span aria-hidden className="size-1.5 shrink-0 rounded-[1px] border border-hairline-strong" />
       <span className="sr-only">{fieldLabel}:&nbsp;</span>
       {label}
     </span>

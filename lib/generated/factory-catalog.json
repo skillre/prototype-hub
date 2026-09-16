@@ -10,14 +10,14 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "ba7d6de33e3b91405b8f2668f239492df2d3927f",
+    "gitSha": "7c514a5d251ff53c055a924042efe8b0feb7695c",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:79934c131ec1f9abc5f25f075721b8122c0b6dbaca43723e63b08101f39a3a34",
+    "inputsDigest": "sha256:01bd41f1163cacc92b0b9dc1458c0c6a65e9379d686bdc626da2ccb767bfdbb7",
     "inputsDirty": false,
     "inputs": [
       {
         "path": "catalog/compatibility.json",
-        "digest": "sha256:678b597ac77abd287ad1b7402a50d5593b3fd89cf58ccec2c358c96b98297802"
+        "digest": "sha256:e512d8547309d59bb063dfdb5dc4fdaa27938a46fbd6aede82c7fd182cec303e"
       },
       {
         "path": "catalog/ports.json",
@@ -29,7 +29,7 @@
       },
       {
         "path": "catalog/projects/ai-finance.json",
-        "digest": "sha256:fbd734b0dd4e2b8493bc08111439ec0591352fa6952c3b3733646a1391d1a527"
+        "digest": "sha256:78933b989b8ada5338c47ddf58e5c7829d1d2700bf519ec6007ea8aa67fe9a8b"
       },
       {
         "path": "catalog/projects/ai-research.json",
@@ -37,15 +37,15 @@
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:00f7b9111dd2e5751df32549866c14c0592cb64c91e321a9c2ce015740dde78f"
+        "digest": "sha256:f1312ad24ebf43d86d20dc9f6b5f06ad01e52cdf05fc069cf34edbf6ab4d14af"
       },
       {
         "path": "catalog/projects/kits.json",
-        "digest": "sha256:9ea8ba88bfeb742d5bbf50a809558ed1597ed550d020ea1a099bf3ac5d4787c1"
+        "digest": "sha256:162c84c45a1385c5fe7b958d17f9b026b9e1de4c080174a750df0ff788328d22"
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:18ae7c3796fbe6b4dba18a5cd614701ece0391a1937e311755644e71ff884ee9"
+        "digest": "sha256:2e3535637ff765b8e42765590bab7725c30913f984bf3dbcaf42dc1cd138a510"
       },
       {
         "path": "catalog/projects/starter.json",
@@ -69,14 +69,16 @@
     "publicRequiresRecordedUrl": "只有当 catalog 记录了 deployment.productionUrl 时，条目才是 public 且可点击。",
     "unknownIsNotPublic": "没有已核实地址的条目显示「未部署 / 受保护」，既不给死链接，也不猜地址；受 SSO 保护的地址不得称为 public。",
     "catalogIsTheOnlyFactSource": "身份、kind、端口、门禁、工厂/套件状态与部署状态全部来自 catalog；lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
-    "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。"
+    "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
+    "retiredIsAStateNotAHole": "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。"
   },
-  "syncedAt": "2026-09-16T07:43:25.088Z",
-  "payloadDigest": "sha256:bb10cfe6b336484cea4dc567d9b38f5aa00c97505b2e6b78fad46a64a15e1095",
+  "syncedAt": "2026-09-16T09:56:24.350Z",
+  "payloadDigest": "sha256:8e22609b1db25e16c38da31bb8e703b6a1b8d246f186227c63d13f4dc23b8e05",
   "counts": {
     "projects": 6,
     "withPublicUrl": 4,
     "withoutPublicUrl": 2,
+    "retired": 1,
     "byKind": {
       "hub": 1,
       "kits": 1,
@@ -89,6 +91,9 @@
     {
       "id": "ai-finance",
       "kind": "product",
+      "status": "active",
+      "lifecycleLabel": null,
+      "retired": null,
       "title": "AI Finance · 原型产品",
       "path": "prototype-ai-finance",
       "repo": "https://github.com/skillre/prototype-ai-finance.git",
@@ -119,7 +124,7 @@
       "observed": {
         "observedAt": "2026-09-16",
         "branch": "feature/factory-governance-v1.3",
-        "head": "dd13e78",
+        "head": "cd47017",
         "dirty": false
       },
       "deployment": {
@@ -166,6 +171,9 @@
     {
       "id": "ai-research",
       "kind": "product",
+      "status": "active",
+      "lifecycleLabel": null,
+      "retired": null,
       "title": "AI Research · 原型产品",
       "path": "prototype-ai-research",
       "repo": "https://github.com/skillre/prototype-ai-research.git",
@@ -231,6 +239,9 @@
     {
       "id": "hub",
       "kind": "hub",
+      "status": "active",
+      "lifecycleLabel": null,
+      "retired": null,
       "title": "Prototype Hub · 原型索引门户",
       "path": "prototype-hub",
       "repo": "https://github.com/skillre/prototype-hub.git",
@@ -261,7 +272,7 @@
       "observed": {
         "observedAt": "2026-09-16",
         "branch": "feature/factory-governance-v1.3",
-        "head": "2d5cc8a",
+        "head": "e090fb5",
         "dirty": false
       },
       "deployment": {
@@ -312,6 +323,9 @@
     {
       "id": "kits",
       "kind": "kits",
+      "status": "active",
+      "lifecycleLabel": null,
+      "retired": null,
       "title": "Prototype Kits · 视觉与能力资产 Registry",
       "path": "prototype-kits",
       "repo": "https://github.com/skillre/prototype-kits.git",
@@ -364,7 +378,7 @@
           },
           {
             "source": "catalog/projects/kits.json#notes[8]",
-            "text": "**部署身份有歧义（原始观察 2026-09-15，未在 2026-09-16 重新推导）**：当时记录「同一个 repo 在 Vercel 侧关联了 3 个项目」。2026-09-16 用已认证的 `vercel project ls` 回读当前 scope，列表里**只有一个**名为 `prototype-kits` 的项目。这两条不矛盾也不互证 —— 后者的范围是当前 scope 的项目名单，前者的证据来源没有重新核。因此 `deployment.productionBranch` / `productionUrl` 仍记 null：**「这个 repo 部署到哪里」在当前仍不只有一个确定答案**。"
+            "text": "**部署身份的歧义已经查清并消除（2026-09-16）**。原始记录（2026-09-15）写的是「同一个 repo 在 Vercel 侧关联了 3 个项目」，当时没人知道另外两个是什么。现在知道了：它们是 **`standalone-product` 与 `standalone-product-wbnj`**，创建于 2026-09-13，两个都把 Git 仓绑到 `skillre/prototype-kits` —— 来由是本仓的 `fixtures/standalone-product`（`scripts/verify-standalone.mjs` 用来验证「Kits 能独立交付」的一次性 fixture）：**某次在 fixture 目录里跑了 `vercel`，把测试装置当成产品部署上去了**。代价是可查的：此后每次往本仓 push 都会同时触发 **3 个项目**构建；`standalone-product` 最近 20 条部署里 **12 条全是 ERROR**（域名 404），`standalone-product-wbnj` 则是一个**匿名 200 的公开副本**，内容与本仓 playground 一模一样（标题 `Prototype Kits · Visual Playground`，54655 字节）—— 一个没人知道的第二份线上副本。**已由用户授权在 2026-09-16 删除这两个项目**（Vercel 项目数 19 → 17），两个域名现在都是 404，本仓自己的地址仍是 200。因此现在 `repo → project` 是**一对一**的，歧义关闭。"
           },
           {
             "source": "catalog/projects/kits.json#notes[10]",
@@ -381,6 +395,19 @@
     {
       "id": "s1",
       "kind": "product",
+      "status": "retired",
+      "lifecycleLabel": "已退役",
+      "retired": {
+        "on": "2026-09-16",
+        "by": "user",
+        "reason": "用户在工作区里删除了 prototype-s1-incident-command/ 目录（Finder 操作，本地改动时间 17:47；废纸篓无记录）。用户说明「是我删的，不用恢复」。因此本条目从 active 转为 retired —— **不删条目**：删掉记录会把「这个工作区曾经有一个 s1、它的仓与部署仍在」这件事从账本上抹掉，而那正是下一个人需要知道的。",
+        "stillExists": [
+          "GitHub 仓 skillre/prototype-s1-incident-command（Public，默认 main，两个分支都停在 8c12c74 —— 本地被删时工作树是干净的，所以提交过的内容一个字节都没丢）",
+          "Vercel 项目 prototype-s1-incident-command 及其生产部署（target=production / gitRef=main / sha=b985588 / READY，2026-09-16 实测）",
+          "HVA 证据备份 scratch/s1-incident-command/20260915-224322/（38 个文件）"
+        ],
+        "recoverableFrom": "git clone https://github.com/skillre/prototype-s1-incident-command.git（main = 8c12c74）"
+      },
       "title": "S1 Incident Command · 原型产品",
       "path": "prototype-s1-incident-command",
       "repo": "https://github.com/skillre/prototype-s1-incident-command.git",
@@ -454,6 +481,9 @@
     {
       "id": "starter",
       "kind": "starter",
+      "status": "active",
+      "lifecycleLabel": null,
+      "retired": null,
       "title": "Prototype Starter · Factory 基线",
       "path": "prototype-starter",
       "repo": "https://github.com/skillre/prototype-starter.git",
