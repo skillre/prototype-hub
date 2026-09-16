@@ -191,13 +191,13 @@ verdict: INTEGRITY-OK (UPSTREAM UNVERIFIED) —— 只验证了生成物内部�
 `target=production` / `gitRef=main` / `gitSha=2d5cc8a` / `readyState=READY`），
 属于独立的人工授权；索引只负责把「地址是已核实的」如实画出来。
 
-> **上游注释里有一处过时（控制面待改，本仓不代改）。** `catalog/projects/hub.json` 的
-> `notes[3]` 与 `notes[6]` 仍写着「Production Branch 与 SHA 没有回读，因此
-> `deployment.productionBranch` 记 null」——那是更早一次观察的原话，已被同一文件的
-> `notes[9]`（Production Branch 已用 `vercel api /v9/projects/<name>` 回读）与
-> `deployment.productionBranch = "main"` 取代。投影按设计**逐字**收录与部署相关的 notes，
-> 所以生成物里 hub 的 `evidence` 会同时出现两种说法：**以最新的那一条为准**，
-> 字段值（`productionBranch` / `productionBranchSource`）是当前事实。
+> **上游注释里那处矛盾已经修掉（根仓 `3b31330`）。** 本仓在 2026-09-16 的审计里发现：
+> `catalog/projects/hub.json` 的 `notes[3]` 与 `notes[6]` 还写着「Production Branch 与 SHA
+> 没有回读，因此 `deployment.productionBranch` 记 null」，而字段本身早已是 `"main"` 且带
+> 出处 —— **字段改了、散文没改**，而这个仓的投影会把 notes 逐字带进生成物。控制面随后保留
+> 那两句原文并标注为**当时**的说法，同时补上「同日稍后已回读」。所以重新锚定之后 hub 的
+> `evidence` 文本会更新（条目数不变）：**当前事实看字段值**，历史句子只在说它当时是什么。
+> 这条缺陷正是本仓存在的理由：过期声明不该悄悄留在页面上，哪怕它出现在 catalog 自己身上。
 
 ## 10 · 输入脏了怎么办（provenance 的边界）
 

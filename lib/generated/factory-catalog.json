@@ -10,9 +10,9 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "2e85683a130de8c9ee07ef64355fcbe64c317fa0",
+    "gitSha": "3b313307db129b459c883af7984a8bae3936e3ab",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:d6b5f022f4a40e6a328933fdc892e023de6a48a46018b1412898d1717a79c625",
+    "inputsDigest": "sha256:a15a1e732bec2c26a113b6de8c179bc9758b59d3a8033e0e91b29aaee1c3b695",
     "inputsDirty": false,
     "inputs": [
       {
@@ -37,7 +37,7 @@
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:074c3bad855e2a13ba3b6e4d933ae85a3b21c636e6187fbb6a34a6d2d980fa73"
+        "digest": "sha256:00f7b9111dd2e5751df32549866c14c0592cb64c91e321a9c2ce015740dde78f"
       },
       {
         "path": "catalog/projects/kits.json",
@@ -71,8 +71,8 @@
     "catalogIsTheOnlyFactSource": "身份、kind、端口、门禁、工厂/套件状态与部署状态全部来自 catalog；lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。"
   },
-  "syncedAt": "2026-09-16T04:57:55.651Z",
-  "payloadDigest": "sha256:4fb34ec687b504218540c319a11b9d5520725165ad72294c8466dc9a8d99d2cc",
+  "syncedAt": "2026-09-16T05:09:53.356Z",
+  "payloadDigest": "sha256:c8cfae6e29f1cb919a9c759889537ed3e074d51fede8a37fc4cc86a323a1174a",
   "counts": {
     "projects": 6,
     "withPublicUrl": 1,
@@ -275,7 +275,7 @@
           },
           {
             "source": "catalog/projects/hub.json#notes[3]",
-            "text": "**部署身份：已核实与未核实被刻意分开。** 已核实（2026-09-16）：Vercel 项目 `prototype-hub`（`prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`），Latest Production URL `https://prototype-hub-dusky.vercel.app/`，匿名 curl 返回 **HTTP/2 200**（server: Vercel，无 SSO 跳转）—— 这个地址是**公开可达**的。未核实：项目级 **Production Branch** 设置与那一次部署对应的 **git SHA** 都没有回读，因此 `productionBranch` 仍记 null。"
+            "text": "**部署身份：已核实与未核实被刻意分开。** 已核实（2026-09-16）：Vercel 项目 `prototype-hub`（`prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`），Latest Production URL `https://prototype-hub-dusky.vercel.app/`，匿名 curl 返回 **HTTP/2 200**（server: Vercel，无 SSO 跳转）—— 这个地址是**公开可达**的。**当时**未核实的两件事在同日稍后都回读了：项目级 Production Branch 用 `vercel api /v9/projects/<name>` 读到 `main`，那一次部署的 git SHA 读自部署记录本身。这句原文保留，因为「同一格在一天里从 null 变成带出处的事实」正是这条记录存在的理由。"
           },
           {
             "source": "catalog/projects/hub.json#notes[4]",
@@ -287,7 +287,7 @@
           },
           {
             "source": "catalog/projects/hub.json#notes[6]",
-            "text": "**部署身份：已核实与未核实被刻意分开。** 已核实（2026-09-16）：Vercel 项目 `prototype-hub`（`prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`）、Latest Production URL `https://prototype-hub-dusky.vercel.app/`、匿名 200、以及那条生产部署的 `target/ref/SHA/readyState`。**仍未核实**：项目级 **Production Branch 设置字段**（CLI 不暴露它）—— 因此 `deployment.productionBranch` 记 null。注意部署记录里的 `gitRef=main` 是**另一个**独立的观察，不能拿它冒充项目设置。"
+            "text": "**部署身份：已核实与未核实被刻意分开。** 已核实（2026-09-16）：Vercel 项目 `prototype-hub`（`prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`）、Latest Production URL `https://prototype-hub-dusky.vercel.app/`、匿名 200、以及那条生产部署的 `target/ref/SHA/readyState`。**这条「仍未核实」已于同日解除**：换用 `vercel api /v9/projects/prototype-hub` 后读到 `link.productionBranch = \"main\"`，并连同出处写入 `deployment.productionBranchSource`。当时写「CLI 不暴露该字段」也是对的 —— 不暴露的是 `vercel project inspect`，不是 API。注意部署记录里的 `gitRef=main` 是**另一个**独立的观察，不能拿它冒充项目设置。"
           },
           {
             "source": "catalog/projects/hub.json#notes[7]",
