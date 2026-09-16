@@ -111,6 +111,12 @@ const FORBIDDEN_RUNTIME_PATTERNS = [
   },
 ]
 
+/**
+ * Fields copied from `deployment` as-is. `productionBranch` is copied together
+ * with `productionBranchSource` because the control plane's rule is that a
+ * branch is a *claim that needs provenance*: a projected "main" with no source
+ * would be exactly the kind of unsourced assertion the catalog refuses.
+ */
 const AVAILABILITY = Object.freeze({
   PUBLIC: "public",
   NOT_PUBLIC: "not-public",
@@ -209,6 +215,7 @@ function deriveDeployment(project) {
       linked: null,
       projectName: null,
       productionBranch: null,
+      productionBranchSource: null,
       productionUrl: null,
       publicUrl: null,
       availability: AVAILABILITY.UNVERIFIED,
@@ -233,6 +240,7 @@ function deriveDeployment(project) {
       linked,
       projectName: deployment.projectName ?? null,
       productionBranch: deployment.productionBranch ?? null,
+      productionBranchSource: deployment.productionBranchSource ?? null,
       productionUrl: recordedUrl,
       publicUrl: recordedUrl,
       availability: AVAILABILITY.PUBLIC,
@@ -247,6 +255,7 @@ function deriveDeployment(project) {
     linked,
     projectName: deployment.projectName ?? null,
     productionBranch: deployment.productionBranch ?? null,
+    productionBranchSource: deployment.productionBranchSource ?? null,
     productionUrl: null,
     publicUrl: null,
     availability: AVAILABILITY.NOT_PUBLIC,
@@ -628,6 +637,19 @@ function checkIntegrity(artifact) {
         `${where}: label「${label}」与 availability「${availability}」不一致（期望「${AVAILABILITY_LABEL[availability]}」）`,
       )
     }
+    const branch = project.deployment.productionBranch
+    const branchSource = project.deployment.productionBranchSource
+    if (branch !== null && branch !== undefined) {
+      if (!("productionBranchSource" in project.deployment)) {
+        problems.push(`${where}: 记录了 productionBranch 却没有 productionBranchSource 字段`)
+      } else if (typeof branchSource !== "string" || branchSource.trim() === "") {
+        problems.push(
+          `${where}: productionBranch=${JSON.stringify(branch)} 没有出处 —— ` +
+            `分支断言必须有 source（控制面规则：断言必须有出处）`,
+        )
+      }
+    }
+
     if (!Array.isArray(project.deployment.evidence)) {
       problems.push(`${where}: 缺少 evidence —— 结论必须能追溯到 catalog 原文`)
     }

@@ -59,7 +59,9 @@ FACTORY_CONTROL_ROOT（默认：本仓父目录）
 {
   "linked": true,
   "projectName": "prototype-ai-finance",
-  "productionUrl": null,          // catalog 记录的地址（null = 没有已核实的）
+  "productionBranch": "main",      // 断言，必须与下一行一起出现
+  "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch（只读回读）",
+  "productionUrl": null,           // catalog 记录的地址（null = 没有已核实的）
   "publicUrl": null,              // 只有 productionUrl 非空时才与它相同
   "availability": "not-public",   // public | not-public | unverified
   "label": "未部署 / 受保护",       // 页面上显示的，且与 availability 绑定
@@ -111,7 +113,7 @@ CI 与裸 checkout 没有根控制面。此时 `catalog:check` 只验证**生成
 ✓ payloadDigest 自洽
 ✓ 展示层覆盖全部 6 个条目，且没有多余条目
 ✓ lib/prototypes.ts 消费生成物
-✓ 运行时代码扫描 23 个文件：无写死部署地址、无手写成熟度断言
+✓ 运行时代码扫描 25 个文件：无写死部署地址、无手写成熟度断言
 
 [upstream-unavailable] 没有可用的根控制面 catalog（FACTORY_CONTROL_ROOT 未设置或目录不存在）。
   只验证了生成物内部完整性：payloadDigest 自洽、展示层契约、运行时只读约束。
@@ -142,36 +144,58 @@ verdict: INTEGRITY-OK (UPSTREAM UNVERIFIED) —— 只验证了生成物内部�
 - `observed` 快照有半衰期（分支/SHA/脏标记随时会动），所以它只作为事实展示，
   不进入任何判据。
 
-## 9 · 2026-09-16 的行为变化：hub 变成「公开且可点击」
+## 9 · 2026-09-16：hub 变成「公开且可点击」，以及同一个地址的两次观察
 
-根控制面刷新后（`prototype-factory-control` main = 见生成物的 `source.gitSha`），
+根控制面刷新后（`prototype-factory-control` main = 生成物的 `source.gitSha`），
 `catalog/projects/hub.json` 记录了：
 
 ```jsonc
 "deployment": {
   "linked": false,
-  "projectName": "prototype-hub",
-  "productionUrl": "https://prototype-hub-dusky.vercel.app/"   // ← 新增
+  "projectName": null,             // 本地没有 .vercel/ 链接，catalog 就不声称项目名；平台侧项目名见 notes
+  "productionBranch": "main",
+  "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch（2026-09-16 只读回读）",
+  "productionUrl": "https://prototype-hub-dusky.vercel.app/"
 }
 ```
 
 核实方式（控制面一侧，2026-09-16）：匿名 `curl` 实测 **HTTP/2 200、`server: Vercel`、
 无 SSO 跳转**；`vercel project ls` 确认项目 `prototype-hub` 存在
-（`prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`）。**只有匿名 2xx 才支持「public」这个说法**，这里成立。
+（`prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`）；Production Branch 由
+`vercel api /v9/projects/<name>` 的 `link.productionBranch` **只读回读**——
+不是从 URL 或分支名推断出来的。只有匿名 2xx 才支持「public」这个说法，这里成立。
 
-于是投影里：
+于是投影里 **hub 自己**从「未部署 / 受保护」变成 `public` + 「公开」+ 可点击；
+其余五仓（starter / kits / research 的生产地址受 SSO 保护；finance 与 s1 目前没有
+可匿名访问的地址）仍是 `not-public`，页面上**不渲染任何 `<a href>`**。
 
-- **hub 自己**从「未部署 / 受保护」变成 **`public` + `label: "公开"` + 可点击**，
-  索引行重新出现外链箭头与「打开原型」级别的可点承诺；
-- **其余五个仓**仍是 `not-public`、「未部署 / 受保护」，页面上**不渲染任何 `<a href>`**。
+> **分支断言必须有出处。** `productionBranch` 与 `productionBranchSource` 是**一起**投影的：
+> 只写一个 "main" 而没有出处，正是控制面这次收紧规则要消除的东西
+> （`drift` 从「任何 production branch 断言都 UNKNOWN」改成「断言必须有出处」）。
+> 本仓的 `catalog:check` 也拒绝「有分支、没出处」的生成物。
 
-> **⚠️ 「链接可点」不等于「内容已更新」。** 那个地址当前提供的仍是**旧版**页面：
-> 手写索引（`AI CRM` / `AI Finance` / `Stable`）与已经 404 的
-> `https://prototype-ai-finance.vercel.app/`。把线上刷新成本仓这一版需要**一次部署**，
-> 而部署是独立的人工授权（见 `docs/deployment.md`）——索引只负责把「地址是已核实的」
-> 如实画出来，不负责让那个地址上的内容变新。
-> 证据：`pnpm qa:online --base-url=https://prototype-hub-dusky.vercel.app/` 以观察者身份
-> 跑过该地址，结论是 identity 标记 0 次、投影条目 0/6、两个未授权外链（52 项问题，exit 1）。
+### 同一个地址的两次观察（都留着，因为可以对照）
+
+| 观察时间 | 该地址当时提供的内容 | 证据 |
+|---|---|---|
+| 2026-09-16 上午 | **旧版**：手写索引 + `Stable` ×4 + 已 404 的 finance 链接，不含身份标记 | `pnpm qa:online --base-url=…` → identity 0 次、投影条目 0/6、两个未授权外链，**exit 1 / 52 项** |
+| 2026-09-16 晚些时候（合并 `main` 触发的 Production 部署之后） | **本版**：身份标记在位、`Stable` 归零、旧死链归零 | 本仓独立匿名探测：**200 / 43755 字节** · `data-app-identity` ×1 · `Stable` ×0 · `prototype-ai-finance.vercel.app` ×0 · 外部链接恰好 1 条（hub 自己） |
+
+**「链接可点」与「内容是新版」是两件事**，它们在当天分别成立过：上午前者不成立
+（catalog 里根本没有地址），下午两者同时成立。这段对照留在文档里的价值就在于它两侧都写了——
+只写「当时是旧的」而不留「后来变新了」，与只写「现在能点」而抹掉它曾经指向死链，是同一种失真。
+
+刷新内容的那一步是**一次部署**（合并 `main`，由 Vercel Git 集成创建 Production 部署
+`target=production` / `gitRef=main` / `gitSha=2d5cc8a` / `readyState=READY`），
+属于独立的人工授权；索引只负责把「地址是已核实的」如实画出来。
+
+> **上游注释里有一处过时（控制面待改，本仓不代改）。** `catalog/projects/hub.json` 的
+> `notes[3]` 与 `notes[6]` 仍写着「Production Branch 与 SHA 没有回读，因此
+> `deployment.productionBranch` 记 null」——那是更早一次观察的原话，已被同一文件的
+> `notes[9]`（Production Branch 已用 `vercel api /v9/projects/<name>` 回读）与
+> `deployment.productionBranch = "main"` 取代。投影按设计**逐字**收录与部署相关的 notes，
+> 所以生成物里 hub 的 `evidence` 会同时出现两种说法：**以最新的那一条为准**，
+> 字段值（`productionBranch` / `productionBranchSource`）是当前事实。
 
 ## 10 · 输入脏了怎么办（provenance 的边界）
 

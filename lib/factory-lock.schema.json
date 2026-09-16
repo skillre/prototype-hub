@@ -190,7 +190,7 @@
         "observedOn",
         "source"
       ],
-      "description": "本仓部署身份中**已核实**的那一部分。刻意只放能拿出来的字段：项目名/ID、最新 Production URL、匿名可访问性。**Production Branch 与实际部署的 git SHA 不在这里** —— 它们没有被回读，因此留在 unresolved（value: null）。把「不知道」写成字段值，比留空更容易被误读成事实。",
+      "description": "本仓部署身份中**已核实**的那一部分。刻意只放能拿出来的字段：项目名/ID、最新 Production URL、匿名可访问性，以及线上那一次生产部署的 SHA 与它的出处。**每一项断言都带出处**：没有被回读的东西不写在这里，而是留在 unresolved（value: null）。",
       "properties": {
         "provider": {
           "enum": [
@@ -228,6 +228,30 @@
         "note": {
           "type": "string",
           "minLength": 1
+        },
+        "latestProductionSha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{7,40}$",
+          "description": "线上那一次生产部署的 git SHA（来自控制面的部署记录回读，不是从 URL 推断）。"
+        },
+        "latestProductionShaSource": {
+          "type": "string",
+          "minLength": 1,
+          "description": "上面那个 SHA 的出处；没有出处就不允许出现断言。"
+        },
+        "productionBranch": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "项目级 Production Branch。与 productionBranchSource 成对：断言必须有出处，没有出处的分支不写在这里。"
+        },
+        "productionBranchSource": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "上面那个分支的出处（例如 vercel api /v9/projects/<name> 的 link.productionBranch 只读回读）。"
         }
       }
     },

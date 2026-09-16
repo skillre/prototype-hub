@@ -206,8 +206,12 @@ Playwright 启动前失败并给出 `lsof` 定位方法。**禁止** `pkill -f "
   不持有部署凭证）。没有用户明确授权时不创建 / 不提升 Production、不改 Deployment
   Protection、不 push Production Branch。契约与授权矩阵见
   [`docs/deployment.md`](docs/deployment.md)（`pnpm factory:deploy actions`）。
-- 本仓当前**没有可公开访问的部署**：本地无 `.vercel/` 链接，Vercel CLI 认证已过期，
-  因此索引里显示「未部署 / 受保护」。
+- 线上部署：`https://prototype-hub-dusky.vercel.app/`（项目 `skillres-projects/prototype-hub`，
+  匿名 200）。索引里 hub 自己是「公开」+ 可点击，因为 `catalog/projects/hub.json` 记录了
+  已核实的地址；2026-09-16 该地址已由合并 `main` 触发的 Production 部署（`2d5cc8a`）刷新为
+  本版——同一天上午它还是旧版页面，两次观察都留在
+  [`docs/catalog-projection.md`](docs/catalog-projection.md) 第 9 节。
+  本地仍无 `.vercel/` 链接（Vercel CLI 认证已过期），因此部署列表只能由控制面回读。
 
 ---
 

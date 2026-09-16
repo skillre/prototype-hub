@@ -10,14 +10,14 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "fdbfbae9f4a25066afe3ee0c775144d09539b986",
+    "gitSha": "b30a55546a769e4f47ff0145d5a83ee1db9b41ac",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:26d71a99c6a47fa8ce789f07d115130220f1f98af6dfd732af1d4a8b7af09d16",
-    "inputsDirty": true,
+    "inputsDigest": "sha256:8d3817f36a9675cf06fbe2d7d029a5ff629f27ea942f9c3984590f864d87cbe5",
+    "inputsDirty": false,
     "inputs": [
       {
         "path": "catalog/compatibility.json",
-        "digest": "sha256:71674445df57f2bd5e9f95b10a8d2eee2ee34bafc7fa1702e6d9d28c554a9792"
+        "digest": "sha256:8f661e03d231195c51f3349f1c572cef904291302d800038691b99c611148dad"
       },
       {
         "path": "catalog/ports.json",
@@ -25,31 +25,31 @@
       },
       {
         "path": "workspace-policy.json",
-        "digest": "sha256:0041c4d3445a8ab4262ba4d370e9a9147c8766f5a8f85821349351363f413d5c"
+        "digest": "sha256:4d6a34600f61419e0c7f910cc5d3e4c5feb3fd26faf0252e2fcb9e464f7e9e42"
       },
       {
         "path": "catalog/projects/ai-finance.json",
-        "digest": "sha256:e97511bd54e74d19da38f76aa16443a940a1c134719359217d4da5d727392b17"
+        "digest": "sha256:dea0951275f0a1774b9cd258653086daaaa54e28f8a0a4a382f6fa47fca2fccf"
       },
       {
         "path": "catalog/projects/ai-research.json",
-        "digest": "sha256:07c86412222112532dbea2636ff70d005872d040661aa0d133f6efdc8c793cba"
+        "digest": "sha256:b0b23fd0027569a3e3fbbef960bbb1861c3f0155b44e938a599877bbcab2ee85"
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:d3e74b9dabb9b518e1e0043467308b7117b0bdbc52849239b18ecf12e8c37045"
+        "digest": "sha256:074c3bad855e2a13ba3b6e4d933ae85a3b21c636e6187fbb6a34a6d2d980fa73"
       },
       {
         "path": "catalog/projects/kits.json",
-        "digest": "sha256:b45a7041fd22e1e39a34d6ecb842638f37d3f275fc1e2e8288da283612c42aa6"
+        "digest": "sha256:9ec7ff6e4e5b0eabae741f420ef137b6ff6e5cd85924763d71458147a9f783c4"
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:2b34dec3b1a09bc7b76cd35557f73ff5483849bf805261cd9c3694385ae333e3"
+        "digest": "sha256:34fa64c5bb3db5d08a1bdb455c256eb79f3b03d2e8902eb72a0d8df9ff04305f"
       },
       {
         "path": "catalog/projects/starter.json",
-        "digest": "sha256:d44c846e3c79ca768139ff7dde8abaa5d60d53b0f8aa04f8b9a2f34bdc1330e0"
+        "digest": "sha256:4b8a3794bbcfc2d315980ad2138100c7ed0f4289c76381885562c4868fe28c4c"
       }
     ],
     "catalogGeneratedAt": "2026-09-16",
@@ -60,7 +60,7 @@
     },
     "vercel": {
       "cliAuth": "valid",
-      "deploymentsProtected": "all-existing-team-deployments-are-sso-protected",
+      "deploymentsProtected": "starter-kits-research-production-deployments-are-sso-protected",
       "accessibilityRule": "受 SSO 保护的 URL 不得被称为 public。只有匿名请求返回 2xx 才支持这个说法 —— 302 到 SSO 两者都不是：它既不是部署失败，也不是公开可访问。"
     },
     "catalogPortsGeneratedAt": "2026-09-16"
@@ -71,8 +71,8 @@
     "catalogIsTheOnlyFactSource": "身份、kind、端口、门禁、工厂/套件状态与部署状态全部来自 catalog；lib/hub-presentation.json 只允许提供展示名、一句话说明与缩略图。",
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。"
   },
-  "syncedAt": "2026-09-16T01:32:26.932Z",
-  "payloadDigest": "sha256:1762d19219b4ddca36b41fe7deeac5e5314cf18dd1153a3247d790bbe12be020",
+  "syncedAt": "2026-09-16T02:11:16.761Z",
+  "payloadDigest": "sha256:15866525b6463cb32e9e19d872d08e882e34cabf02d839a3865a11366dec10d3",
   "counts": {
     "projects": 6,
     "withPublicUrl": 1,
@@ -126,7 +126,8 @@
         "provider": "vercel",
         "linked": true,
         "projectName": "prototype-ai-finance",
-        "productionBranch": null,
+        "productionBranch": "main",
+        "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch；2026-09-16 只读回读，六个项目全部为 main，且 link.type=github / link.org=skillre 与该仓的 origin 一致",
         "productionUrl": null,
         "publicUrl": null,
         "availability": "not-public",
@@ -145,6 +146,10 @@
           {
             "source": "catalog/projects/ai-finance.json#notes[7]",
             "text": "**没有验证的部分（缺这条就不算合格交接）**：`pnpm qa:online` 从未对任何真实部署运行过；本次 push 之后的 CI 结果尚未回读；`factory:manifest` 的 L3 与 `qa:doctor` 的上游比对都是对着**同机 prototype-kits 工作副本**（registry 0.2.0），不是对着一个钉住的 commit，也不直接对已安装的 0.1.1 —— 它证明「id 存在且 approved / 托管文件与 kits.lock.json 的 checksum 一致」，**不证明**已装内容与上游逐字节一致；HVA（人工视觉验收）未做，因此本仓不处于任何 READY-TO-RELEASE 状态。"
+          },
+          {
+            "source": "catalog/projects/ai-finance.json#notes[9]",
+            "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
           }
         ]
       },
@@ -190,7 +195,8 @@
         "provider": "vercel",
         "linked": true,
         "projectName": "prototype-ai-research",
-        "productionBranch": null,
+        "productionBranch": "main",
+        "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch；2026-09-16 只读回读，六个项目全部为 main，且 link.type=github / link.org=skillre 与该仓的 origin 一致",
         "productionUrl": null,
         "publicUrl": null,
         "availability": "not-public",
@@ -201,6 +207,10 @@
           {
             "source": "catalog/projects/ai-research.json#notes[6]",
             "text": "本仓当前在 `feature/factory-governance-v1.3` 上，已 push 到 origin。Caveat：GITHUB git filter 与 Vercel 部署仍取决于人 —— 本仓的 Preview 受 SSO 保护（匿名 302 → sso-api，实测），不得称为 public。"
+          },
+          {
+            "source": "catalog/projects/ai-research.json#notes[8]",
+            "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
           }
         ]
       },
@@ -239,14 +249,15 @@
       "observed": {
         "observedAt": "2026-09-16",
         "branch": "feature/factory-governance-v1.3",
-        "head": "841a789",
+        "head": "2d5cc8a",
         "dirty": false
       },
       "deployment": {
         "provider": "vercel",
         "linked": false,
         "projectName": null,
-        "productionBranch": null,
+        "productionBranch": "main",
+        "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch；2026-09-16 只读回读，六个项目全部为 main，且 link.type=github / link.org=skillre 与该仓的 origin 一致",
         "productionUrl": "https://prototype-hub-dusky.vercel.app/",
         "publicUrl": "https://prototype-hub-dusky.vercel.app/",
         "availability": "public",
@@ -264,11 +275,23 @@
           },
           {
             "source": "catalog/projects/hub.json#notes[4]",
-            "text": "**那份公开部署提供的是旧版页面**（2026-09-16 观察：仍是手写索引 + `Stable` 标记 + 已 404 的 finance 链接，且不含新的 `data-app-identity` 标记）。刷新它需要一次部署，而部署是独立的人工授权 —— 本控制面没有创建、没有提升、没有修改任何部署。把 URL 记进 catalog 只说明「它部署在这里」，不代表它的内容是当前版本。"
+            "text": "**那份公开部署曾经是旧版页面**（2026-09-16 上午观察：手写索引 + `Stable` 标记 + 已 404 的 finance 链接，且不含新的 `data-app-identity` 标记；对它的 `qa:online` exit 1 / 52 项）。同一 URL 在当天下晚些时候的观察**变了**：用户授权合并 `main` 后，Vercel Git 集成创建了 Production 部署（记录显示 `target=production`、`gitRef=main`、`gitSha=2d5cc8a`、`readyState=READY`，SHA 等于 merge 后的 main），此后该地址匿名返回 **200 / 43755 字节**、**包含 `data-app-identity` 标记**、`Stable` 与旧链接**归零**。前后两次观察是同一个 URL，因此这个对比本身是有效证据 —— 一条记录不能只留「当时是旧的」而不留「后来变新了」。"
           },
           {
             "source": "catalog/projects/hub.json#notes[5]",
+            "text": "**本工作区第一次真正的在线 QA 就发生在 hub（2026-09-16）**：`pnpm qa:online --base-url=https://prototype-hub-dusky.vercel.app/ --identity=<vercel ls 的部署记录> --expect-sha=2d5cc8a…` —— 判据链全部通过：身份先于 QA（`production · main @ 2d5cc8a · READY`，且 SHA **等于**期望的 RC）→ 可访问性 `public`（匿名 200，因此**可以**称为 public）→ 2 路由 × 桌面/移动 × 默认/reduced-motion 共 8 个组合，**无控制台报错 / 无请求失败 / 无横向溢出** → exit 0。这次运行没有部署、没有 promote、没有创建 bypass secret，也没有启动本地 server（REMOTE 观察者模式）。报告落在 `.qa/out/`（该目录被本仓 .gitignore 忽略，未进仓库）。"
+          },
+          {
+            "source": "catalog/projects/hub.json#notes[6]",
+            "text": "**部署身份：已核实与未核实被刻意分开。** 已核实（2026-09-16）：Vercel 项目 `prototype-hub`（`prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`）、Latest Production URL `https://prototype-hub-dusky.vercel.app/`、匿名 200、以及那条生产部署的 `target/ref/SHA/readyState`。**仍未核实**：项目级 **Production Branch 设置字段**（CLI 不暴露它）—— 因此 `deployment.productionBranch` 记 null。注意部署记录里的 `gitRef=main` 是**另一个**独立的观察，不能拿它冒充项目设置。"
+          },
+          {
+            "source": "catalog/projects/hub.json#notes[7]",
             "text": "仓库本地无 `.vercel` 目录（未经 CLI link），但 Vercel 侧项目确实存在 —— Git 集成连接是平台侧的事。`deployment.linked` 记的是**本地有没有 link 文件**，与「平台上有没有项目」是两件事，不能互相推断。"
+          },
+          {
+            "source": "catalog/projects/hub.json#notes[9]",
+            "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
           }
         ]
       },
@@ -314,7 +337,8 @@
         "provider": "vercel",
         "linked": true,
         "projectName": "prototype-kits",
-        "productionBranch": null,
+        "productionBranch": "main",
+        "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch；2026-09-16 只读回读，六个项目全部为 main，且 link.type=github / link.org=skillre 与该仓的 origin 一致",
         "productionUrl": null,
         "publicUrl": null,
         "availability": "not-public",
@@ -329,6 +353,10 @@
           {
             "source": "catalog/projects/kits.json#notes[8]",
             "text": "**部署身份有歧义（原始观察 2026-09-15，未在 2026-09-16 重新推导）**：当时记录「同一个 repo 在 Vercel 侧关联了 3 个项目」。2026-09-16 用已认证的 `vercel project ls` 回读当前 scope，列表里**只有一个**名为 `prototype-kits` 的项目。这两条不矛盾也不互证 —— 后者的范围是当前 scope 的项目名单，前者的证据来源没有重新核。因此 `deployment.productionBranch` / `productionUrl` 仍记 null：**「这个 repo 部署到哪里」在当前仍不只有一个确定答案**。"
+          },
+          {
+            "source": "catalog/projects/kits.json#notes[10]",
+            "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
           }
         ]
       },
@@ -339,7 +367,7 @@
       "kind": "product",
       "title": "S1 Incident Command · 原型产品",
       "path": "prototype-s1-incident-command",
-      "repo": null,
+      "repo": "https://github.com/skillre/prototype-s1-incident-command.git",
       "defaultBranch": null,
       "qaPort": 3220,
       "qaPortSource": "prototype-s1-incident-command/.qa/qa.config.mjs:QA_PORT",
@@ -367,24 +395,33 @@
       "observed": {
         "observedAt": "2026-09-16",
         "branch": "feature/incident-command-workspace",
-        "head": "e0fe812",
-        "dirty": true
+        "head": "b985588",
+        "dirty": false
       },
       "deployment": {
         "provider": "vercel",
-        "linked": false,
-        "projectName": null,
-        "productionBranch": null,
+        "linked": true,
+        "projectName": "prototype-s1-incident-command",
+        "productionBranch": "main",
+        "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch；2026-09-16 只读回读，六个项目全部为 main，且 link.type=github / link.org=skillre 与该仓的 origin 一致",
         "productionUrl": null,
         "publicUrl": null,
         "availability": "not-public",
         "label": "未部署 / 受保护",
         "clickable": false,
-        "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
+        "reason": "catalog 记录了 Vercel 项目链接，但没有已核实的公开 URL（deployment.productionUrl = null）；团队内已存在的部署受 SSO 保护，受保护不得称为 public。",
         "evidence": [
           {
             "source": "catalog/projects/s1.json#notes[1]",
-            "text": "**原因已核实（2026-09-15）**：`skillre/prototype-s1-incident-command` 这个 GitHub repo **不存在**。所以这不是一处漏配的 remote —— 远端仓根本还没有。创建远端仓是人的决定，控制面不猜仓名，也不填一个看起来合理的 URL。推论：s1 目前无法通过 Vercel Git 集成部署。"
+            "text": "**一个真实配置问题（已记录、已修一半）**：新建仓的 GitHub **默认分支是第一个被 push 的分支**，于是 s1 的默认分支成了 `feature/incident-command-workspace`；Vercel 的 Production 逻辑跟着默认分支走，结果首次 push 产生了 `target=production` 但 `gitRef=feature/incident-command-workspace` 的部署（`bfa14b6`），而随后 push 的 `main`（`b985588`）只生成了 Preview。已把 GitHub 默认分支改回 `main`（项目级 `link.productionBranch` 本来就是 `main`），**下一次 push main 会自然纠正**。这条留下来是因为它正是「Production Branch 未知也是 STOP」要防的状态：Production 指向了一个大家以为是预览的分支。"
+          },
+          {
+            "source": "catalog/projects/s1.json#notes[8]",
+            "text": "**没有验证的部分**：`pnpm qa:online` 从未跑过（无部署 URL、无用户提供的 bypass secret）；Kits 缺席时的诚实模式（`[upstream-unavailable]`）没有被观测到，因为 `../prototype-kits` 一直在场，`qa:doctor` 报的是 `[verified]`；上游比对是对**本地** `../prototype-kits`（registry 0.2.0）做的，不是对远端 clone；HVA（人工视觉验收）未做，因此本仓最靠前的状态仍是 `READY FOR HUMAN VISUAL ACCEPTANCE`。"
+          },
+          {
+            "source": "catalog/projects/s1.json#notes[9]",
+            "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
           }
         ]
       },
@@ -430,14 +467,20 @@
         "provider": "vercel",
         "linked": false,
         "projectName": null,
-        "productionBranch": null,
+        "productionBranch": "main",
+        "productionBranchSource": "vercel api /v9/projects/<name> → link.productionBranch；2026-09-16 只读回读，六个项目全部为 main，且 link.type=github / link.org=skillre 与该仓的 origin 一致",
         "productionUrl": null,
         "publicUrl": null,
         "availability": "not-public",
         "label": "未部署 / 受保护",
         "clickable": false,
         "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
-        "evidence": []
+        "evidence": [
+          {
+            "source": "catalog/projects/starter.json#notes[9]",
+            "text": "**Production Branch 已回读（2026-09-16）**：`deployment.productionBranch = \"main\"`。此前这一格一直是 null，理由写的是「CLI 不暴露该字段」—— 那个理由当时是对的，现在不再成立：`vercel api /v9/projects/<name>` 会返回 `link.productionBranch` / `link.repo` / `link.type` / `link.org`，六个项目全部读到 `main`，且都已连到各自的 GitHub 仓。**只读探测，没有修改任何项目设置。** 记录依据：该响应来自 Vercel API，不是从 URL 或分支名推断的。"
+          }
+        ]
       },
       "sourceFile": "catalog/projects/starter.json"
     }

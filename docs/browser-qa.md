@@ -88,8 +88,9 @@ node .qa/online-qa.mjs --base-url=<url> [--identity=<deployment.json>] [--expect
 - **真机**：只有 Chromium（Playwright `Desktop Chrome` + 一个 mobile 视口），
   没有 WebKit / Firefox，也没有真实触摸硬件。
 - **真实部署上的行为**：`pnpm qa` 只扫它自己启动的本地 server；部署侧必须用
-  `pnpm qa:online`，而本仓当前**没有可公开访问的部署**（见 `factory.lock.json` 的
-  `deployment/hub-vercel-identity`），因此在线 QA **从未对任何真实部署运行过**。
+  `pnpm qa:online`。2026-09-16 它在 hub 的公开地址上跑过一次（观察者模式，身份
+  `production · main @ 2d5cc8a · READY` → `public` → 8 个组合全过，exit 0；见
+  `docs/deployment.md` 第 6 节），但**其余五个仓的部署仍然没有被这样跑过**。
 - **样式缺失（style presence）**：没有实现「与未加样式基线做差」那一类通道，
   路由级 CSS 缺失只靠视觉断言兜底。
 - **可访问性**：只覆盖了结构化语义（区块名、身份标记、键盘可达性），

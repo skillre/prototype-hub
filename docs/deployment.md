@@ -71,35 +71,44 @@ node scripts/verify-deployment.mjs access --status 302 --location https://…/ss
 `pnpm qa:online` 不创建任何 secret：它只接受用户通过 `QA_ONLINE_BYPASS_SECRET`
 提供的值，且不打印、不持久化、不提交。
 
-## 5 · 本仓的部署现状（2026-09-16 核实）
+## 5 · 本仓的部署现状（2026-09-16 核实，同日更新）
 
-**已核实（写在 `factory.lock.json` 的 `deployment` 段）：**
+**已核实（写在 `factory.lock.json` 的 `deployment` 段，每条都带出处）：**
 
 - 项目是 `skillres-projects/prototype-hub`，project id `prj_Vz6w0EwclApNmGZ7MrWku0I7UZjB`
   —— 由控制面通过 Vercel CLI 回读确认（本仓不持有 CLI 认证）。
 - Latest Production URL `https://prototype-hub-dusky.vercel.app/`；本仓独立做了匿名只读探测：
   `curl -s -D- https://prototype-hub-dusky.vercel.app/` → **HTTP/2 200**（`server: Vercel`，
   无 SSO 跳转）。**只有匿名 2xx 才支持「public」这个说法**，这里成立。
-- 该地址当前提供的是**旧版**页面：手写索引（`AI CRM` / `AI Finance` / `Stable`）+
-  旧地址 `https://prototype-ai-finance.vercel.app/`（已 404）与 starter 的 CRM 地址，
-  且不含新的 `data-app-identity="prototype-hub"` 标记。`pnpm qa:online --base-url=<该地址>`
-  会把这一点说清楚（它确实这样说过：identity 0 次、投影条目 0/6、两个未授权外链）。
+- 项目级 **Production Branch = `main`**：由 `vercel api /v9/projects/<name>` 的
+  `link.productionBranch` **只读回读**（不是从 URL 或分支名推断）。本仓自己没有 CLI 认证，
+  这一步由控制面完成，出处写在锁的 `productionBranchSource`。
+- 线上那次生产部署的 SHA = `2d5cc8a`（`target=production` / `gitRef=main` /
+  `readyState=READY`），出处写在锁的 `latestProductionShaSource`。
+- **该地址在当天被刷新过一次**：2026-09-16 上午它还是**旧版**页面（手写索引
+  `AI CRM` / `AI Finance` / `Stable` + 已 404 的 `https://prototype-ai-finance.vercel.app/`，
+  不含 `data-app-identity="prototype-hub"`；当时 `pnpm qa:online --base-url=<该地址>`
+  报 identity 0 次、投影条目 0/6、两个未授权外链，exit 1 / 52 项）。用户授权合并 `main`
+  之后，Vercel Git 集成创建了 Production 部署；此后**同一个 URL** 匿名返回
+  **200 / 43755 字节**、`data-app-identity` ×1、`Stable` ×0、旧死链 ×0、外部链接恰好 1 条
+  （hub 自己）。两次观察是同一个 URL，对照本身是证据，所以两边都留在文档里。
 
-**未核实（留在 `unresolved[deployment/hub-production-branch-and-sha]`，value 仍为 null）：**
+**未核实（留在 `unresolved[deployment/hub-live-revision-sha]`，value 仍为 null）：**
 
-- Production Branch 是什么；线上那一版对应哪个 git SHA；是否等于某个已验收的 RC。
-  没有 `target` / `git ref` / `git SHA` / `readyState` 就没有「这一版已验收」这句话。
+- **页面上的那一版是否就是 `2d5cc8a`**：页面不暴露 commit，本仓也没有 Vercel 凭证可回读
+  部署列表。探测能证明「是新版」，控制面的部署记录给出 SHA——这两件事**没有被本仓独立对上**。
 - 本地没有 `.vercel/` 链接，`catalog/compatibility.json` 记 `vercel.cliAuth = "expired"`，
-  所以本仓自己无法回读这三项——「知道一半」不写成「知道」。
+  所以本仓自己无法回读部署列表——「知道一半」不写成「知道」。
 
 **因此：**
 
-- 投影里 hub 仍是 `productionUrl: null` / 「未部署 / 受保护」且不可点击：地址的事实来自 catalog，
-  而 catalog 还没记录它（`catalog/projects/hub.json` 仍是 `linked=false, productionUrl=null`，
-  与刚核实到的项目事实不一致）。**控制面把地址写进 catalog 之后，下一次 `pnpm catalog:sync`
-  会自动把它变成 public + 可点击**——投影不需要改代码，也不需要手改生成物。
-- **本轮没有执行任何部署动作**：未创建、未链接、未提升、未修改保护设置、未 push。
-  让线上从「旧版」变成「这一版」是一次独立的部署授权，属于人的决定。
+- 投影里 hub 是 `public` + 「公开」+ 可点击：`catalog/projects/hub.json` 现在记录了
+  `productionUrl` 与 `productionBranch`（带出处），`pnpm catalog:sync` 据此把它渲染成可点条目。
+  **「链接可点」与「页面是新版」是两件事**——当天上午前者不成立，下午两者同时成立；
+  索引只负责把「地址是已核实的」如实画出来。
+- **本仓没有执行任何部署动作**：未创建、未链接、未提升、未修改保护设置、未推 Production 分支。
+  刷新线上内容的那次 Production 部署，是用户授权合并 `main` 后由 Vercel Git 集成创建的
+  ——部署是独立的一次人工决定，不是索引的副作用。
 
 ## 6 · 在线 QA 的位置
 
@@ -112,5 +121,10 @@ pnpm qa:online --base-url=<url> --identity=<deployment.json> --expect-sha=<rc-sh
 顺序永远是：**RC SHA → 本地全部门禁 → Preview（同一 SHA）→ 在线 QA → 人工视觉验收
 → 源码发布 → Production（同一 SHA）→ annotated tag → housekeeping**。
 
-本仓当前没有可公开访问的部署，因此 `pnpm qa:online` 从未对真实部署运行过——
-这一点写在 `factory.lock.json` 的 `note` 与交接里，**不写成「已验证」**。
+本工作区第一次真正的在线 QA 就发生在 hub（2026-09-16）：
+`pnpm qa:online --base-url=https://prototype-hub-dusky.vercel.app/ --identity=<部署记录>
+--expect-sha=2d5cc8a…` → 身份 `production · main @ 2d5cc8a · READY` → 可访问性 `public`
+（匿名 200）→ 2 路由 × 桌面/移动 × 默认/reduced-motion 共 8 个组合，无 console error、
+无请求失败、无横向溢出 → exit 0。其余五个仓的部署没有被这样跑过，对它们来说
+`pnpm qa:online` 仍然「从未运行」——这一点写在 `factory.lock.json` 的 `note` 与交接里，
+**不写成「已验证」**。

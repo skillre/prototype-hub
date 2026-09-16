@@ -36,6 +36,8 @@ const artifact = catalogArtifact as unknown as {
     deployment: {
       publicUrl: string | null
       productionUrl: string | null
+      productionBranch: string | null
+      productionBranchSource: string | null
       clickable: boolean
       availability: string
       label: string
@@ -90,6 +92,20 @@ test.describe("catalog 投影", () => {
       .sort()
 
     expect(artifact.projects.map((project) => project.id).sort()).toEqual(catalogIds)
+  })
+
+  /**
+   * 控制面 2026-09-16 收紧的规则：**分支断言必须有出处**。
+   * 本仓的投影与 `catalog:check` 必须同款——只写 "main" 而没有 source 的生成物不算通过。
+   */
+  test("productionBranch 与它的出处成对出现", () => {
+    for (const project of artifact.projects) {
+      const branch = project.deployment.productionBranch
+      if (branch === null) continue
+      expect(typeof branch).toBe("string")
+      expect(project.deployment.productionBranchSource, `${project.id} 有分支却没出处`).toBeTruthy()
+      expect(project.deployment.productionBranchSource!.length).toBeGreaterThan(20)
+    }
   })
 
   test("每个条目都记录了来源文件与判定理由", () => {
@@ -185,8 +201,9 @@ test.describe("catalog 投影", () => {
    * hub 自己的 production URL。别处新增 productionUrl 时它必须被显式改一次，
    * 因为「有没有对外可点的地址」不该悄悄变化。
    *
-   * 注意它断言的是**链接可用**，不是**页面已更新**：那个地址当前提供的仍是旧版页面，
-   * 详见 docs/catalog-projection.md 第 9 节。
+   * 注意它断言的是**链接可用**，不是**页面已更新**：那个地址当天下午已被合并 `main`
+   * 触发的 Production 部署（2d5cc8a）刷新，而「页面 == 该 SHA」没有被本仓独立复核
+   * （页面不暴露 commit）。两次观察见 docs/catalog-projection.md 第 9 节。
    */
   test("公开地址的条目集合与当前 catalog 事实一致", () => {
     const publicIds = artifact.projects

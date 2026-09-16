@@ -223,18 +223,25 @@ pnpm qa                # Browser QA：自管 server + 身份校验 + 双视口 �
 
 - `upstream/control-repo` —— 根控制仓的 reusable workflow 是否发布到某个 ref。未核实前
   本仓 CI 保持自包含（引用一个解析不了的 ref 会让 workflow 直接不可用）。
-- `deployment/hub-production-branch-and-sha` —— 当前 Production Branch 与「线上那一版对应哪个
-  commit」。**已核实**的部分写在锁的 `deployment` 段（项目 `skillres-projects/prototype-hub`、
-  project id、Latest Production URL、匿名 200）；**没有回读**的部分留在这里，值仍为 null。
+- `deployment/hub-live-revision-sha` —— 「页面上的那一版是否就是 `2d5cc8a`」。
+  **已核实**的部分写在锁的 `deployment` 段（项目 `skillres-projects/prototype-hub`、project id、
+  Latest Production URL、匿名 200、项目级 Production Branch = `main` + 出处、那次生产部署的
+  SHA + 出处）；本仓没有独立复核到的部分（页面不暴露 commit）留在这里，值仍为 null。
   两半分开放，是为了不把「知道一半」说成「知道」。
-- `ci/runtime` —— 这份 CI 是否真的在 Actions 上跑过。本轮没有 push，也没有运行历史。
+- `ci/runtime` —— 这份 CI 是否真的在 Actions 上跑过。**在 2026-09-16 这次 push 之前**没有任何
+  运行记录；push 之后必须回读第一次运行的结论（run id / headSha / conclusion），
+  不能因为 workflow 文件看着对就假设它是绿的。
 
-> **部署现状与本仓源码的差距（需要人决定）**：线上那个地址当前提供的是**旧版**页面
-> （手写索引 + `Stable` + 已经 404 的旧地址），也没有身份标记；本仓这一版**没有被部署**。
-> 部署需要用户明确授权，Agent 不代做。另一方面，`catalog/projects/hub.json` 仍记
-> `deployment.linked=false, productionUrl=null`，所以索引里 hub 自己也是「未部署 / 受保护」——
-> 控制面把已核实的地址写进 catalog 之后，下一次 `pnpm catalog:sync` 会自动把它变成
-> public + 可点击（投影不需要改代码）。
+> **线上地址的两次观察（都留着，因为可以对照）**：2026-09-16 上午该地址提供的还是**旧版**页面
+> （手写索引 + `Stable` + 已经 404 的旧地址，也没有身份标记）；用户授权合并 `main` 之后，
+> Vercel Git 集成为它创建了 Production 部署（`target=production` / `gitRef=main` /
+> `gitSha=2d5cc8a` / `readyState=READY`），此后同一个 URL 匿名 200 / 43755 字节、
+> 身份标记在位、`Stable` 与旧死链归零。所以 `catalog/projects/hub.json` 现在记录
+> `productionUrl` 与 `productionBranch`（带出处），索引里 hub 自己也是 `public` + 可点击——
+> 投影不需要改代码，这是 catalog 一侧的事实变了。**没有本仓独立复核过的只剩一件事**：
+> 页面不暴露 commit，「页面 == `2d5cc8a`」没有被对上（见
+> `unresolved[deployment/hub-live-revision-sha]`）。那次部署是用户授权合并触发的平台行为，
+> 本仓没有创建、没有提升、没有改保护设置。
 
 > **根控制面侧待补（不是本仓回退形状的理由）**：`contracts/factory-lock.schema.json`
 > 目前用 `oneOf` 描述三种角色形状（`factory-baseline` / `product` / `kits-registry`），
