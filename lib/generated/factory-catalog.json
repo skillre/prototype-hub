@@ -10,9 +10,9 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "8a9f16ddb2670d14902b9346f40590f1e1d89219",
+    "gitSha": "9ca1b44219bc5c5a3fb29780ddfa0269446d1464",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:76d91c187f28a81927d4e6247e8ee15067846982716d1320e11b6f33e3174b9e",
+    "inputsDigest": "sha256:55164a1bd8ef280db2692d110d6591715c47d175fb08812bcc8bc4f5bf54e109",
     "inputsDirty": false,
     "inputs": [
       {
@@ -37,7 +37,7 @@
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:7b00d08e0bd82a49f8d2cf80d44358a8b1bd60dc750147e740555d59fec47ab8"
+        "digest": "sha256:2e983443798525fb806854f8c7fef541e73bd62f514e6194ff6ae8208d53f4f2"
       },
       {
         "path": "catalog/projects/kits.json",
@@ -49,7 +49,7 @@
       },
       {
         "path": "catalog/projects/sth.json",
-        "digest": "sha256:0d2b58ef58122f5957c1657a14e4ede3220ec42a6acd3077c4e0a1e4165c21da"
+        "digest": "sha256:f793e407b32faf3846555c761a96787ecc2bd7bb1539abb3cdaaef7d4ab6a0e4"
       }
     ],
     "catalogGeneratedAt": "2026-09-16",
@@ -72,12 +72,12 @@
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
     "retiredIsAStateNotAHole": "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。"
   },
-  "syncedAt": "2026-09-17T10:43:53.806Z",
-  "payloadDigest": "sha256:f370a06858c2323b2bc665df88611054bdec04ceb52baaeb90b17a7fdde9889e",
+  "syncedAt": "2026-09-17T12:51:58.371Z",
+  "payloadDigest": "sha256:d72d1c446e2611eca4383f1e99c1ed888b1eeb556bf3835fc719efc59d203881",
   "counts": {
     "projects": 6,
-    "withPublicUrl": 4,
-    "withoutPublicUrl": 2,
+    "withPublicUrl": 5,
+    "withoutPublicUrl": 1,
     "retired": 0,
     "byKind": {
       "hub": 1,
@@ -272,7 +272,7 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "fd29b51",
+        "head": "7502f54",
         "dirty": false
       },
       "deployment": {
@@ -492,21 +492,21 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/sth-console",
-        "head": "068f6ab",
+        "head": "3550b33",
         "dirty": false
       },
       "deployment": {
-        "provider": null,
-        "linked": false,
-        "projectName": null,
-        "productionBranch": null,
-        "productionBranchSource": null,
-        "productionUrl": null,
-        "publicUrl": null,
-        "availability": "not-public",
-        "label": "未部署 / 受保护",
-        "clickable": false,
-        "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
+        "provider": "vercel",
+        "linked": true,
+        "projectName": "prototype-sth",
+        "productionBranch": "feature/sth-console",
+        "productionBranchSource": "部署别名 prototype-sth-git-feature-sth-console-skillres-projects.vercel.app（vercel ls / inspect，2026-09-17）",
+        "productionUrl": "https://prototype-sth.vercel.app",
+        "publicUrl": "https://prototype-sth.vercel.app",
+        "availability": "public",
+        "label": "公开",
+        "clickable": true,
+        "reason": "catalog 的 deployment.productionUrl 记录了一个已核实的地址。",
         "evidence": [
           {
             "source": "catalog/projects/sth.json#notes[4]",
@@ -519,6 +519,10 @@
           {
             "source": "catalog/projects/sth.json#notes[15]",
             "text": "**`deployment` 六格全部为 null，且 `productionBranch` 是刻意清空的（2026-09-16）**：此前它写着 `main` 但 `productionBranchSource` 为 null，drift 因此报 `policy-production-branch-unrecorded`（UNKNOWN）。STH 尚未创建任何 Vercel 项目、也没有 link，所以「Production Branch 是 main」这句话**没有任何出处** —— 按本仓规则「核不出来就写 null，并把怎么核的写进 notes」，已改为 null。"
+          },
+          {
+            "source": "catalog/projects/sth.json#notes[18]",
+            "text": "2026-09-17 · 部署（人授权「直接上线 vercel，我来验收看看」）：Vercel 项目 skillres-projects/prototype-sth 已创建并接上 GitHub 仓。productionUrl https://prototype-sth.vercel.app 的核实方式：匿名 curl 返回 200（/ 与 /workbench 都试了）、vercel inspect 显示 target=production 且 readyState=READY。productionBranch 的核实方式：部署别名里出现 prototype-sth-git-feature-sth-console-skillres-projects.vercel.app。push 50efe79 后 24 秒出现一条新的 Production 部署 —— 即 Git 集成确实在推 push 触发生产构建。**未核实**：这次部署的 git SHA —— Vercel CLI 的 inspect --json 完全不返回 git 元数据（没有 gitSource），所以「线上这一版 == 50efe79」这句话没有被证明，不写。要看 commit 去 Vercel 部署详情页。另：首次部署是 CLI 上传创建的，那条完全没有 gitSource。**HVA 仍未做**：上线不等于验收，状态只能停在 READY FOR HUMAN VISUAL ACCEPTANCE。"
           }
         ]
       },
