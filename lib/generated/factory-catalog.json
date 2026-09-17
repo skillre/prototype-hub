@@ -10,10 +10,10 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "51fa6bd05f6edc3a66c8cb889764ea829948b70b",
+    "gitSha": "48dea0c9cf2fc057165a2ca87f34947e408f6d80",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:7a56804f872bb74c2a6ffbe2edf3387eb134ab5f04a145a99d6108cf3e3469cb",
-    "inputsDirty": false,
+    "inputsDigest": "sha256:b2b38414353895bec9c2aa55e7361558559af760405b0f33cff84943c78e2e8c",
+    "inputsDirty": true,
     "inputs": [
       {
         "path": "catalog/compatibility.json",
@@ -25,7 +25,7 @@
       },
       {
         "path": "workspace-policy.json",
-        "digest": "sha256:dbe7865fb4d0e44b57dd9684b12e07c2041b3c97153db0e5fcebf42d5cce389f"
+        "digest": "sha256:637dee2afe8d703be6c2cfc9789002b494753db71aaa61da82ff4dc3d78766af"
       },
       {
         "path": "catalog/projects/ai-finance.json",
@@ -37,15 +37,15 @@
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:c94a17eb83814542cb3d8b7b76d7bb3aa98416455712046794df73507216e0a1"
+        "digest": "sha256:d8cb098a4ca59548519ab64c149ba509f89918e8ca6eda38000b4107703edee2"
       },
       {
         "path": "catalog/projects/kits.json",
-        "digest": "sha256:ce7f447de4c1095c48a90e1c41eca63a776fbf224e9d06eb68ffa96281367033"
+        "digest": "sha256:d8361feefb006bd00ad7e18da8611580623971d60a7a1ee5514047c1fe0d532d"
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:bf065c64021e163cdb9f48576f20048265280635e92cfb9e38dd50c99936ac00"
+        "digest": "sha256:dc6074de5298e0386ffc430f64e6a303131f56e2c0074665ee8a29aa5758f6bc"
       },
       {
         "path": "catalog/projects/starter.json",
@@ -72,8 +72,8 @@
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
     "retiredIsAStateNotAHole": "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。"
   },
-  "syncedAt": "2026-09-16T23:42:46.222Z",
-  "payloadDigest": "sha256:1d1bfa5d8f565c99c8fe7f909dbbc57149d2f6779d84a039a081163604a93574",
+  "syncedAt": "2026-09-17T02:52:56.541Z",
+  "payloadDigest": "sha256:5c3e519a05bbd664ea3a203c246cca3b2ff8f899db1d60db73408bb7a5d564ed",
   "counts": {
     "projects": 6,
     "withPublicUrl": 4,
@@ -272,8 +272,8 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "43d2047",
-        "dirty": false
+        "head": "aa34d3e",
+        "dirty": true
       },
       "deployment": {
         "provider": "vercel",
@@ -357,7 +357,7 @@
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
         "head": "3bd09a3",
-        "dirty": false
+        "dirty": true
       },
       "deployment": {
         "provider": "vercel",
@@ -429,7 +429,7 @@
         "observedAt": "2026-09-17",
         "branch": "feature/s1-console",
         "head": "49f302c",
-        "dirty": false
+        "dirty": true
       },
       "deployment": {
         "provider": null,
@@ -450,7 +450,7 @@
           },
           {
             "source": "catalog/projects/s1.json#notes[12]",
-            "text": "**仍未回读的两格**：`observed.head`（该仓尚无 commit）与 `deployment.*`（未创建 Vercel 项目）。这两处仍按「不知道就不写」处理。"
+            "text": "**仍未回读的两格**：`observed.head`（该仓尚无 commit）与 `deployment.*`（未创建 Vercel 项目）。这两处仍按「不知道就不写」处理。**（2026-09-17 更正）** 本条关于 `observed.head` 的那半句**已被下一条推翻**：该仓早已有 commit（`53662db` 起共 4 个，最新 `49f302c`），`observed.head` 已是回读值。**仍然没有回读的只剩 `deployment.*`** —— 它依旧按「不知道就不写」处理，且 `prototype-s1` 尚无任何 Vercel 项目或 link（创建需人授权）。"
           },
           {
             "source": "catalog/projects/s1.json#notes[15]",
