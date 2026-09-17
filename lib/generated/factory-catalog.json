@@ -10,9 +10,9 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "3378d3c86923a18cc62e0faac2534492d9e5d5e7",
+    "gitSha": "bf86fe126f9c8de1d3fdcbf1e951843abca3f42e",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:950ca2e89ffe60c232f482bf3cb4268f6f496470c4ac481471a7bf77a183b40d",
+    "inputsDigest": "sha256:95b4d8a7b998d105fc185ec1e438e54d69fad0ac142b8a38ecc34b94423fdb1a",
     "inputsDirty": false,
     "inputs": [
       {
@@ -37,7 +37,7 @@
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:4c91a58c390f833c4b608897265943972d80a060c16e350add7cb70cbff4c846"
+        "digest": "sha256:42ecad000258bb450a15742c5d3af494d44cfd7a3e3a47c267f07f447f1a171f"
       },
       {
         "path": "catalog/projects/kits.json",
@@ -45,7 +45,7 @@
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:2e7d6e14d378617a95685abbc6a00125175bd1c7d1a8c492d3e9b7f2d7ef71aa"
+        "digest": "sha256:60bb4fc08b9d516bb6c098b1bb1cb873efb96cea46cdc95c8df5c5b8826cb5f0"
       },
       {
         "path": "catalog/projects/starter.json",
@@ -72,8 +72,8 @@
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
     "retiredIsAStateNotAHole": "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。"
   },
-  "syncedAt": "2026-09-17T07:18:02.845Z",
-  "payloadDigest": "sha256:480053a02f16afdde1823145f5403c36e5787cdbb87bdb083a408828cf339fbf",
+  "syncedAt": "2026-09-17T09:15:56.659Z",
+  "payloadDigest": "sha256:a490a45bd716fd2f425dfef9b93d0cac11ec283aa53db7ab8addda776067d675",
   "counts": {
     "projects": 6,
     "withPublicUrl": 4,
@@ -272,7 +272,7 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "0735345",
+        "head": "d60f16c",
         "dirty": false
       },
       "deployment": {
@@ -428,7 +428,7 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/s1-console",
-        "head": "1e09f9e",
+        "head": "7363f1b",
         "dirty": false
       },
       "deployment": {
