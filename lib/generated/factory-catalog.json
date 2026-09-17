@@ -10,9 +10,9 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "9ca1b44219bc5c5a3fb29780ddfa0269446d1464",
+    "gitSha": "1ec75e283dc5db0e9eaf5fee9c50b0f4203aefc6",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:55164a1bd8ef280db2692d110d6591715c47d175fb08812bcc8bc4f5bf54e109",
+    "inputsDigest": "sha256:977cc5e33bfff2fa3303eff95189c15cd8b8de4dec2f917a8b990b770d43e5c4",
     "inputsDirty": false,
     "inputs": [
       {
@@ -37,7 +37,7 @@
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:2e983443798525fb806854f8c7fef541e73bd62f514e6194ff6ae8208d53f4f2"
+        "digest": "sha256:77179124e6db42580797d421c9ab8bed55f2054f89bd789151633d4daa0b8662"
       },
       {
         "path": "catalog/projects/kits.json",
@@ -49,7 +49,7 @@
       },
       {
         "path": "catalog/projects/sth.json",
-        "digest": "sha256:f793e407b32faf3846555c761a96787ecc2bd7bb1539abb3cdaaef7d4ab6a0e4"
+        "digest": "sha256:baae5ddf1cfefe15783cf4e918a84b021de6e8ebf2173f25e9cf4358fc35b97b"
       }
     ],
     "catalogGeneratedAt": "2026-09-16",
@@ -72,8 +72,8 @@
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
     "retiredIsAStateNotAHole": "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。"
   },
-  "syncedAt": "2026-09-17T12:51:58.371Z",
-  "payloadDigest": "sha256:d72d1c446e2611eca4383f1e99c1ed888b1eeb556bf3835fc719efc59d203881",
+  "syncedAt": "2026-09-17T12:54:07.186Z",
+  "payloadDigest": "sha256:3d7fda544fe315e606376536bd672fc5841118f6dd9c992c853cf88d622d2173",
   "counts": {
     "projects": 6,
     "withPublicUrl": 5,
@@ -272,7 +272,7 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "7502f54",
+        "head": "0bbe34d",
         "dirty": false
       },
       "deployment": {
@@ -523,6 +523,10 @@
           {
             "source": "catalog/projects/sth.json#notes[18]",
             "text": "2026-09-17 · 部署（人授权「直接上线 vercel，我来验收看看」）：Vercel 项目 skillres-projects/prototype-sth 已创建并接上 GitHub 仓。productionUrl https://prototype-sth.vercel.app 的核实方式：匿名 curl 返回 200（/ 与 /workbench 都试了）、vercel inspect 显示 target=production 且 readyState=READY。productionBranch 的核实方式：部署别名里出现 prototype-sth-git-feature-sth-console-skillres-projects.vercel.app。push 50efe79 后 24 秒出现一条新的 Production 部署 —— 即 Git 集成确实在推 push 触发生产构建。**未核实**：这次部署的 git SHA —— Vercel CLI 的 inspect --json 完全不返回 git 元数据（没有 gitSource），所以「线上这一版 == 50efe79」这句话没有被证明，不写。要看 commit 去 Vercel 部署详情页。另：首次部署是 CLI 上传创建的，那条完全没有 gitSource。**HVA 仍未做**：上线不等于验收，状态只能停在 READY FOR HUMAN VISUAL ACCEPTANCE。"
+          },
+          {
+            "source": "catalog/projects/sth.json#notes[19]",
+            "text": "2026-09-17 · 与本条之后的部署记录**互相取代关系**的说明（免得读的人以为目录自相矛盾）：notes[4]、notes[12]、notes[15] 里都写着「deployment 全部为 null / 尚无 Vercel 项目 / 不得写 productionUrl」——那些话在**写下时是真的**，现在都**已被取代**，因为人在 2026-09-17 明确授权了上线。保留它们不改写，是因为它们记的是「当时知道什么」；判断当前状态请以 deployment 段与它后面那条为准。hub 的投影会把这几条一并当作 evidence 列出来（同一段里既有旧结论也有新结论）——那不是投影出错，是审计线索本来就这样长。"
           }
         ]
       },
