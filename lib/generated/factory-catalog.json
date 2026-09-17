@@ -10,9 +10,9 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "9adaba57c346aa90755a568fd051d7b1d8900859",
+    "gitSha": "8a9f16ddb2670d14902b9346f40590f1e1d89219",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:4c9e608109000b863df655dc5d8b9d32fe2d971d24d59c9e1ccee090448c780a",
+    "inputsDigest": "sha256:76d91c187f28a81927d4e6247e8ee15067846982716d1320e11b6f33e3174b9e",
     "inputsDirty": false,
     "inputs": [
       {
@@ -29,19 +29,19 @@
       },
       {
         "path": "catalog/projects/ai-finance.json",
-        "digest": "sha256:d1bd371180a0899e58a9f380e78b9bddaba5a6b7bb157fa7d8b909fd2e057dd1"
+        "digest": "sha256:5067aa06172636f91a04b2884239415425ff911cb4e2c9c71bf5a1046d46be91"
       },
       {
         "path": "catalog/projects/ai-research.json",
-        "digest": "sha256:19a3ac29db7b9e331ddf8898fcdf8392337ed62002232334cd642eeac33b68de"
+        "digest": "sha256:2cbbdaeb4cf2283eb69010fddd0c0bddb7d454d2f69007cb34e2832534706ed3"
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:42ecad000258bb450a15742c5d3af494d44cfd7a3e3a47c267f07f447f1a171f"
+        "digest": "sha256:7b00d08e0bd82a49f8d2cf80d44358a8b1bd60dc750147e740555d59fec47ab8"
       },
       {
         "path": "catalog/projects/kits.json",
-        "digest": "sha256:5089bebdd49ca3e0966174dc9eb032590285047310a2a395a25950b3bdf78937"
+        "digest": "sha256:05ed66b1b2e96973f3a34cbb64596cf1ed997e466a579776c7987969ffbe8434"
       },
       {
         "path": "catalog/projects/starter.json",
@@ -49,7 +49,7 @@
       },
       {
         "path": "catalog/projects/sth.json",
-        "digest": "sha256:365e8e99d4366dd7557da0ba4c6024274a14291226af3443885a0d06a6761ddb"
+        "digest": "sha256:0d2b58ef58122f5957c1657a14e4ede3220ec42a6acd3077c4e0a1e4165c21da"
       }
     ],
     "catalogGeneratedAt": "2026-09-16",
@@ -72,8 +72,8 @@
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
     "retiredIsAStateNotAHole": "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。"
   },
-  "syncedAt": "2026-09-17T10:23:27.904Z",
-  "payloadDigest": "sha256:ed304a671ed1ff2a03e67c958ceb3a8189dc95dbaab616fb68dbbc00a20bbb8f",
+  "syncedAt": "2026-09-17T10:43:53.806Z",
+  "payloadDigest": "sha256:f370a06858c2323b2bc665df88611054bdec04ceb52baaeb90b17a7fdde9889e",
   "counts": {
     "projects": 6,
     "withPublicUrl": 4,
@@ -124,7 +124,7 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "38946ca",
+        "head": "abe0488",
         "dirty": false
       },
       "deployment": {
@@ -204,7 +204,7 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "afdc0db",
+        "head": "55b781d",
         "dirty": false
       },
       "deployment": {
@@ -272,7 +272,7 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "d60f16c",
+        "head": "fd29b51",
         "dirty": false
       },
       "deployment": {
@@ -356,7 +356,7 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "623736d",
+        "head": "cf6502a",
         "dirty": false
       },
       "deployment": {
@@ -492,7 +492,7 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/sth-console",
-        "head": "7363f1b",
+        "head": "068f6ab",
         "dirty": false
       },
       "deployment": {
