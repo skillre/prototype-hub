@@ -820,10 +820,24 @@ function checkAgainstRoot(artifact, root, rootSource = "default") {
       if (sha256(blob) !== entry.digest) mismatched.push(entry.path)
     }
     if (artifact.source?.inputsDirty === true) {
+      /*
+       * 措辞必须是**过去时**。
+       *
+       * `inputsDirty` 是**生成物里记下的那一刻**的状态（sync 时根仓是否干净），
+       * 不是当前状态。原文写「catalog 输入在根仓里有未提交改动」（现在时），
+       * 于是在「当时脏、现在已经提交」之后仍然这样报 —— 读的人会得出一个
+       * 当下就不成立的结论（2026-09-17 实测：根仓 `git status` 为 0 个文件，
+       * 这条消息却仍在说它脏）。
+       *
+       * 实质结论不变，而且仍然重要：**记录的那个 SHA 描述不了记录的这些输入**，
+       * 所以「生成物 ↔ catalog 一致」这件事在这一格上没有被证明。
+       */
       notes.push(
-        "[upstream-provenance-dirty] catalog 输入在根仓里有未提交改动，SHA 无法完整描述内容：" +
+        "[upstream-provenance-dirty] 生成这份投影时，catalog 输入在根仓里**有未提交改动**" +
+          `（当时记下的，不是当前状态），因此记录的 SHA 描述不了这些输入：` +
           `${[...missingAtSha, ...mismatched].join(", ") || "（摘要与工作副本一致）"} —— ` +
-          "这一点没有被验证，不代表通过",
+          "「生成物 ↔ catalog 一致」这一点没有被验证，不代表通过。" +
+          "要让这一格重新可核：在根仓提交干净之后重跑 `pnpm catalog:sync`",
       )
     } else if (missingAtSha.length > 0) {
       notes.push(
