@@ -26,7 +26,8 @@
 - **允许并要求**在 **DSH 宿主**内用多 Subagent 拆分与并行任务；
 - **禁止**在**产品应用代码**（`app` `components` `lib` `hooks` `stores` `scripts`）里引入
   编排框架或编排运行时；
-- 模型路由：`opencode-go-dsv41` / `deepseek-flash` / `max`，每次调用显式写全三个字段；
+- 模型路由：`commandcode` / `deepseek/deepseek-v4.1-flash` / `max`，每次调用显式写全三个字段
+  （2026-09-17 定；此前两次替换的理由见 `AGENTS.md` 管理块外那一节「路由为什么改过」）；
 - 单 worktree 单写者 · 共享路径单 owner · `test` / `qa` 串行；
 - HVA（人工视觉验收）先于发布 · 部署是独立的一次人工授权。
 

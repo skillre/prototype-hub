@@ -22,7 +22,7 @@
   - **事实只能来自 catalog**：身份、kind、端口、门禁、工厂/套件状态、部署状态与地址；展示层只提供展示名、说明与缩略图。
   - **未知不是 public**：只有 catalog 记录了已核实的 `deployment.productionUrl` 才是 public 且可点击；其余显示「未部署 / 受保护」，不给死链接、不猜地址。受 SSO 保护的地址不得称为 public。
   - **上游不可用时不判 PASS**：找不到根 catalog 时，`pnpm catalog:check` 只验证生成物内部完整性并打印 `[upstream-unavailable]`，输出 `INTEGRITY-OK (UPSTREAM UNVERIFIED)`；它**不会**说自己通过。
-- **模型路由**：provider `opencode-go-dsv41` / model `deepseek-flash` / reasoning effort `max`（2026-09-15 与 DSH 模型目录核对）。Subagent 默认走这条路由；改路由先改 `factory-policy.json`。
+- **模型路由**：provider `commandcode` / model `deepseek/deepseek-v4.1-flash` / reasoning effort `max`（2026-09-17 与 DSH 模型目录核对）。Subagent 默认走这条路由；改路由先改 `factory-policy.json`。
 - **单 worktree 单写者**（`single-writer`）：同一棵工作副本同一时间只有一个写者；要并行写就各自独立 worktree。两个写者共享一棵树，冲突不是概率问题，是时间问题。
 - **共享路径单 owner**（`single-owner`）：`AGENTS.md`、`package.json`、`factory-policy.json`、`factory.lock.json`、契约 schema、门禁脚本与 `lib/generated/factory-catalog.json` 这类共享面，同一时间只有一个 owner，其余 agent 只读。
 - **test / qa 串行**（`serial`）：`pnpm test` 与 `pnpm qa` **永不并发**（Next 16 dev server 按项目加锁，并行只会在错误的 server 上出结果）。CI 里同样不得拆成两个并行 job。
@@ -31,6 +31,23 @@
 
 机器可读副本：`factory-policy.json` · 关键值：`lib/factory-policy.schema.json` · 平台锁：`factory.lock.json` · 校验器：`scripts/guard-agent-policy.mjs`（`pnpm factory:agents`）。
 <!-- END:factory-core-policy -->
+
+### 路由为什么改过（块外，人类写的部分）
+
+**2026-09-17 一天之内换了两次，两次都有理由，不是漂移：**
+
+1. **旧路由 `opencode-go-dsv41 / deepseek-flash` 额度耗尽** —— 当天三个 subagent 连续中途死亡
+   且不留收尾消息（其中两份工作其实已经做完，只是没人收尾）。
+2. **随后 4.1 被放开给子代理**：会话侧把它加进允许名单后**实测派发成功**
+   （`list_subagent_models` 列出 provider `commandcode` 的子代理可用模型为
+   `deepseek/deepseek-v4.1-flash` 与 `Qwen/Qwen3.8-Flash`）。
+   于是路由定为 **`commandcode / deepseek/deepseek-v4.1-flash / max`**，即当前值。
+
+`verifiedOn: 2026-09-17` 记的就是第二次核对的日期。
+
+**一处刻意不改的地方**：`factory.lock.json` 的 `adoptedBy` 里仍写着旧路由 ——
+那是**采纳 v1.3 政策那一刻的历史记录**，不是路由声明。改写它等于篡改"谁在什么时候采纳了什么"。
+要判断当前路由，看上面那个块（由 `factory-policy.json` 渲染）。
 
 ---
 
