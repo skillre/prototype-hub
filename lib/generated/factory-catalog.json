@@ -10,9 +10,9 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "d9a1072cf875ce056b7e3302c7562c32314dc51b",
+    "gitSha": "c565962d9f95afa54e4f2d860ea1b9b4a682a927",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:fb06c06df6548a30c2805d40dc0cfd00088305bdbd4c713042cde011545bc6c5",
+    "inputsDigest": "sha256:17229aedf1ce79a8f402aaea528554e2c76b97a2b5d1aa3235b4c3e0447a6ac7",
     "inputsDirty": false,
     "inputs": [
       {
@@ -37,7 +37,7 @@
       },
       {
         "path": "catalog/projects/hub.json",
-        "digest": "sha256:2f7a8c95d368a286719f14565bfbf61ee59d3eff4a2adde609558f7a415c57e4"
+        "digest": "sha256:472ca82064a706729d9ac9068c5c3d4c5b4d6a6c1b3a34bf8fb7951f625811d7"
       },
       {
         "path": "catalog/projects/kits.json",
@@ -45,7 +45,7 @@
       },
       {
         "path": "catalog/projects/s1.json",
-        "digest": "sha256:41e4301cc3849a752fdb8d2fc0c8f8f003f14e1032c36a249265790ed769ca43"
+        "digest": "sha256:03d04e794adff8cf7f2f0f3d1b17411c752874236ef1e9016ccf809a68bbc7f8"
       },
       {
         "path": "catalog/projects/starter.json",
@@ -72,8 +72,8 @@
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
     "retiredIsAStateNotAHole": "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。"
   },
-  "syncedAt": "2026-09-17T05:47:38.118Z",
-  "payloadDigest": "sha256:3a17aa3255567ec604103978c2a696092ab5b8841dc49b08755d05e41db554b6",
+  "syncedAt": "2026-09-17T07:08:06.883Z",
+  "payloadDigest": "sha256:6ac3f1af029abee20a2ec1c787be934e8d846163e9e88798946fd185acf77be8",
   "counts": {
     "projects": 6,
     "withPublicUrl": 4,
@@ -272,8 +272,8 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/factory-governance-v1.3",
-        "head": "0235a14",
-        "dirty": true
+        "head": "24bb944",
+        "dirty": false
       },
       "deployment": {
         "provider": "vercel",
@@ -428,8 +428,8 @@
       "observed": {
         "observedAt": "2026-09-17",
         "branch": "feature/s1-console",
-        "head": "74aba93",
-        "dirty": true
+        "head": "af94862",
+        "dirty": false
       },
       "deployment": {
         "provider": null,
