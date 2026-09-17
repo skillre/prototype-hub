@@ -491,7 +491,7 @@ test.describe("本地化", () => {
    * 硬编码英文泄漏审计：首页可见文本里的拉丁词必须全部来自词典或展示层登记过的
    * 产品名，白名单 = 品牌字标 / 技术栈 / 展示层里的仓名 / 术语。
    *
-   * 词元包含数字（`S1` 是一个词元而不是 `S`），否则「S1 Incident Command」这种
+   * 词元包含数字（`STH` 是一个词元而不是 `S`），否则「STH Incident Command」这种
    * 名字会退化成把一个单字母塞进白名单，那道白名单也就形同虚设。
    */
   test("首页不出现词典之外的硬编码英文", async ({ page }) => {
@@ -516,7 +516,7 @@ test.describe("本地化", () => {
       "research",
       "hub",
       "kits",
-      "s1",
+      "sth",
       "incident",
       "command",
       "starter",

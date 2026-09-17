@@ -23,7 +23,7 @@
  *     identity assertion turns that into a loud failure instead of a green lie.
  */
 
-/** QA port. Hub's slot; not 3000, not the 3200 shared by starter / s1 / kits. */
+/** QA port. Hub's slot; not 3000, not the 3200 shared by starter / sth / kits. */
 export const QA_PORT = 3100
 
 /** Host the QA server binds to. 127.0.0.1 keeps the dev server off the network. */

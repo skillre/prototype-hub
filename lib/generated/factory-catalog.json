@@ -10,9 +10,9 @@
     "controlRoot": "..",
     "controlRootSource": "default",
     "controlRootMeaning": "输入实际来自哪里。默认是仓父目录（\"..\"）；用 FACTORY_CONTROL_ROOT 或 --root 指向别处时，这里记的是一个绝对路径，而不是继续谎称 \"..\"。",
-    "gitSha": "bf86fe126f9c8de1d3fdcbf1e951843abca3f42e",
+    "gitSha": "9adaba57c346aa90755a568fd051d7b1d8900859",
     "gitShaMeaning": "读取输入文件时根控制面 HEAD 的 SHA。输入内容未变时 sync 不推进它（避免无意义 diff）；`catalog:sync --reanchor` 可以显式重新锚定。",
-    "inputsDigest": "sha256:95b4d8a7b998d105fc185ec1e438e54d69fad0ac142b8a38ecc34b94423fdb1a",
+    "inputsDigest": "sha256:4c9e608109000b863df655dc5d8b9d32fe2d971d24d59c9e1ccee090448c780a",
     "inputsDirty": false,
     "inputs": [
       {
@@ -21,11 +21,11 @@
       },
       {
         "path": "catalog/ports.json",
-        "digest": "sha256:96c64807ff3e1c3c8eab5afe8caa5a77e1a7082af11e601d5626c86561b7b5fc"
+        "digest": "sha256:c62d3c573547d849d6eb2de7a062ef157f191f4076eb10946e0a333f0d044a48"
       },
       {
         "path": "workspace-policy.json",
-        "digest": "sha256:67e68c21f14142ea661b96d0dd096bdabeb1f0a5c72d0f9de2f5fe599abe060f"
+        "digest": "sha256:0338bbb14d7b2975afd8e3d0936ca4a5fecfe16ce05dedfb5221bc374f1ecc5d"
       },
       {
         "path": "catalog/projects/ai-finance.json",
@@ -44,12 +44,12 @@
         "digest": "sha256:5089bebdd49ca3e0966174dc9eb032590285047310a2a395a25950b3bdf78937"
       },
       {
-        "path": "catalog/projects/s1.json",
-        "digest": "sha256:60bb4fc08b9d516bb6c098b1bb1cb873efb96cea46cdc95c8df5c5b8826cb5f0"
-      },
-      {
         "path": "catalog/projects/starter.json",
         "digest": "sha256:f9de556f9ca07266dffbc097f0fbb8b257f9939bacb6596c2f0f5c283e3c401b"
+      },
+      {
+        "path": "catalog/projects/sth.json",
+        "digest": "sha256:365e8e99d4366dd7557da0ba4c6024274a14291226af3443885a0d06a6761ddb"
       }
     ],
     "catalogGeneratedAt": "2026-09-16",
@@ -72,8 +72,8 @@
     "standaloneHonesty": "根控制面不可用时，catalog:check 只验证生成物内部完整性并报告 upstream unavailable，不判 PASS。",
     "retiredIsAStateNotAHole": "status=retired 的条目仍然如实投影（含退役记录：原因 / 仍然存在的东西 / 从哪里能恢复），不从索引里消失 —— 删掉它会抹掉「这个工作区曾经有它、它的仓与部署还在」这件事实；退役也不改变可点击规则：仍然只有 catalog 记录的 productionUrl 才能点。"
   },
-  "syncedAt": "2026-09-17T09:15:56.659Z",
-  "payloadDigest": "sha256:a490a45bd716fd2f425dfef9b93d0cac11ec283aa53db7ab8addda776067d675",
+  "syncedAt": "2026-09-17T10:23:27.904Z",
+  "payloadDigest": "sha256:ed304a671ed1ff2a03e67c958ceb3a8189dc95dbaab616fb68dbbc00a20bbb8f",
   "counts": {
     "projects": 6,
     "withPublicUrl": 4,
@@ -393,74 +393,6 @@
       "sourceFile": "catalog/projects/kits.json"
     },
     {
-      "id": "s1",
-      "kind": "product",
-      "status": "active",
-      "lifecycleLabel": null,
-      "retired": null,
-      "title": "S1 · AI 原生安全运营工作台",
-      "path": "prototype-s1",
-      "repo": "https://github.com/skillre/prototype-s1.git",
-      "defaultBranch": "feature/s1-console",
-      "qaPort": 3310,
-      "qaPortSource": "prototype-s1/.qa/qa.config.mjs:QA_PORT",
-      "gates": {
-        "lint": true,
-        "typecheck": true,
-        "test": true,
-        "build": true,
-        "qa": true
-      },
-      "gatesMissing": [],
-      "factory": {
-        "lockPath": "factory.lock.json",
-        "lockPresent": true,
-        "lockFormat": "product",
-        "factoryVersion": "1.2.0",
-        "policyVersion": "1.3.0",
-        "initStage": "product"
-      },
-      "kits": {
-        "role": "consumer",
-        "lockPresent": true,
-        "registryVersion": "0.3.0"
-      },
-      "observed": {
-        "observedAt": "2026-09-17",
-        "branch": "feature/s1-console",
-        "head": "7363f1b",
-        "dirty": false
-      },
-      "deployment": {
-        "provider": null,
-        "linked": false,
-        "projectName": null,
-        "productionBranch": null,
-        "productionBranchSource": null,
-        "productionUrl": null,
-        "publicUrl": null,
-        "availability": "not-public",
-        "label": "未部署 / 受保护",
-        "clickable": false,
-        "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
-        "evidence": [
-          {
-            "source": "catalog/projects/s1.json#notes[4]",
-            "text": "`deployment` 全部为 null：没有创建任何 Vercel 项目，也没有 link。按 workspace-policy，创建 Vercel Project / link project 需要明确授权，本阶段未授权。**不得写任何 productionUrl。**"
-          },
-          {
-            "source": "catalog/projects/s1.json#notes[12]",
-            "text": "**仍未回读的两格**：`observed.head`（该仓尚无 commit）与 `deployment.*`（未创建 Vercel 项目）。这两处仍按「不知道就不写」处理。**（2026-09-17 更正）** 本条关于 `observed.head` 的那半句**已被下一条推翻**：该仓早已有 commit（`53662db` 起共 4 个，最新 `49f302c`），`observed.head` 已是回读值。**仍然没有回读的只剩 `deployment.*`** —— 它依旧按「不知道就不写」处理，且 `prototype-s1` 尚无任何 Vercel 项目或 link（创建需人授权）。"
-          },
-          {
-            "source": "catalog/projects/s1.json#notes[15]",
-            "text": "**`deployment` 六格全部为 null，且 `productionBranch` 是刻意清空的（2026-09-16）**：此前它写着 `main` 但 `productionBranchSource` 为 null，drift 因此报 `policy-production-branch-unrecorded`（UNKNOWN）。S1 尚未创建任何 Vercel 项目、也没有 link，所以「Production Branch 是 main」这句话**没有任何出处** —— 按本仓规则「核不出来就写 null，并把怎么核的写进 notes」，已改为 null。"
-          }
-        ]
-      },
-      "sourceFile": "catalog/projects/s1.json"
-    },
-    {
       "id": "starter",
       "kind": "starter",
       "status": "active",
@@ -523,6 +455,74 @@
         ]
       },
       "sourceFile": "catalog/projects/starter.json"
+    },
+    {
+      "id": "sth",
+      "kind": "product",
+      "status": "active",
+      "lifecycleLabel": null,
+      "retired": null,
+      "title": "STH · AI 原生安全运营工作台",
+      "path": "prototype-sth",
+      "repo": "https://github.com/skillre/prototype-sth.git",
+      "defaultBranch": "feature/sth-console",
+      "qaPort": 3310,
+      "qaPortSource": "prototype-sth/.qa/qa.config.mjs:QA_PORT",
+      "gates": {
+        "lint": true,
+        "typecheck": true,
+        "test": true,
+        "build": true,
+        "qa": true
+      },
+      "gatesMissing": [],
+      "factory": {
+        "lockPath": "factory.lock.json",
+        "lockPresent": true,
+        "lockFormat": "product",
+        "factoryVersion": "1.2.0",
+        "policyVersion": "1.3.0",
+        "initStage": "product"
+      },
+      "kits": {
+        "role": "consumer",
+        "lockPresent": true,
+        "registryVersion": "0.3.0"
+      },
+      "observed": {
+        "observedAt": "2026-09-17",
+        "branch": "feature/sth-console",
+        "head": "7363f1b",
+        "dirty": false
+      },
+      "deployment": {
+        "provider": null,
+        "linked": false,
+        "projectName": null,
+        "productionBranch": null,
+        "productionBranchSource": null,
+        "productionUrl": null,
+        "publicUrl": null,
+        "availability": "not-public",
+        "label": "未部署 / 受保护",
+        "clickable": false,
+        "reason": "catalog 未记录 Vercel 项目链接，也没有已核实的公开 URL（deployment.linked=false，productionUrl=null）。",
+        "evidence": [
+          {
+            "source": "catalog/projects/sth.json#notes[4]",
+            "text": "`deployment` 全部为 null：没有创建任何 Vercel 项目，也没有 link。按 workspace-policy，创建 Vercel Project / link project 需要明确授权，本阶段未授权。**不得写任何 productionUrl。**"
+          },
+          {
+            "source": "catalog/projects/sth.json#notes[12]",
+            "text": "**仍未回读的两格**：`observed.head`（该仓尚无 commit）与 `deployment.*`（未创建 Vercel 项目）。这两处仍按「不知道就不写」处理。**（2026-09-17 更正）** 本条关于 `observed.head` 的那半句**已被下一条推翻**：该仓早已有 commit（`53662db` 起共 4 个，最新 `49f302c`），`observed.head` 已是回读值。**仍然没有回读的只剩 `deployment.*`** —— 它依旧按「不知道就不写」处理，且 `prototype-sth` 尚无任何 Vercel 项目或 link（创建需人授权）。"
+          },
+          {
+            "source": "catalog/projects/sth.json#notes[15]",
+            "text": "**`deployment` 六格全部为 null，且 `productionBranch` 是刻意清空的（2026-09-16）**：此前它写着 `main` 但 `productionBranchSource` 为 null，drift 因此报 `policy-production-branch-unrecorded`（UNKNOWN）。STH 尚未创建任何 Vercel 项目、也没有 link，所以「Production Branch 是 main」这句话**没有任何出处** —— 按本仓规则「核不出来就写 null，并把怎么核的写进 notes」，已改为 null。"
+          }
+        ]
+      },
+      "sourceFile": "catalog/projects/sth.json"
     }
   ]
 }

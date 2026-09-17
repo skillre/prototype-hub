@@ -166,7 +166,7 @@ verdict: INTEGRITY-OK (UPSTREAM UNVERIFIED) —— 只验证了生成物内部�
 不是从 URL 或分支名推断出来的。只有匿名 2xx 才支持「public」这个说法，这里成立。
 
 于是投影里 **hub 自己**从「未部署 / 受保护」变成 `public` + 「公开」+ 可点击；当时另外五仓
-仍是 `not-public`（starter / kits / research 的生产地址受 SSO 保护；finance 与 s1 的生产部署是
+仍是 `not-public`（starter / kits / research 的生产地址受 SSO 保护；finance 与 sth 的生产部署是
 当天稍后用 Vercel API 以 `gitSource`（`ref=main`）补上的（`8d3eea5`），同样受保护 ——
 **受保护既不是失败，也不是 public**，因此 `deployment.productionUrl` 对它们仍是 null）。
 
@@ -184,13 +184,13 @@ Production 不再要求登录，Preview 仍受 SSO 保护。投影里的事实�
 | ai-research | `https://prototype-ai-research-git-main-skillres-projects.vercel.app`（200） | 同上 |
 | hub | `https://prototype-hub-dusky.vercel.app/`（不变，200） | 同上 |
 | ai-finance | 仍为 `null` | `not-public` + 「未部署 / 受保护」+ 不渲染 `<a href>` |
-| s1 | 仍为 `null` | 同上 |
+| sth | 仍为 `null` | 同上 |
 
-**finance 与 s1 为什么没有跟着变公开 —— 以及一条被推翻的解释**：同一个设置下，它们的地址
+**finance 与 sth 为什么没有跟着变公开 —— 以及一条被推翻的解释**：同一个设置下，它们的地址
 返回 **404**（既不是 200 也不是 302）。控制面第一版写下的解释是「它们的部署由 Vercel API 以
 `gitSource` 创建、不是 Git webhook 触发的，所以平台不把它们当作当前生产部署」——
 **这个解释已经被控制面自己的实验推翻**：随后给两个仓做了真正的 Git push（finance `cd47017`、
-s1 `8c12c74`，都拿到 `target=production` / `gitRef=main` / `READY` 的 webhook 部署），
+sth `8c12c74`，都拿到 `target=production` / `gitRef=main` / `READY` 的 webhook 部署），
 再把保护设成 Only-Preview，**依旧 404**。「API vs webhook」与「时间顺序」（`git connect`
 之后重建 gitSource 部署）两条假设都实测排除。**已确立**的是：这两个项目的主域名被**另一个
 Vercel 项目**占用 —— `POST /v9/projects/<id>/domains` 返回 **409
@@ -200,10 +200,10 @@ Vercel 项目**占用 —— `POST /v9/projects/<id>/domains` 返回 **409
 
 > **为什么把「写错了」也留下**：这是一个**看起来合理、推理自洽、却被一次真实实验推翻**的
 > 解释。只留结论的话，下一个人会照着它去修错误的方向。控制面把
-> `compatibility.json` 的 `finding` / `alternativeConsidered` 与 `s1.json#notes[11]`
+> `compatibility.json` 的 `finding` / `alternativeConsidered` 与 `sth.json#notes[11]`
 > 都改成了「已证实的 + 已排除的 + 未确定的」，本仓的投影逐字收录它们。
 >
-> **那条上游遗留已经修掉（根仓 `ba7d6de`）**：`ai-finance.json#notes[11]` 现在与 s1 一样，
+> **那条上游遗留已经修掉（根仓 `ba7d6de`）**：`ai-finance.json#notes[11]` 现在与 sth 一样，
 > 写的是「原因尚未完全确定」＋「第一版解释已被本仓真正的 Git push（`cd47017`）推翻」＋
 > 已证实的主域名冲突（409）＋已排除的时间顺序假设，并明确保留「我曾写错」这件事。
 > 于是生成物里两条 `evidence` 都不再以本仓的口气主张那条被推翻的原因 —— 旧解释只剩**引号里
@@ -265,7 +265,7 @@ catalog 改动**时，这句话就不成立，所以生成物会记 `source.inpu
 
 **机制在场，当前没有任何条目处于退役态。**
 
-曾经有过一个：2026-09-16，工作区里的 `prototype-s1-incident-command/` 被移除，随后它的
+曾经有过一个：2026-09-16，工作区里的 `prototype-sth-incident-command/` 被移除，随后它的
 GitHub 仓与 Vercel 项目也被删除，最后连 catalog 条目本身都按用户要求清掉了。**那一次的顺序
 说明了这条机制为什么值得留着**：目录先消失时，控制面把一个"被移除"的仓报成了四条"坏掉"的
 FAIL（没有锁、没有 kits lock、没有 remote、containment 失败）—— 它描述的是错的事情。
@@ -291,5 +291,5 @@ retired: { on, by, reason, stillExists[], recoverableFrom, irreversibleLoss } | 
    删掉机制会让它变红，而不是让页面悄悄少一行。
 
 > 展示层（`lib/hub-presentation.json`）不为退役做特殊处理：它只管展示名、说明与缩略图。
-> 但**它不能给一个 catalog 里不存在的仓保留条目** —— s1 从 catalog 消失时，`catalog:check`
+> 但**它不能给一个 catalog 里不存在的仓保留条目** —— sth 从 catalog 消失时，`catalog:check`
 > 正是靠这条把展示层里的残留当场报了出来。

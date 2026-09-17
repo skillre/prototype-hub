@@ -216,7 +216,7 @@ test.describe("catalog 投影", () => {
    * 触发的 Production 部署（2d5cc8a）刷新，而「页面 == 该 SHA」没有被本仓独立复核
    * （页面不暴露 commit）。两次观察见 docs/catalog-projection.md 第 9 节。
    *
-   * 另外两条（ai-finance / s1）**故意留在 not-public**：把 Deployment Protection 关成
+   * 另外两条（ai-finance / sth）**故意留在 not-public**：把 Deployment Protection 关成
    * 「Only Preview Deployments」之后，它们的地址变成 **404**（既不是 200 也不是 302），
    * 控制面已把它们恢复为受保护：**受保护不是失败，也不是 public**。
    * **原因尚未确定**：控制面第一版解释（「部署由 API 创建、不是 Git webhook 触发的」）
@@ -239,7 +239,7 @@ test.describe("catalog 投影", () => {
     const notPublicIds = artifact.projects
       .filter((project) => project.deployment.publicUrl === null)
       .map((project) => project.id)
-    expect(notPublicIds).toEqual(["ai-finance", "s1"])
+    expect(notPublicIds).toEqual(["ai-finance", "sth"])
     for (const project of artifact.projects.filter((entry) => notPublicIds.includes(entry.id))) {
       expect(project.deployment.clickable).toBe(false)
       expect(project.deployment.label).toBe("未部署 / 受保护")
@@ -261,10 +261,20 @@ test.describe("catalog 投影", () => {
       expect(project.retired).toBeNull()
     }
 
-    // active 必须被明说，而不是靠「没有 retired 字段」去推断。
+    /*
+     * active 必须被明说，而不是靠「没有 retired 字段」去推断。
+     *
+     * 顺序是**投影的排序**（按 id），不是随便排的 —— 所以 `starter` 在 `sth` 前面：
+     * 两者前两个字符相同（`st`），第三个字符 `a` < `h`。
+     *
+     * 2026-09-17 产品改名 S1 → STH 时，这一行被机械替换成了 `[…, "sth", "starter"]`
+     * —— 位置还是 `s1` 原来的位置，但 `s1` 与 `sth` 在这个列表里**排不到同一处**
+     * （`s1` 时它是 s 段的最后一个，`sth` 时 `starter` 插到了它前面）。
+     * 测试当场红了，红得对：断言的是"投影给出的顺序"，换名字就要重新看一遍顺序。
+     */
     expect(
       artifact.projects.filter((entry) => entry.status === "active").map((entry) => entry.id),
-    ).toEqual(["ai-finance", "ai-research", "hub", "kits", "s1", "starter"])
+    ).toEqual(["ai-finance", "ai-research", "hub", "kits", "starter", "sth"])
 
     // 运行时 API 同样带着这个字段，页面才有东西可渲染。
     expect(prototypes.every((prototype) => prototype.status === "active")).toBe(true)
